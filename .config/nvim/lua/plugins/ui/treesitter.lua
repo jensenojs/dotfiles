@@ -3,10 +3,10 @@ return {
     build = ":TSUpdate",
 
     -- https://github.com/andymass/vim-matchup
-    -- dependencies = {
-    --     -- better matchup which can be intergreted to treesitter
-    --     "andymass/vim-matchup",
-    -- },
+    dependencies = {
+        -- better matchup which can be intergreted to treesitter
+        "andymass/vim-matchup",
+    },
 
     config = function()
         require("nvim-treesitter.configs").setup({

@@ -1,19 +1,16 @@
 -- https://github.com/jesseduffield/lazygit
 -- 符合vim直觉的git CUI 
-local opts = {
-    noremap = true, -- non-recursive
-    silent = true -- do not show message
+local bind = require("utils.bind")
+local map_cr = bind.map_cr
+
+local keymaps = {
+    ["n|<leader>G"] = map_cr("LazyGit"):with_noremap():with_silent():with_desc("打开LazyGit")
 }
+
+bind.nvim_load_mapping(keymaps)
 
 return {
     'kdheepak/lazygit.nvim',
     -- optional for floating window border decoration
     dependencies = {"nvim-lua/plenary.nvim"},
-    config = function()
-        vim.g.lazygit_floating_window_winblend = 0
-        vim.g.lazygit_use_neovim_remote = true
-        vim.keymap.set('n', '<leader>G', ':LazyGit<CR>', opts, {
-            desc = '<leader>+G : 打开LazyGit'
-        })
-    end
 }

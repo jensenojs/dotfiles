@@ -1,8 +1,4 @@
-local global = require("basic.global")
-
--- leader键设置为空格
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
+local global = require("core.global")
 
 -- 
 local clipboard_config = function()
@@ -85,10 +81,10 @@ local load = function()
         shell_config()
 
         -- ordinary Neovim
-        require("basic.keymaps")
-        require("basic.options")
-        require("basic.lazy")
-        require("basic.autocmds")
+        require("core.keymaps")
+        require("core.options")
+        require("core.lazy")
+        require("core.autocmds")
     end
 end
 

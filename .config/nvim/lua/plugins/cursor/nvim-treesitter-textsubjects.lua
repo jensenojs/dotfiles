@@ -10,7 +10,7 @@ return {
     "RRethy/nvim-treesitter-textsubjects",
     -- lazy = true,
     -- event = {"User FileOpened"},
-    after = "nvim-treesitter",
+
     dependencies = {"nvim-treesitter/nvim-treesitter"},
     config = function()
         require("nvim-treesitter.configs").setup({

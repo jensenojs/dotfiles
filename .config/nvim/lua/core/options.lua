@@ -10,6 +10,11 @@ opt.background = "dark"
 -- 修复markdown缩进设置
 vim.g.markdown_recommended_style = 0
 
+-- 来自nvim-tree的要求
+-- disable netrw at the very start of your init.lua
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 -- 禁用与vi兼容的模式，以便使用nvim的所有高级功能
 opt.compatible = false
 
@@ -102,7 +107,7 @@ opt.ignorecase = true
 opt.smartcase = true
 
 -- -- 与系统剪贴板同步
--- opt.clipboard = "unnamedplus"
+opt.clipboard = "unnamedplus"
 
 -- 增量搜索
 opt.incsearch = true

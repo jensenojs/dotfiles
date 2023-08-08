@@ -6,8 +6,7 @@ return {
     event = { "InsertEnter" },
     config = function()
         require("tabout").setup({
-            -- tabkey = "<Tab>",
-            -- backwards_tabkey = "<S-Tab>",
+            -- 这个插件的功能被集成在了coc-nvim的Smart Tab中
             tabkey = "",
             backwards_tabkey = "",
             act_as_tab = true,

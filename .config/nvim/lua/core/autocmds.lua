@@ -1,6 +1,5 @@
 -- Autocmds are automatically loaded on the VeryLazy event
 -- Default autocmds that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua
--- Add any additional autocmds here
 
 -- 定义一个函数，用于创建自动命令组
 local function augroup(name)

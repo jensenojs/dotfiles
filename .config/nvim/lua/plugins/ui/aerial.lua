@@ -1,4 +1,6 @@
+-- https://github.com/stevearc/aerial.nvim
 -- 文件大纲
+
 return {
     'stevearc/aerial.nvim',
     opts = {},

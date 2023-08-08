@@ -1,56 +1,7 @@
 -- https://github.com/nvim-tree/nvim-tree.lua
 -- 目录树
-
 -- define common options
-local opts = {
-    noremap = true, -- non-recursive
-    silent = true -- do not show message
-}
 
-local function edit_or_open()
-    local api = require("nvim-tree.api")
-    local node = api.tree.get_node_under_cursor()
-
-    if node.nodes ~= nil then
-        -- expand or collapse folder
-        api.node.open.edit()
-    else
-        -- open file
-        api.node.open.edit()
-        -- Close the tree if file was opened
-        api.tree.close()
-    end
-end
-
--- open as vsplit on current node
-local function vsplit_preview()
-    local api = require("nvim-tree.api")
-    local node = api.tree.get_node_under_cursor()
-
-    if node.nodes ~= nil then
-        -- expand or collapse folder
-        api.node.open.edit()
-    else
-        -- open file as vsplit
-        api.node.open.vertical()
-    end
-
-    -- Finally refocus on tree if it was lost
-    api.tree.focus()
-end
-
--- Collapses the nvim-tree recursively, but keep the directories open, which are
--- used in an open buffer.
-local function collapse_keep_buffer()
-    local api = require "nvim-tree.api"
-    api.tree.collapse_all(true)
-end
-
-local function open_tab_silent(node)
-    local api = require("nvim-tree.api")
-    api.node.open.tab(node)
-    vim.cmd.tabprev()
-end
 
 -- https://github.com/nvim-tree/nvim-tree.lua/wiki/Migrating-To-on_attach
 local function my_on_attach(bufnr)
@@ -70,15 +21,41 @@ local function my_on_attach(bufnr)
     api.config.mappings.default_on_attach(bufnr)
 
     -- on_attach
-    vim.keymap.set("n", "l", edit_or_open, opts("Edit Or Open"))
-    vim.keymap.set("n", "L", vsplit_preview, opts("Vsplit Preview"))
-    vim.keymap.set("n", "h", collapse_keep_buffer, opts("Collapse but keep buffer"))
-    vim.keymap.set('n', 'T', open_tab_silent, opts("Open Tab Silent"))
+    vim.keymap.set("n", "l", function()
+        local node = api.tree.get_node_under_cursor()
+        api.node.open.edit()
+    end, opts("跳转到光标所对应的文件"))
+
+
+
+    vim.keymap.set("n", "L", function()
+        local node = api.tree.get_node_under_cursor()
+        if node.nodes ~= nil then
+            -- expand or collapse folder
+            api.node.open.edit()
+        else
+            -- open file as vsplit
+            api.node.open.vertical()
+        end
+        -- Finally refocus on tree if it was lost
+        -- api.tree.focus()
+    end, opts("纵向分割窗口, 并跳转到文件"))
+
+    vim.keymap.set("n", "h", api.node.navigate.parent_close, opts("合拢父文件夹"))
+
+    -- Collapses the nvim-tree recursively, but keep the directories open, which are
+    -- used in an open buffer.
+    vim.keymap.set("n", "H", function()
+        api.tree.collapse_all(true)
+    end, opts("递归合拢父文件夹"))
+
+    vim.keymap.set('n', 'T', function()
+        api.node.open.tab(node)
+        vim.cmd.tabprev()
+    end, opts("在新标签页中打开, 但不跳转"))
     vim.keymap.set("n", "<CR>", api.node.open.tab_drop, opts("Tab drop"))
 
 end
-
-----------------------------------------------------------------
 
 -- 自动打开nvim-tree的辅助函数
 local function open_nvim_tree(data)
@@ -127,6 +104,13 @@ local function tab_win_closed(winnr)
     end
 end
 
+local icons = {
+    diagnostics = require("utils.icons").get("diagnostics"),
+    documents = require("utils.icons").get("documents"),
+    git = require("utils.icons").get("git"),
+    ui = require("utils.icons").get("ui")
+}
+
 -- r : 重命名文件或者目录
 -- a : 创建一个文件
 -- d : 删除一个文件(需要最后确认)
@@ -143,20 +127,80 @@ return {
             -- 设置nvim-tree的快捷键
             on_attach = my_on_attach,
 
+            auto_reload_on_write = true,
+
             sort_by = "case_sensitive",
 
             -- 以图标显示git的状态
             git = {
-                enable = true
+                enable = true,
+                ignore = false,
+                show_on_dirs = true,
+                timeout = 400
             },
 
             renderer = {
-                group_empty = true
+                add_trailing = false,
+                group_empty = true,
+                highlight_git = true,
+                full_name = false,
+                highlight_opened_files = "none",
+                special_files = {"Cargo.toml", "Makefile", "README.md", "readme.md", "CMakeLists.txt"},
+                symlink_destination = true,
+                indent_markers = {
+                    enable = true,
+                    icons = {
+                        corner = "└ ",
+                        edge = "│ ",
+                        item = "│ ",
+                        none = "  "
+                    }
+                },
+                root_folder_label = ":.:s?.*?/..?",
+                icons = {
+                    webdev_colors = true,
+                    git_placement = "after",
+                    show = {
+                        file = true,
+                        folder = true,
+                        folder_arrow = true,
+                        git = true
+                    },
+                    padding = " ",
+                    symlink_arrow = " 󰁔 ",
+                    glyphs = {
+                        default = icons.documents.Default, -- 
+                        symlink = icons.documents.Symlink, -- 
+                        bookmark = icons.ui.Bookmark,
+                        git = {
+                            unstaged = icons.git.Mod_alt,
+                            staged = icons.git.Add, -- 󰄬
+                            unmerged = icons.git.Unmerged,
+                            renamed = icons.git.Rename, -- 󰁔
+                            untracked = icons.git.Untracked, -- "󰞋"
+                            deleted = icons.git.Remove, -- 
+                            ignored = icons.git.Ignore -- ◌
+                        },
+                        folder = {
+                            arrow_open = icons.ui.ArrowOpen,
+                            arrow_closed = icons.ui.ArrowClosed,
+                            -- arrow_open = "",
+                            -- arrow_closed = "",
+                            default = icons.ui.Folder,
+                            open = icons.ui.FolderOpen,
+                            empty = icons.ui.EmptyFolder,
+                            empty_open = icons.ui.EmptyFolderOpen,
+                            symlink = icons.ui.SymlinkFolder,
+                            symlink_open = icons.ui.FolderOpen
+                        }
+                    }
+                }
             },
 
             filters = {
-                -- 不显示隐藏文件
-                dotfiles = true
+                dotfiles = false,
+                custom = {".DS_Store"},
+                exclude = {}
             },
 
             actions = {
@@ -178,8 +222,24 @@ return {
                         }
                     }
                 }
-            }
+            },
 
+            diagnostics = {
+                enable = false,
+                show_on_dirs = false,
+                debounce_delay = 50,
+                icons = {
+                    hint = icons.diagnostics.Hint_alt,
+                    info = icons.diagnostics.Information_alt,
+                    warning = icons.diagnostics.Warning_alt,
+                    error = icons.diagnostics.Error_alt
+                }
+            },
+
+            filesystem_watchers = {
+                enable = true,
+                debounce_delay = 50
+            }
         })
 
         -- 自动打开nvim-tree, 这个东西不能放在setup里面

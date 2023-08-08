@@ -20,8 +20,8 @@
 -- viD：选中双中括号内容[[]]
 return {
     "chrisgrieser/nvim-various-textobjs",
-    -- lazy = true,
-    -- event = {"User FileOpened"},
+    lazy = true,
+    event = {"User FileOpened"},
     config = function()
         require("various-textobjs").setup({
             useDefaultKeymaps = true,

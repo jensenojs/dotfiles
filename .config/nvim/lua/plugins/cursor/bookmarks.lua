@@ -9,6 +9,5 @@
 return {
     'MattesGroeger/vim-bookmarks',
     config = function()
-
     end
 }
