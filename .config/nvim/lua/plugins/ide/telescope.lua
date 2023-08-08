@@ -78,9 +78,9 @@ return {
         vim.keymap.set('n', '<leader>M', ':Telescope vim_bookmarks all<CR>', opts, {
             desc = '<leader>+M : 查找当前项目下的所有书签'
         })
-        vim.keymap.set('n', '<leader>fg', builtin.live_grep, opts, {
-            desc = '<leader>+fg : 模糊搜索当前项目'
-        })
+        -- vim.keymap.set('n', '<leader>fg', builtin.live_grep, opts, {
+        --     desc = '<leader>+fg : 模糊搜索当前项目'
+        -- })
         vim.keymap.set('n', '<leader>g', builtin.git_status, opts, {
             desc = '<leader>+g : 列出当前git项目下做了哪些修改'
         })
@@ -90,10 +90,10 @@ return {
         vim.keymap.set('n', '<leader>b', ':Telescope coc diagnostics<cr>', opts, {
             desc = '<leader>+b : 搜索当前项目下有bug的地方'
         })
-        vim.keymap.set('n', '<leader>r', ':Telescope coc references<cr>', opts, {
+        vim.keymap.set('n', 'gr', ':Telescope coc references<cr>', opts, {
             desc = '<leader>+r : 搜索当前光标下的函数引用'
         })
-        vim.keymap.set('n', '<leader>i', ':Telescope coc implementations<cr>', opts, {
+        vim.keymap.set('n', 'gi', ':Telescope coc implementations<cr>', opts, {
             desc = '<leader>+i : 搜索当前光标下的函数实现'
         })
         -- 适应vscode的快捷键
@@ -108,7 +108,6 @@ return {
         })
 
         require('telescope').setup {
-
             defaults = {
                 -- 可爱捏
                 prompt_prefix = "🔍 ",

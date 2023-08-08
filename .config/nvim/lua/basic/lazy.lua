@@ -8,37 +8,39 @@ vim.g.loaded_netrwPlugin = 1
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
     -- bootstrap lazy.nvim
-    vim.fn.system({"git", "clone", "--filter=blob:none", "https://github.com/folke/lazy.nvim.git", "--branch=stable",
-                   lazypath})
+    vim.fn.system({ "git", "clone", "--filter=blob:none", "https://github.com/folke/lazy.nvim.git", "--branch=stable",
+        lazypath })
 end
 vim.opt.rtp:prepend(lazypath)
 
 -- 配置lazy.nvim
 require("lazy").setup({
-    spec = {{
+    spec = { {
         -- 让neo-vim更漂亮的插件
         import = "plugins.beautify"
     }, {
         -- 让neo-vim输入/移动更高效的插件
         import = "plugins.cursor"
     }, {
-        -- 让neo-vim有能匹敌ide能力的插件
-        import = "plugins.ide"
-    }, {
+        import = "plugins.lang"
+    },{
+            -- 让neo-vim有能匹敌ide能力的插件
+            import = "plugins.ide"
+        }, {
         -- which-key
         import = "plugins"
-    }},
+    } },
 
     defaults = {
         -- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.
         -- If you know what you're doing, you can set this to `true` to have all your custom plugins lazy-loaded by default.
-        lazy = false, -- 不懒加载, 目前懒加载会导致coc-nvim有些问题
+        lazy = false,   -- 不懒加载, 目前懒加载会导致coc-nvim有些问题
         -- version = "*" -- 尝试安装支持语义化版本控制的插件的最新稳定版本。
-        version = false   -- 不显示版本信息, 总是使用最新的插件
+        version = false -- 不显示版本信息, 总是使用最新的插件
     },
 
     install = {
-        colorscheme = {"gruvbox"}
+        colorscheme = { "gruvbox" }
     }, -- 安装颜色主题插件
 
     checker = {
@@ -50,7 +52,7 @@ require("lazy").setup({
     performance = {
         rtp = {
             -- 禁用一些rtp插件
-            disabled_plugins = {"gzip", "netrwPlugin", "tarPlugin", "tohtml", "tutor", "zipPlugin"}
+            disabled_plugins = { "gzip", "netrwPlugin", "tarPlugin", "tohtml", "tutor", "zipPlugin" }
         }
     }
 })
