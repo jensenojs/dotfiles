@@ -1,0 +1,395 @@
+lua require("config/options")
+lua require("config/keymaps")
+lua require("config/autocmds")
+
+
+"""""""""""""""""""""""""""""""""""""
+""" Vim-Plug 配置
+
+call plug#begin('~/.local/share/nvim/site/plugged')
+" The default plugin directory will be as follows:
+"   - Vim (Linux/macOS): '~/.vim/plugged'
+"   - Vim (Windows): '~/vimfiles/plugged'
+"   - Neovim (Linux/macOS/Windows): stdpath('data') . '/plugged'
+
+""""""""""""""
+" 颜色主题
+Plug 'morhetz/gruvbox'                             " gruxbox主题
+Plug 'itchyny/lightline.vim'                       " 状态栏插件，美化 Vim 界面
+Plug 'vim-airline/vim-airline'                     " 状态栏插件，美化 Vim 界面
+Plug 'vim-airline/vim-airline-themes'              " 状态栏插件的主题
+Plug 'mhinz/vim-startify'                          " 启动 Vim 时的欢迎界面
+
+""""""""""""""
+" 泛用辅助
+Plug 'jiangmiao/auto-pairs'                        " 自动匹配括号、引号等符号
+Plug 'lfv89/vim-interestingwords'                  " 高亮突出显示当前光标下的单词
+Plug 'easymotion/vim-easymotion'                   " 快速跳转
+Plug 'haya14busa/incsearch.vim'                    " 在/搜索里也能快速跳转
+Plug 'haya14busa/incsearch-easymotion.vim'
+Plug 'preservim/tagbar'                            " 大纲
+Plug 'tpope/vim-surround'                          " 快速修改括号，引号等
+Plug 'brglng/vim-im-select'                        " 在vim中也能舒服地输入中文, 注意可能要:CocConfig设置一下imselect.defaultInput
+Plug 'dense-analysis/ale'                          " 代码异步检测插件
+
+""""""""""""""
+" 特定语言辅助
+Plug 'neoclide/coc.nvim', {'branch': 'release'}    " 用于代码补全和语法检查的插件
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' } " 针对 Go 语言的插件，提供代码补全、语法检查等功能
+Plug 'buoto/gotests-vim'                           " 在vim下快捷生成go的测试用例
+Plug 'plasticboy/vim-markdown'                     " markdown支持
+Plug 'nvim-treesitter/nvim-treesitter',            " 代码高亮
+ \ {'do': ':TSUpdate'}
+
+""""""""""""""
+" 文件搜索跳转
+Plug 'preservim/nerdtree'                          " 文件树插件，快速浏览文件
+Plug 'Xuyuanp/nerdtree-git-plugin'                 " 给修改过的代码显示一下
+Plug 'preservim/nerdcommenter'                     " 加上注释和取消注释
+Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }  " 模糊搜索插件，可以快速搜索文件、函数
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'                            " fzf模糊搜索, 文件间跳转
+Plug 'tracyone/fzf-funky',{'on': 'FzfFunky'}       " fzf模糊搜索, 文件内跳转
+
+call plug#end()
+
+"""""""""""""""""""""""""""""""""""""
+""" 插件配置
+
+""""""""""""""
+" nvim-treesitter的配置
+""""""""""""""
+lua << EOF
+require('nvim-treesitter.configs').setup({
+    -- 支持的语言
+    ensure_installed = {"go", "sql", "vim", "lua", "java", "rust", "typescript", "c", "cpp", "python"},
+    -- 启用代码高亮
+    highlight = {
+        enable = true,
+        additional_vim_regex_highlighting = false
+    },
+    --启用增量选择
+    incremental_selection = {
+        enable = true,
+        keymaps = {
+            init_selection = '<CR>',
+            node_incremental = '<CR>',
+            node_decremental = '<BS>',
+            scope_incremental = '<TAB>'
+        }
+    },
+    -- 启用基于 Treesitter 的代码格式化(=)
+    indent = {
+        enable = true
+    },
+})
+-- 开启代码折叠
+vim.wo.foldmethod = 'expr'
+vim.wo.foldexpr = 'nvim_treesitter#foldexpr()'
+-- 默认不折叠
+vim.wo.foldlevel = 99
+EOF
+
+""""""""""""""
+" vim主题插件
+""""""""""""""
+" 启动gruxbox主题
+autocmd vimenter * ++nested colorscheme gruvbox
+
+""""""""""""""
+" nerdcommenter的配置
+""""""""""""""
+" 快捷指令对齐vscode
+map <c-/> <leader>ci
+
+map <c-q> <leader>ci 
+
+" 定制化注释的方法
+" Add your own custom formats or override the defaults
+let g:NERDCustomDelimiters = {'c': { 'left': '/**','right': '*/' },  'go': { 'left': '/**','right': '*/' } }
+
+" 允许注释和反转空行
+let g:NERDCommentEmptyLines = 1
+
+
+""""""""""""""
+" ale 插件
+""""""""""""""
+" 改个可爱的图标
+let g:ale_sign_error = '✗'
+let g:ale_sign_warning = '⚡'
+"保持侧边栏可见
+let g:ale_sign_column_always = 1
+" 改变命令行消息
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+
+""""""""""""""
+" tagbar 插件
+""""""""""""""
+noremap <F8> :TagbarToggle<CR>
+"autocmd VimEnter * TagbarOpen
+
+""""""""""""""
+" vim-easymotion的配置
+""""""""""""""
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+
+" Jump to anywhere you want with minimal keystrokes, with just one key binding.
+" `s{char}{label}`
+nmap s <Plug>(easymotion-overwin-f)
+
+" `s{char}{char}{label}`
+" Need one more keystroke, but on average, it may be more comfortable.
+nmap ss <Plug>(easymotion-overwin-f2)
+
+
+" Turn on case-insensitive feature
+let g:EasyMotion_smartcase = 1
+
+" JK motions: Line motions
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+
+
+""""""""""""""
+" incsearch-easymotion的配置
+""""""""""""""
+
+" You can use other keymappings like <C-l> instead of <CR> if you want to
+" use these mappings as default search and sometimes want to move cursor with
+" EasyMotion.
+function! s:incsearch_config(...) abort
+  return incsearch#util#deepextend(deepcopy({
+  \   'modules': [incsearch#config#easymotion#module({'overwin': 1})],
+  \   'keymap': {
+  \     "\<CR>": '<Over>(easymotion)'
+  \   },
+  \   'is_expr': 0
+  \ }), get(a:, 1, {}))
+endfunction
+
+noremap <silent><expr> /  incsearch#go(<SID>incsearch_config())
+noremap <silent><expr> ?  incsearch#go(<SID>incsearch_config({'command': '?'}))
+noremap <silent><expr> g/ incsearch#go(<SID>incsearch_config({'is_stay': 1}))
+
+""""""""""""""
+" NERDTree的配置
+""""""""""""""
+" F2快速打开或者关闭
+nnoremap <F2> :NERDTreeToggle<cr>
+
+" <space> v 快速跳转到当前文件在目录位置
+nnoremap <leader>v :NERDTreeFind<cr>
+
+" <space> g 打开侧边栏目录
+" 基础使用j k进行上下选择，o或回车打开文件目录
+nnoremap <leader>g <c-w>w
+
+"highlight VertSplit ctermbg=NONE "边框颜色的调整
+
+" 在打开 Vim 时自动打开 NERDTree 并将焦点切换到左侧窗口
+autocmd VimEnter * NERDTree | wincmd p
+
+" 这行我也不懂, 好像是自动启用某些插件或者功能的
+autocmd StdinReadPre * let s:std_in=1
+
+" 如果没有打开任何文件，则自动打开 NERDTree
+autocmd VimEnter * if argc()==0 && !exists('s:std_in') | NERDTree | endif
+
+" 如果当前窗口是 NERDTree 并且是最后一个窗口，则退出 Vim
+autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+
+""""""""""""""
+" vim-go的配置
+""""""""""""""
+
+
+""""""""""""""
+" coc.vim的配置
+""""""""""""""
+" if hidden is not set, TextEdit might fail.
+set hidden " 隐藏未保存的文件
+" Some servers have issues with backup files, see #649
+set nobackup " 禁止备份文件
+set nowritebackup " 禁止写入备份文件
+
+ 
+" 设置更新时间为 300 毫秒
+" You will have bad experience for diagnostic messages when it's default 4000.
+set updatetime=300
+
+" 禁止显示补全菜单提示信息
+" don't give |ins-completion-menu| messages.
+set shortmess+=c 
+
+" 设置剪切板共享
+set clipboard+=unnamed
+
+" 设置补全菜单高度
+set pumheight=5
+
+" 选中项背景色设置
+" cterm表示有色终端，
+" ctermfg表示前景颜色，
+" ctermbg表示b背景颜色，
+" Pmenu表示下拉框(Popup Menu)
+" PmenuSel表示选择效果，CocFloating表示右侧的浮动窗。
+hi Pmenu ctermfg=7 ctermbg=236 " 设置下拉菜单背景颜色
+hi PmenuSel ctermfg=white ctermbg=32 " 设置下拉菜单选中项背景颜色
+hi CocFloating ctermfg=black ctermbg=240 " 设置浮动窗口的背景颜色
+
+" 自动安装coc-nvim对应的语言补齐插件
+let g:coc_global_extensions = [
+	\ 'coc-marketplace',
+    \ 'coc-highlight',
+	\ 'coc-snippets',
+	\ 'coc-json',
+	\ 'coc-vimlsp',
+	\ 'coc-markdownlint',
+	\ 'coc-sh',
+	\ 'coc-pyright',
+	\ 'coc-xml',
+	\ 'coc-yaml',
+	\ 'coc-toml',
+	\ 'coc-go',
+	\ 'coc-translator',
+	\ 'coc-java',
+	\ 'coc-java-intellicode',
+	\ 'coc-rls',
+	\ 'coc-sql',
+\]
+
+" always show signcolumns
+set signcolumn=yes
+ 
+" Tab键触发补全菜单
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+ 
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" <c-space> 触发补全菜单
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+ 
+" <cr> 确认补全菜单
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" Or use `complete_info` if your vim support it, like:
+" inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+ 
+" [g 和 ]g：导航诊断信息
+" Use `[g` and `]g` to navigate diagnostics
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" gd：跳转到定义 gy：跳转到类型定义 gi：跳转到实现 gr：跳转到引用
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" nnoremap 的 "n" 表示 normal 模式，"nore" 表示非递归映射，即不允许递归调用。
+" 在预览窗口中显示文档
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+ 
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+ 
+" Highlight symbol under cursor on CursorHold
+autocmd CursorHold * silent call CocActionAsync('highlight')
+ 
+
+" <leader> rn 重命名当前单词
+" Remap for rename current word
+nmap <leader>rn <Plug>(coc-rename)
+ 
+" <leader> f 格式化选中代码
+" Remap for format selected region
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+ 
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+ 
+" <leader> a 对当前选中的代码执行代码操作
+" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+ 
+" <leader> ac 对当前行执行代码操作
+" Remap for do codeAction of current line
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Fix autofix problem of current line
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" Create mappings for function text object, requires document symbols feature of languageserver.
+xmap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap if <Plug>(coc-funcobj-i)
+omap af <Plug>(coc-funcobj-a)
+ 
+" :Format 格式化当前缓冲区
+" Use `:Format` to format current buffer
+command! -nargs=0 Format :call CocAction('format')
+
+" :Fold 折叠当前缓冲区
+" Use `:Fold` to fold current buffer
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+ 
+" :OR 组织当前缓冲区的导入
+" use `:OR` for organize import of current buffer
+command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
+""""""""""""""
+" fzf and FzfFunck
+""""""""""""""
+" 全局文件搜索, mac 下可以用item2的配置将<c-p>映射为<m-p>,
+" 使得快捷键和vscode一致
+nnoremap <c-p>  :GFiles<CR>   
+" 函数跳转, 有些终端可能识别不到ctrl+shift的快捷键, 向vscode对齐
+nnoremap <c-s-o> :FzfFunky<CR>
+" nnoremap <leader>fu :FzfFunky<CR> 不行就用这个
+" 全局模糊搜索(文件里也能搜)
+"nnoremap <c-t>  :Ag<CR>
+" Linting
+let g:ags_enable_async = 1
+" Show 1 line before and after from the match
+let g:ags_agcontext = 1
+
+""""""""""""""
+" airline的配置
+""""""""""""""
+set laststatus=2  "永远显示状态栏
+let g:airline_powerline_fonts = 1  " 支持 powerline 字体
+let g:airline#extensions#tabline#enabled = 1 " 显示窗口tab和buffer
+let g:airline_theme='gruvbox'
+
+if !exists('g:airline_symbols')
+let g:airline_symbols = {}
+endif
+
