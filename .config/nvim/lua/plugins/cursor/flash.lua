@@ -1,9 +1,6 @@
 -- https://github.com/folke/flash.nvim
 -- 光标移动插件, 结合了easymotion和clvever-f的功能, 还有Treesitte集成, 对默认搜索也有所优化
 local bind = require("utils.bind")
-local map_cr = bind.map_cr
-local map_cu = bind.map_cu
-local map_cmd = bind.map_cmd
 local map_callback = bind.map_callback
 
 local keymaps = {

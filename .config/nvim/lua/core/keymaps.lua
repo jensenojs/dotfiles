@@ -65,8 +65,8 @@ local keymaps = {
     -----------------
     --    可视模式  --
     -----------------
-    ["v|J"] = map_cmd(":m '>+1<CR>gv=gv"):with_desc("可视: Move this line down"),
-    ["v|K"] = map_cmd(":m '<-2<CR>gv=gv"):with_desc("可视: Move this line up"),
+    ["v|J"] = map_cmd(":m '>+1<CR>gv=gv"):with_desc("可视:Move this line down"),
+    ["v|K"] = map_cmd(":m '<-2<CR>gv=gv"):with_desc("可视:Move this line up"),
     ["v|<"] = map_cmd("<gv"):with_noremap():with_silent():with_desc("重新选择上一次选择的区域"),
     ["v|>"] = map_cmd(">gv"):with_noremap():with_silent():with_desc(
         "重新选择上一次选择的区域，并向右移动一次缩进"),
@@ -75,11 +75,11 @@ local keymaps = {
     --    其他      --
     -----------------
     ["n|<Home>"] = map_callback(home):with_desc(
-        "光标: 先按相当于^, 再按到行首"),
+        "光标:先按相当于^, 再按到行首"),
     ["i|<Home>"] = map_callback(home):with_desc(
-        "光标: 先按相当于^, 再按到行首"),
+        "光标:先按相当于^, 再按到行首"),
     ["n|0"] = map_callback(home):with_desc(
-        "光标: 先按相当于^, 再按到行首"),
+        "光标:先按相当于^, 再按到行首"),
     ["n|<c-s-t>"] = map_cr(":e#"):with_desc("重新打开刚才关闭的文件")
 }
 

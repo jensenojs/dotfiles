@@ -1,6 +1,5 @@
 -- Autocmds are automatically loaded on the VeryLazy event
 -- Default autocmds that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua
-
 -- 定义一个函数，用于创建自动命令组
 local function augroup(name)
     return vim.api.nvim_create_augroup("lazyvim_" .. name, {
@@ -53,4 +52,11 @@ vim.api.nvim_create_autocmd("FileType", {
         vim.opt_local.wrap = true
         vim.opt_local.spell = true
     end
+})
+
+-- fix couldn't fold any code segments in files which were opened using telescope
+-- https://github.com/nvim-treesitter/nvim-treesitter/issues/1337#issuecomment-1397639999
+vim.api.nvim_create_autocmd({"BufEnter"}, {
+    pattern = {"*"},
+    command = "normal zx"
 })

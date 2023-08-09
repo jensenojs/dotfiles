@@ -19,6 +19,7 @@
 --      []：跳到上一个类的结尾处
 --      ]d：跳到下一个条件
 --      [d：跳到上一个条件
+
 return {
     "nvim-treesitter/nvim-treesitter-textobjects",
     -- lazy = true,

@@ -58,7 +58,15 @@
 
 ### curosr
 
-#### [flash](https://github.com/folke/flash.nvim)
+对于光标移动相关的插件实际上也可以进行分类
+
+
+
+#### 光标移动
+
+
+
+##### [flash](https://github.com/folke/flash.nvim)
 
 结合了[easymotion](https://github.com/easymotion/vim-easymotion)和[clvever-f](https://github.com/rhysd/clever-f.vim)的功能, 还有Treesitte集成，功能也十分强大
 
@@ -66,41 +74,52 @@
 -   `S`：
 
 
-#### [nvim-surround](https://github.com/kylechui/nvim-surround)
 
-这个似乎比`vim-surround`好用一些，记住三个就行：
-
--   `add`：`ys{motion}{char}`
--   `delete`：`ds{motion}{char}`
--   `change`：`cs{target}{replacement}`
-
-For the following examples, `*` will denote the cursor position:
-
-```
-    Old text                    Command         New text
---------------------------------------------------------------------------------
-    surr*ound_words             ysiw)           (surround_words)
-    *make strings               ys$"            "make strings"
-    [delete ar*ound me!]        ds]             delete around me!
-    remove <b>HTML t*ags</b>    dst             remove HTML tags
-    'change quot*es'            cs'"            "change quotes"
-    <b>or tag* types</b>        csth1<CR>       <h1>or tag types</h1>
-    delete(functi*on calls)     dsf             function calls
-```
-
-#### [vim-matchup](https://github.com/andymass/vim-matchup)
+##### [vim-matchup](https://github.com/andymass/vim-matchup)
 
 在vim中，按下%会跳转到当前光标所在位置的配对括号（如圆括号、方括号、花括号）的另一半括号位置。这个功能在编辑代码时非常有用，可以快速定位到配对的括号上，方便代码的阅读和编辑。
 
 这个插件，可以基于`treesitter`扩展`%`键能力，在配置里面也已经设置好了，其他还有一些快捷键，但是我们可以不用管了，`z%` 可以go inside，但是我们也不见得需要它来跳转。
 
 
-#### [tabout.nvim](https://github.com/abecodes/tabout.nvim)
 
-可以在Insert模式下，按`<Tab>`可以跳出括号 —— 这个东西默认跟`coc-nvim`的自动补齐会有冲突，但是在coc-nvim.lua中应该已经配置好了。
+##### [vim-bookmarks](https://github.com/MattesGroeger/vim-bookmarks)
+
+默认的快捷键也已经很好了，但我也重新配置了一遍并做了一些小小的修改，直接集成``telescope`插件的查找，`ma`查看当前文件下的所有书签，`mA`查看当前项目下的所有书签。同时在`whichkey`中能看到更加友好的注释，
+
+| Action                                     | Shortcut |
+| ------------------------------------------ | -------- |
+| Add/remove bookmark at current line        | `mm`     |
+| Add/edit/remove annotation at current line | `mi`     |
+| Jump to next bookmark in buffer            | `mn`     |
+| Jump to previous bookmark in buffer        | `mp`     |
+| Show current file bookmarks                | `ma`     |
+| Show all bookmarks (toggle)                | `mA`     |
+| Clear bookmarks in current buffer only     | `mc`     |
+| Clear bookmarks in all buffers             | `mx`     |
 
 
-#### [nvim-various-textobjs](https://github.com/chrisgrieser/nvim-various-textobjs)
+
+****
+
+
+
+#### textobjs
+
+这里的插件功能都很强大，还没有怎么学会。
+
+##### [nvim-treesitter-textsubjects](https://github.com/RRethy/nvim-treesitter-textsubjects)
+
+根据光标位置自动决定要选中什么textobject
+
+使用方式：快捷键使用（以v选中模式举例）
+
+-   `v.`：根据光标位置，智能选择
+-   `v,`：选中上一次选中的范围
+-   `v;`：选中容器外围
+-   `vi;`：选中容器内
+
+##### [nvim-various-textobjs](https://github.com/chrisgrieser/nvim-various-textobjs)
 
 为neovim新增很多textobjects，它们可以丰富你的快捷键选中、复制、修改等操作的体验。
 
@@ -124,7 +143,7 @@ For the following examples, `*` will denote the cursor position:
 -   `vi/`：选中javascript的正则表达式pattern
 -   `viD`：选中双中括号内容`[[]]`
 
-#### [nvim-treesitter-textobjects](https://github.com/nvim-treesitter/nvim-treesitter-textobjects)
+##### [nvim-treesitter-textobjects](https://github.com/nvim-treesitter/nvim-treesitter-textobjects)
 
 简介：基于nvim-treesitter的textobjects，可以帮你选中class、function等语法内容
 
@@ -152,16 +171,110 @@ For the following examples, `*` will denote the cursor position:
 -   `]d`：跳到下一个条件
 -   `[d`：跳到上一个条件
 
-#### [nvim-treesitter-textsubjects](https://github.com/RRethy/nvim-treesitter-textsubjects)
 
-根据光标位置自动决定要选中什么textobject
 
-使用方式：快捷键使用（以v选中模式举例）
+****
 
--   `v.`：根据光标位置，智能选择
--   `v,`：选中上一次选中的范围
--   `v;`：选中容器外围
--   `vi;`：选中容器内
+
+
+#### 其他
+
+前两个是与`insert mode`相关
+
+
+
+##### [tabout.nvim](https://github.com/abecodes/tabout.nvim)
+
+可以在Insert模式下，按`<Tab>`可以跳出各种的右括号什么的 —— 这个东西默认跟`coc-nvim`的自动补齐会有冲突，但是在coc-nvim.lua中应该已经配置好了，详情可以看coc-nvim下的`SmartTab`函数。
+
+
+
+##### [nvim-surround](https://github.com/kylechui/nvim-surround)
+
+这个似乎比`vim-surround`好用一些，它的默认配置我就不修改了。
+
+###### basic
+
+-   `add`：`ys{motion}{char}`
+-   `delete`：`ds{motion}{char}`
+-   `change`：`cs{target}{replacement}`
+
+For the following examples, `*` will denote the cursor position:
+
+```
+    Old text                    Command         New text
+--------------------------------------------------------------------------------
+    surr*ound_words             ysiw)           (surround_words)
+    surr*ound_words             ysiw(           ( surround_words )
+    *make strings               ys$"            "make strings"
+    [delete ar*ound me!]        ds]             delete around me!
+    remove <b>HTML t*ags</b>    dst             remove HTML tags
+    'change quot*es'            cs'"            "change quotes"
+    <b>or tag* types</b>        csth1<CR>       <h1>or tag types</h1>
+    delete(functi*on calls)     dsf             function calls
+```
+
+###### (less) More mapping
+
+下面的例子摘抄自文档，我挑了些我觉得可能有用的记录。对于`ys`来说它有一些变体，比如说`yss`会忽略掉一些空格，`yS`和`ySS`类似于`ys`和`yss`，但是会把分割符新起一行：
+
+```
+    Old text                    Command         New text
+    --------------------------------------------------------------------------------
+    hel*lo world                yss"            "hello world"
+    some content                ySStp           <p>
+                                                some content
+                                                </p>
+   func(a*rgs)                  cS))            func(
+                                                    args
+                                                    )
+```
+
+一些跟`html`相关的我就不记录了，但是这个`f`是有点有趣的：
+
+```Go
+   Old text                    Command         New text ~
+    arg*s                       ysiwffunc       func(args)
+    f*unc_name(a, b, x)         dsf             a, b, x
+    f*unc_name(a, b, x)         csfnew_name     new_name(a, b, x)
+```
+
+###### Aliasing
+
+默认地对`()`和`[]`是有别名的，分别是`b`和`r`，`{}`的对应是`B`，这样按起来更快——看下面的例子，
+
+```
+    Old text                    Command         New text ~
+    sample* text                yssb            (sample text)
+    sample* text                yssB            {sample text}
+    [more stuff]                dsr             more stuff
+    use["nvim*-surround"]       csrb            use("nvim-surround")
+```
+
+还有一个别名是`q`，`q` 可以对应 ``,',"`这么多种`pair`，因为我们只在删除的时候用它，看下面的例子。
+
+```Go
+    Old text                    Command         New text ~
+    "Nested '*quotes'"          dsq             "Nested quotes"
+    "Nes*ted 'quotes'"          dsq             Nested 'quotes'
+    "Nes*ted 'quotes'"          csqb            (Nested 'quotes')
+```
+
+###### Jump
+
+如果光标不在`surrounding pair`中，它可以自动地跳到最近的`pair`里面进行操作，它移动优先级文档我觉得说得也不太清楚，直接看例子吧，其实是很直觉的。
+
+```
+    Old text                    Command         New text ~
+    "hello"* 'world'            dsq             "hello" world
+    "hello" world*              csqB            {hello} world
+    *some "'nested' quotes"     dsq             some 'nested' quotes
+    "'nested' quotes" t*ext     dsq             'nested' quotes text
+```
+
+
+
+****
 
 
 

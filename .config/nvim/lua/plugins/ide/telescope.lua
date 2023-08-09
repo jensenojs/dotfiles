@@ -72,12 +72,7 @@ return {
         vim.keymap.set('n', '<leader>?', builtin.oldfiles, opts, {
             desc = '<leader>+? : 查找打开过的文件'
         })
-        vim.keymap.set('n', '<leader>m', ':Telescope vim_bookmarks current_file<CR>', opts, {
-            desc = '<leader>+m : 查找当前文件下的书签'
-        })
-        vim.keymap.set('n', '<leader>M', ':Telescope vim_bookmarks all<CR>', opts, {
-            desc = '<leader>+M : 查找当前项目下的所有书签'
-        })
+
         -- vim.keymap.set('n', '<leader>fg', builtin.live_grep, opts, {
         --     desc = '<leader>+fg : 模糊搜索当前项目'
         -- })

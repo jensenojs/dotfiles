@@ -2,11 +2,12 @@ return {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
 
-    -- https://github.com/andymass/vim-matchup
-    dependencies = {
-        -- better matchup which can be intergreted to treesitter
-        "andymass/vim-matchup",
-    },
+    dependencies = { -- better matchup which can be intergreted to treesitter
+    "andymass/vim-matchup"},
+    -- -- 开启treesitter加持的代码折叠
+    vim.api.nvim_set_option_value('foldmethod', 'expr', {}),
+    vim.api.nvim_set_option_value('foldexpr', 'nvim_treesitter#foldexpr()', {}),
+    -- vim.api.nvim_set_option_value('foldenable', false, {}),
 
     config = function()
         require("nvim-treesitter.configs").setup({
@@ -19,7 +20,7 @@ return {
 
             -- Automatically install missing parsers when entering buffer
             -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-            -- auto_install = true,
+            auto_install = true,
 
             -- 启用代码高亮
             highlight = {
@@ -32,20 +33,19 @@ return {
                     if ok and stats and stats.size > max_filesize then
                         return true
                     end
-                end
+                end,
+
+                -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+                -- Using this option may slow down your editor, and you may see some duplicate highlights.
+                -- Instead of true it can also be a list of languages
+                additional_vim_regex_highlighting = false
             }
 
-            -- 启用基于 Treesitter 的代码格式化。
-            -- indent = {
-            --     enable = true
-            -- },
         })
 
-        -- 开启treesitter加持的代码折叠
-        vim.wo.foldmethod = "expr"
-        vim.wo.foldexpr = 'nvim_treesitter#foldexpr()'
-        -- 默认不折叠
-        vim.wo.foldlevel = 99
+        -- 启用基于treesiter的代码折叠功能
+        -- vim.opt.foldmethod = "expr"
+        -- vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 
     end
 }
