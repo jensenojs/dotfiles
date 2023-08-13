@@ -1,4 +1,4 @@
-vim.opt.list = true
+-- https://github.com/lukas-reineke/indent-blankline.nvim
 
 -- 默认的颜色有点糟糕，换一下
 vim.opt.termguicolors = true
