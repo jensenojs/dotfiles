@@ -1,14 +1,11 @@
+-- https://github.com/nvim-treesitter/nvim-treesitter
+-- 
 return {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
 
     dependencies = { -- better matchup which can be intergreted to treesitter
     "andymass/vim-matchup"},
-    -- -- 开启treesitter加持的代码折叠
-    vim.api.nvim_set_option_value('foldmethod', 'expr', {}),
-    vim.api.nvim_set_option_value('foldexpr', 'nvim_treesitter#foldexpr()', {}),
-    -- vim.api.nvim_set_option_value('foldenable', false, {}),
-
     config = function()
         require("nvim-treesitter.configs").setup({
             -- 支持的语言, 它们的代码高亮就很漂亮啦
@@ -44,8 +41,8 @@ return {
         })
 
         -- 启用基于treesiter的代码折叠功能
-        -- vim.opt.foldmethod = "expr"
-        -- vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-
+        vim.opt.foldmethod = "expr"
+        vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+        vim.opt.foldlevel = 10
     end
 }

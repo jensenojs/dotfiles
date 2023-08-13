@@ -5,13 +5,13 @@ local map_callback = bind.map_callback
 
 local keymaps = {
     -- 还有内置的类似clever-f的功能
-
     ["nxo|s"] = map_callback(function()
         require("flash").jump()
-    end):with_desc("easymotion的跳转"),
+    end):with_noremap():with_silent():with_desc("easymotion的跳转"),
+
     ["nxo|S"] = map_callback(function()
         require("flash").treesitter()
-    end):with_desc("基于treesitter的块选中")
+    end):with_noremap():with_silent():with_desc("基于treesitter的块选中")
 }
 
 bind.nvim_load_mapping(keymaps)

@@ -1,32 +1,15 @@
 -- https://github.com/RRethy/nvim-treesitter-textsubjects
-
--- 根据光标位置自动决定要选中什么textobject
+-- 根据光标位置启发式的决定要选中什么textobject, 像treesitter-textobjects会有一些认知负担
+--
 -- 使用方式：快捷键使用（以v选中模式举例）
 -- v.：根据光标位置，智能选择
 -- v,：选中上一次选中的范围
 -- v;：选中容器外围
 -- vi;：选中容器内
 -- <leader>+a : 
-
-local bind = require("utils.bind")
-local map_cr = bind.map_cr
-local map_cu = bind.map_cu
-local map_cmd = bind.map_cmd
-local map_callback = bind.map_callback
-
-local keymaps = {
-
-    -- ["nxo|s"] = map_callback(function()
-    --     require("flash").jump()
-    -- end):with_desc("easymotion的跳转"),
-    -- ["nxo|S"] = map_callback(function()
-    --     require("flash").treesitter()
-    -- end):with_desc("基于treesitter的块选中")
-}
-
-bind.nvim_load_mapping(keymaps)
-
-
+-- 
+-- 等合适的时候才能给这个快捷键加上docs
+-- https://github.com/RRethy/nvim-treesitter-textsubjects/pull/36
 return {
     "RRethy/nvim-treesitter-textsubjects",
     -- lazy = true,

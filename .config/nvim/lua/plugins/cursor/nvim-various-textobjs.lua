@@ -1,7 +1,7 @@
 -- https://github.com/chrisgrieser/nvim-various-textobjs
 -- 为neovim新增很多textobjects，它们可以丰富你的快捷键选中、复制、修改等操作的体验
--- 使用方式：快捷键使用（以选中功能"v"来举例，可以替换为"c"（删除并修改）、"d"（删除）、"y"复制等）（i可以替换为a，i表示"inner"，a表示"outer"，如va}会选中包括}本身的内容，而vi}则不会）
--- viS：选中当前光标下的子word（如VimEnter，我们使用viw会选中整个VimEnter，但viS只会选中Enter或Vim）
+-- 使用方式：快捷键使用（以选中功能"v"来举例，可以替换为"c"（删除并修改）、"d"（删除）、"y"复制等）
+-- i可以替换为a，i表示"inner"，a表示"outer"，如va}会选中包括}本身的内容，而vi}则不会
 -- vii：选中当前相同缩进的所有行
 -- vR：选中当前相同缩进往后剩余的行
 -- v%：选中当前光标下对应的括号结束位置
@@ -18,21 +18,32 @@
 -- vic：选中css选择器
 -- vi/：选中javascript的正则表达式pattern
 -- viD：选中双中括号内容[[]]
+local bind = require("utils.bind")
+local map_callback = bind.map_callback
+
+local keymaps = {
+    ["ox|aS"] = map_callback(function()
+        require("various-textobjs").subword(false)
+    end):with_noremap():with_silent():with_desc("textobj: inner subword(treating -, _, and . as word delimiters)"),
+
+    ["ox|iS"] = map_callback(function()
+        require("various-textobjs").subword(true)
+    end):with_noremap():with_silent():with_desc("textobj: outer subword(includes trailing _,-, or space)")
+}
+
+bind.nvim_load_mapping(keymaps)
+
 return {
     "chrisgrieser/nvim-various-textobjs",
-    lazy = true,
-    event = {"User FileOpened"},
+    -- lazy = true,
+    -- event = {"User FileOpened"},
     config = function()
         require("various-textobjs").setup({
-            useDefaultKeymaps = true,
+            useDefaultKeymaps = false,
+
+            -- lines to seek forwards for "small" textobjs (mostly characterwise textobjs)
+            -- set to 0 to only look in the current line
             lookForwardLines = 10
         })
-        -- example: `an` for outer subword, `in` for inner subword
-        vim.keymap.set({"o", "x"}, "aS", function()
-            require("various-textobjs").subword(false)
-        end)
-        vim.keymap.set({"o", "x"}, "iS", function()
-            require("various-textobjs").subword(true)
-        end)
     end
 }

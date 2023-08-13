@@ -37,7 +37,7 @@ require("lazy").setup({
         -- 特定语言的支持
         import = "plugins.lang"
     }, {
-        -- 让neo-vim有能匹敌ide能力的插件
+        -- 让neo-vim有ide能力的插件
         import = "plugins.ide"
     }, {
         -- which-key

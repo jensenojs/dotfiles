@@ -2,6 +2,5 @@
 -- Always have a nice view over your split windows
 return {{
     'nvim-focus/focus.nvim',
-    version = '*',
     config = true,
 }}

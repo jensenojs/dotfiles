@@ -3,36 +3,14 @@
 return {
     "abecodes/tabout.nvim",
     lazy = true,
-    event = { "InsertEnter" },
+    event = {"InsertEnter"},
     config = function()
         require("tabout").setup({
-            -- 这个插件的功能被集成在了coc-nvim的Smart Tab中
+            -- 这个插件的功能被集成在了coc-nvim中，所以禁用掉了默认的配置
             tabkey = "",
             backwards_tabkey = "",
-            act_as_tab = true,
-            act_as_shift_tab = false,
-            default_tab = "<C-t>",
-            default_shift_tab = "<C-d>",
-            enable_backwards = true,
-            completion = true,
-            tabouts = {
-                { open = "'", close = "'" },
-                { open = '"', close = '"' },
-                { open = "`", close = "`" },
-                { open = "(", close = ")" },
-                { open = "[", close = "]" },
-                { open = "{", close = "}" },
-            },
-            ignore_beginning = true,
-            exclude = {
-                "qf",
-                "NvimTree",
-                "toggleterm",
-                "TelescopePrompt",
-                "alpha",
-                "netrw",
-            },
+
+            exclude = {"qf", "NvimTree", "toggleterm", "TelescopePrompt", "alpha", "netrw"}
         })
-    end,
-    -- after = { "coc-nvim" },
+    end
 }

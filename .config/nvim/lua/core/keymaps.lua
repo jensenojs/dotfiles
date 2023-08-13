@@ -3,7 +3,6 @@
 -- Add any additional keymaps here
 local bind = require("utils.bind")
 local map_cr = bind.map_cr
-local map_cu = bind.map_cu
 local map_cmd = bind.map_cmd
 local map_callback = bind.map_callback
 
@@ -57,9 +56,9 @@ local keymaps = {
     -----------------
     --   保存与退出  --
     -----------------
+    ["n|<leader>q"] = map_cr("q"):with_noremap():with_silent():with_desc("删除当前窗口"),
     ["n|<leader>w"] = map_cr("w"):with_noremap():with_silent():with_desc("保存当前窗口指向的buffer"),
     ["n|<leader>W"] = map_cr("wa"):with_noremap():with_silent():with_desc("保存所有的buffer"),
-    ["n|<leader>q"] = map_cr("q"):with_noremap():with_silent():with_desc("删除当前窗口"),
     ["n|<leader>Q"] = map_cr("qa!"):with_noremap():with_silent():with_desc("强制退出neovim"),
 
     -----------------
@@ -74,13 +73,10 @@ local keymaps = {
     -----------------
     --    其他      --
     -----------------
-    ["n|<Home>"] = map_callback(home):with_desc(
-        "光标:先按相当于^, 再按到行首"),
-    ["i|<Home>"] = map_callback(home):with_desc(
-        "光标:先按相当于^, 再按到行首"),
-    ["n|0"] = map_callback(home):with_desc(
-        "光标:先按相当于^, 再按到行首"),
-    ["n|<c-s-t>"] = map_cr(":e#"):with_desc("重新打开刚才关闭的文件")
+    ["in|<Home>"] = map_callback(home):with_desc("光标:先按相当于^, 再按到行首"),
+    -- ["i|<Home>"] = map_callback(home):with_desc(
+    --     "光标:先按相当于^, 再按到行首"),
+    ["n|0"] = map_callback(home):with_desc("光标:先按相当于^, 再按到行首")
 }
 
 bind.nvim_load_mapping(keymaps)

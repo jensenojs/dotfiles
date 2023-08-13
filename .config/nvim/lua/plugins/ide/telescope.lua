@@ -66,40 +66,28 @@ return {
         end, opts, {
             desc = '<leader>+/ : 在当前文件下模糊搜索'
         })
-        vim.keymap.set('n', '<leader><space>', builtin.buffers, opts, {
-            desc = '<leader>+<space> : 查找当前打开的buffer'
-        })
         vim.keymap.set('n', '<leader>?', builtin.oldfiles, opts, {
             desc = '<leader>+? : 查找打开过的文件'
         })
-
-        -- vim.keymap.set('n', '<leader>fg', builtin.live_grep, opts, {
-        --     desc = '<leader>+fg : 模糊搜索当前项目'
-        -- })
         vim.keymap.set('n', '<leader>g', builtin.git_status, opts, {
             desc = '<leader>+g : 列出当前git项目下做了哪些修改'
         })
-        -- vim.keymap.set('n', '<leader>a', ':Telescope coc code_actions<cr>', opts, {
-        --     desc = '<leader>+a : '
-        -- })
-        vim.keymap.set('n', '<leader>b', ':Telescope coc diagnostics<cr>', opts, {
-            desc = '<leader>+b : 搜索当前项目下有bug的地方'
+        vim.keymap.set('n', '<leader>a', ':Telescope coc code_actions<cr>', opts, {
+            desc = '采取行动'
         })
-        vim.keymap.set('n', 'gr', ':Telescope coc references<cr>', opts, {
-            desc = '<leader>+r : 搜索当前光标下的函数引用'
-        })
-        vim.keymap.set('n', 'gi', ':Telescope coc implementations<cr>', opts, {
-            desc = '<leader>+i : 搜索当前光标下的函数实现'
-        })
+
         -- 适应vscode的快捷键
         vim.keymap.set('n', '<c-p>', builtin.find_files, opts, {
-            desc = 'ctrl+p : 查找文件'
+            desc = '查找文件'
         })
-        vim.keymap.set('n', '<c-s-o>', ':Telescope coc document_symbols<cr>', opts, {
-            desc = 'ctrl+s : 搜索当前文件下的符号'
+        -- vim.keymap.set('n', '<c-s-o>', ':Telescope coc document_symbols<cr>', opts, {
+        --     desc = '搜索当前文件下的符号'
+        -- })
+        vim.keymap.set('n', '<c-s-o>', ':Telescope aerial<cr>', opts, {
+            desc = '搜索当前文件下的符号'
         })
         vim.keymap.set('n', '<c-t>', ':Telescope coc workspace_symbols<cr>', opts, {
-            desc = 'ctrl+t : 搜索当前项目下的符号'
+            desc = '搜索当前项目下的符号'
         })
 
         require('telescope').setup {
@@ -186,8 +174,15 @@ return {
                 coc = {
                     -- always use Telescope locations to preview definitions/declarations/implementations etc
                     prefer_locations = true
+                },
+                aerial = {
+                    -- Display symbols as <root>.<parent>.<symbol>
+                    show_nesting = {
+                        ['_'] = false, -- This key will be the default
+                        json = true, -- You can set the option for specific filetypes
+                        yaml = true
+                    }
                 }
-
             }
         }
         require('telescope').load_extension('fzf')
@@ -195,6 +190,7 @@ return {
         require('telescope').load_extension('coc')
         require('telescope').load_extension('vim_bookmarks')
         require("telescope").load_extension("lazygit")
+        require('telescope').load_extension('aerial')
 
     end
 }

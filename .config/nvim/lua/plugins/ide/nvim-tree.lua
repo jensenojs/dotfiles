@@ -1,9 +1,8 @@
 -- https://github.com/nvim-tree/nvim-tree.lua
 -- 目录树
 -- define common options
-
-
 -- https://github.com/nvim-tree/nvim-tree.lua/wiki/Migrating-To-on_attach
+
 local function my_on_attach(bufnr)
     local api = require "nvim-tree.api"
 
@@ -25,8 +24,6 @@ local function my_on_attach(bufnr)
         local node = api.tree.get_node_under_cursor()
         api.node.open.edit()
     end, opts("跳转到光标所对应的文件"))
-
-
 
     vim.keymap.set("n", "L", function()
         local node = api.tree.get_node_under_cursor()
@@ -128,6 +125,11 @@ return {
             on_attach = my_on_attach,
 
             auto_reload_on_write = true,
+
+            -- autofocus file in the tree after opening
+            update_focused_file = {
+                enable = true
+            },
 
             sort_by = "case_sensitive",
 
@@ -259,4 +261,3 @@ return {
         vim.keymap.set('n', '<F2>', ':NvimTreeToggle<CR>', opts)
     end
 }
-

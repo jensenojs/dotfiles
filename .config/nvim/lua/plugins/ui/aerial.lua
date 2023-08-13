@@ -1,6 +1,7 @@
 -- https://github.com/stevearc/aerial.nvim
 -- 文件大纲
-
+-- 类似： https://github.com/liuchengxu/vista.vim 
+-- 其实coc-nvim本身也有大纲，但是那个太丑了
 return {
     'stevearc/aerial.nvim',
     opts = {},
@@ -21,7 +22,6 @@ return {
             end
 
         })
-
         vim.keymap.set('n', '<leader>o', '<cmd>AerialToggle!<CR>')
 
     end

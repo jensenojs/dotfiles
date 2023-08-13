@@ -12,7 +12,6 @@
 --    Old text                    Command         New text ~
 --    sample* text                yssb            (sample text)
 -- 3. autojump
-
 return {
     "kylechui/nvim-surround",
     event = "VeryLazy",

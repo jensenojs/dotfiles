@@ -44,7 +44,5 @@ return {
                 winblend = 0
             }
         })
-
     end
-
 }

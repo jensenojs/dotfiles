@@ -1,12 +1,6 @@
 -- Options are automatically loaded before lazy.nvim startup
 -- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
 -- Add any additional options here
-
--- 设置vim的选项
-local opt = vim.opt
-
-opt.background = "dark"
-
 -- 修复markdown缩进设置
 vim.g.markdown_recommended_style = 0
 
@@ -14,6 +8,14 @@ vim.g.markdown_recommended_style = 0
 -- disable netrw at the very start of your init.lua
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
+
+local opt = vim.opt
+
+-- 设置nvim显示语法高亮
+opt.syntax = "enable"
+
+-- 设置背景色
+opt.background = "dark"
 
 -- 禁用与vi兼容的模式，以便使用nvim的所有高级功能
 opt.compatible = false
@@ -106,7 +108,7 @@ opt.ignorecase = true
 -- 智能大小写匹配（当搜索文本有大写字母的时候会进行匹配）
 opt.smartcase = true
 
--- -- 与系统剪贴板同步
+-- 与系统剪贴板同步
 opt.clipboard = "unnamedplus"
 
 -- 增量搜索

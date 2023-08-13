@@ -1,5 +1,5 @@
 {
-	"languageserver": {
+    "languageserver": {
         "golang": {
             "command": "gopls",
             "rootPatterns": [
@@ -8,14 +8,13 @@
             "filetypes": [
                 "go"
             ]
-        },
-
-
+        }
     },
-
-	"imselect.defaultInput": "com.apple.keylayout.ABC",
-
-	"suggest.completionItemKindLabels": {
+    "go.goplsOptions": {
+        "completeUnimported": true
+    },
+    "imselect.defaultInput": "com.apple.keylayout.ABC",
+    "suggest.completionItemKindLabels": {
         "constructor": "\ufb25",
         "keyword": "\uf1de",
         "variable": "\ue79b",
@@ -44,5 +43,3 @@
         "default": " "
     }
 }
-
-
