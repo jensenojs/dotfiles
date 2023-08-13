@@ -13,6 +13,8 @@
     "go.goplsOptions": {
         "completeUnimported": true
     },
+    "diagnostic.virtualText": true,
+    "diagnostic.virtualTextCurrentLineOnly": false,
     "imselect.defaultInput": "com.apple.keylayout.ABC",
     "suggest.completionItemKindLabels": {
         "constructor": "\ufb25",

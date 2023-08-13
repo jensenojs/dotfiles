@@ -74,8 +74,6 @@ local keymaps = {
     --    其他      --
     -----------------
     ["in|<Home>"] = map_callback(home):with_desc("光标:先按相当于^, 再按到行首"),
-    -- ["i|<Home>"] = map_callback(home):with_desc(
-    --     "光标:先按相当于^, 再按到行首"),
     ["n|0"] = map_callback(home):with_desc("光标:先按相当于^, 再按到行首")
 }
 

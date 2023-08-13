@@ -7,11 +7,11 @@
 --  build your own custom pipeline to suit your needs
 --  customisable look and appearance
 return {
-    -- 'gelguy/wilder.nvim',
-    -- config = function()
-    --     local wilder = require('wilder')
-    --     wilder.setup({
-    --         modes = {":", "/", "?"}
-    --     })
-    -- end
+    'gelguy/wilder.nvim',
+    config = function()
+        local wilder = require('wilder')
+        wilder.setup({
+            modes = {":", "/", "?"}
+        })
+    end
 }

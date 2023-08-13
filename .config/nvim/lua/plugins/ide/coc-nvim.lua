@@ -120,7 +120,7 @@ local keymaps = {
     end):with_silent():with_desc("显示光标所在处的文档"),
 
     -- format code, coc-formatselect can not work with go
-    ["nx|<leader>f"] = map_cmd("<Plug>(coc-format)"):with_silent():with_desc("格式化选中代码")
+    -- ["nx|<leader>f"] = map_cmd("<Plug>(coc-format)"):with_silent():with_desc("格式化当前代码w文件")
 }
 
 bind.nvim_load_mapping(keymaps)
@@ -152,7 +152,7 @@ return {
             group = "CocGroup",
             pattern = "typescript,json,go,c,c++,sql",
             command = "setl formatexpr=CocAction('formatSelected')",
-            desc = "Setup formatexpr specified filetype(s)."
+            desc = "Setup formatexpr specified filetype(s)"
         })
 
         -- Update signature help on jump placeholder
