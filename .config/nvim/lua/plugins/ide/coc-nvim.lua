@@ -120,14 +120,14 @@ local keymaps = {
     end):with_silent():with_desc("显示光标所在处的文档"),
 
     -- format code, coc-formatselect can not work with go
-    -- ["nx|<leader>f"] = map_cmd("<Plug>(coc-format)"):with_silent():with_desc("格式化当前代码w文件")
+    ["nx|<leader>f"] = map_cmd("<Plug>(coc-format)"):with_silent():with_desc("格式化当前代码文件")
 }
 
 bind.nvim_load_mapping(keymaps)
 
 -- 设置支持的语言
 vim.g.coc_global_extensions = {'coc-marketplace', 'coc-highlight', 'coc-snippets', 'coc-dictionary', 'coc-pairs',
-                               'coc-markdownlint',  -- 非LSP插件
+                               'coc-markdownlint',  'coc-git',-- 非LSP插件
 'coc-json', 'coc-xml', 'coc-yaml', 'coc-toml', -- 配置语言
 'coc-pyright', 'coc-clangd', 'coc-go', 'coc-java', 'coc-java-intellicode', 'coc-rls', 'coc-sql', 'coc-lua',
                                'coc-rust-analyzer', -- LSP

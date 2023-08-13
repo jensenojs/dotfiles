@@ -9,6 +9,7 @@
   "flash.nvim": { "branch": "main", "commit": "967117690bd677cb7b6a87f0bc0077d2c0be3a27" },
   "focus.nvim": { "branch": "master", "commit": "a994282f957840ee3419ad62a36be9d4e155560c" },
   "formatter.nvim": { "branch": "master", "commit": "9bf2e7e294b00bac87c6123c889828ee08dc9b46" },
+  "git-blame.nvim": { "branch": "master", "commit": "93d983806a0c76692bebd6f804c8eaa2a3844452" },
   "gitsigns.nvim": { "branch": "main", "commit": "bae45ef449d8811061cc940459e70e883a3aa83a" },
   "glow.nvim": { "branch": "main", "commit": "8942dfb05794f436af4fbc90a34393f1fd36f361" },
   "gruvbox.nvim": { "branch": "main", "commit": "353be593e52e2008ce17d61208668747dd557248" },
