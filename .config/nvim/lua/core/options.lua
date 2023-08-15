@@ -12,7 +12,7 @@ vim.g.loaded_netrwPlugin = 1
 local opt = vim.opt
 
 -- 设置nvim显示语法高亮
-opt.syntax = "enable"
+opt.syntax = "true"
 
 -- 设置背景色
 opt.background = "dark"
@@ -119,6 +119,9 @@ opt.mouse = 'a'
 
 -- 显示行号
 opt.number = true
+
+-- 设置相对行号
+opt.relativenumber = true
 
 -- 如果是nvim-0.9.0版本以上，则设置splitkeep和shortmess选项
 if vim.fn.has("nvim-0.9.0") == 1 then

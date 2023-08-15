@@ -1,10 +1,20 @@
 -- https://github.com/stevearc/aerial.nvim
 -- 文件大纲
--- 类似： https://github.com/liuchengxu/vista.vim 
--- 其实coc-nvim本身也有大纲，但是那个太丑了
+local bind = require("utils.bind")
+local map_callback = bind.map_callback
+
+local keymaps = {
+    ["n|<leader>o"] = map_callback(function()
+        require('aerial').toggle({
+            focus = false
+        })
+    end):with_noremap():with_silent():with_desc("大纲: 打开/关闭")
+}
+
+bind.nvim_load_mapping(keymaps)
+
 return {
     'stevearc/aerial.nvim',
-    opts = {},
     -- Optional dependencies
     dependencies = {"nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons"},
 
@@ -22,8 +32,15 @@ return {
             end
 
         })
-        vim.keymap.set('n', '<leader>o', '<cmd>AerialToggle!<CR>')
 
+        -- 自动打开
+        vim.api.nvim_create_autocmd("Vimenter", {
+            callback = function()
+                require('aerial').open({
+                    focus = false
+                })
+            end
+        })
     end
 
 }

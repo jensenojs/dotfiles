@@ -2,6 +2,12 @@
 -- 目录树
 -- define common options
 -- https://github.com/nvim-tree/nvim-tree.lua/wiki/Migrating-To-on_attach
+-- r : 重命名文件或者目录
+-- a : 创建一个文件
+-- d : 删除一个文件(需要最后确认)
+-- x : 剪切一个文件到剪切版或者从剪切版移除一个剪切
+-- c : 拷贝一个文件到剪切版或者从剪切版移除一个拷贝
+-- p : 粘贴文件或者目录
 
 local function my_on_attach(bufnr)
     local api = require "nvim-tree.api"
@@ -108,12 +114,7 @@ local icons = {
     ui = require("utils.icons").get("ui")
 }
 
--- r : 重命名文件或者目录
--- a : 创建一个文件
--- d : 删除一个文件(需要最后确认)
--- x : 剪切一个文件到剪切版或者从剪切版移除一个剪切
--- c : 拷贝一个文件到剪切版或者从剪切版移除一个拷贝
--- p : 粘贴文件或者目录
+
 return {
     "nvim-tree/nvim-tree.lua",
 
@@ -149,16 +150,8 @@ return {
                 highlight_opened_files = "none",
                 special_files = {"Cargo.toml", "Makefile", "README.md", "readme.md", "CMakeLists.txt"},
                 symlink_destination = true,
-                indent_markers = {
-                    enable = true,
-                    icons = {
-                        corner = "└ ",
-                        edge = "│ ",
-                        item = "│ ",
-                        none = "  "
-                    }
-                },
                 root_folder_label = ":.:s?.*?/..?",
+                -- 好看的图标
                 icons = {
                     webdev_colors = true,
                     git_placement = "after",
