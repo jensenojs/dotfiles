@@ -8,7 +8,7 @@ local keymaps = {
         require('aerial').toggle({
             focus = false
         })
-    end):with_noremap():with_silent():with_desc("大纲: 打开/关闭")
+    end):with_noremap():with_silent():with_desc("大纲: 打开/关闭"),
 }
 
 bind.nvim_load_mapping(keymaps)
@@ -21,6 +21,11 @@ return {
     config = function()
         require('aerial').setup({
             -- optionally use on_attach to set keymaps when aerial has attached to a buffer
+
+            keymaps = {
+                ["H"] = "actions.close",
+            },
+
             on_attach = function(bufnr)
                 -- Jump forwards/backwards with '{' and '}'
                 vim.keymap.set('n', '{', '<cmd>AerialPrev<CR>', {
@@ -29,6 +34,9 @@ return {
                 vim.keymap.set('n', '}', '<cmd>AerialNext<CR>', {
                     buffer = bufnr
                 })
+                -- vim.keymap.set('n', '<s-h>', '<cmd>AerialNext<CR>', {
+                --     buffer = bufnr
+                -- })
             end
 
         })

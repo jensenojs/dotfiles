@@ -31,7 +31,7 @@ local function my_on_attach(bufnr)
         api.node.open.edit()
     end, opts("跳转到光标所对应的文件"))
 
-    vim.keymap.set("n", "L", function()
+    vim.keymap.set("n", "<tab>", function()
         local node = api.tree.get_node_under_cursor()
         if node.nodes ~= nil then
             -- expand or collapse folder
@@ -48,9 +48,9 @@ local function my_on_attach(bufnr)
 
     -- Collapses the nvim-tree recursively, but keep the directories open, which are
     -- used in an open buffer.
-    vim.keymap.set("n", "H", function()
-        api.tree.collapse_all(true)
-    end, opts("递归合拢父文件夹"))
+    -- vim.keymap.set("n", "H", function()
+    --     api.tree.collapse_all(true)
+    -- end, opts("递归合拢父文件夹"))
 
     vim.keymap.set('n', 'T', function()
         api.node.open.tab(node)

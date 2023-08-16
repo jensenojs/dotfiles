@@ -35,10 +35,6 @@ return {
                 -- get an indicator in the bufferline for a given tab if it has any errors
                 diagnostics = "coc"
             },
-
-            vim.keymap.set("n", "<s-h>", ":BufferLineCyclePrev<CR>"),
-            vim.keymap.set("n", "<s-l>", ":BufferLineCycleNext<CR>")
-
         })
     end
 }

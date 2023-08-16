@@ -24,10 +24,11 @@ local keymaps = {
     -----------------
     --   窗口管理   --
     -----------------
-    ["n|<c-l>"] = map_cmd("<C-w>l"):with_noremap():with_silent():with_desc("窗口:光标向右移动"),
-    ["n|<c-h>"] = map_cmd("<C-w>h"):with_noremap():with_silent():with_desc("窗口:光标向左移动"),
-    ["n|<c-k>"] = map_cmd("<C-w>k"):with_noremap():with_silent():with_desc("窗口:光标向上移动"),
-    ["n|<c-j>"] = map_cmd("<C-w>j"):with_noremap():with_silent():with_desc("窗口:光标向下移动"),
+    -- vim的窗口管理逻辑和一般的ide不一样
+    ["n|<s-l>"] = map_cmd("<C-w>l"):with_noremap():with_silent():with_desc("窗口:光标向右移动"),
+    ["n|<s-h>"] = map_cmd("<C-w>h"):with_noremap():with_silent():with_desc("窗口:光标向左移动"),
+    ["n|<s-k>"] = map_cmd("<C-w>k"):with_noremap():with_silent():with_desc("窗口:光标向上移动"),
+    ["n|<s-j>"] = map_cmd("<C-w>j"):with_noremap():with_silent():with_desc("窗口:光标向下移动"),
 
     ["n|<c-s-up>"] = map_cmd("<C-w>+"):with_noremap():with_silent():with_desc("窗口:增加当前的高度"),
     ["n|<c-s-down>"] = map_cmd("<C-w>-"):with_noremap():with_silent():with_desc("窗口:减少当前的高度"),
@@ -50,8 +51,8 @@ local keymaps = {
     ["n|tc"] = map_cmd(":tabc<CR>"):with_noremap():with_silent():with_desc("标签:关闭当前tab"),
     ["n|to"] = map_cmd(":tabo<CR>"):with_noremap():with_silent():with_desc(
         "标签:关闭除了当前tab以外的其他tab"),
-    ["n|<s-l>"] = map_cr("+tabnext"):with_noremap():with_silent():with_desc("标签:移动到右tab"),
-    ["n|<s-h>"] = map_cr("-tabnext"):with_noremap():with_silent():with_desc("标签:移动到左tab"),
+    ["n|<c-l>"] = map_cr("+tabnext"):with_noremap():with_silent():with_desc("标签:移动到右tab"),
+    ["n|<c-h>"] = map_cr("-tabnext"):with_noremap():with_silent():with_desc("标签:移动到左tab"),
 
     -----------------
     --   保存与退出  --
