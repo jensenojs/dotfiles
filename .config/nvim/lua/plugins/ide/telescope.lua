@@ -131,27 +131,42 @@ return {
                 -- Now the picker_config_key will be applied every time you call this
                 -- builtin picker
                 find_files = {
-                    find_command = {"fd", "--type", "f", "--strip-cwd-prefix"}
+                    find_command = {"fd", "--type", "f", "--strip-cwd-prefix"},
+                    mappings = {
+			        	i = { ["<CR>"] = actions.select_tab_drop }
+			        }
                 },
                 buffers = {
                     show_all_buffers = true,
                     sort_lastused = true,
                     mappings = {
                         i = {
-                            ["<c-d>"] = actions.delete_buffer
+                            ["<c-d>"] = actions.delete_buffer,
+                            ["<CR>"] = actions.select_tab_drop
                         }
                     }
                 },
                 git_status = {
                     preview = {
                         hide_on_startup = false
-                    }
+                    },
+                    mappings = {
+				        i = { ["<CR>"] = actions.select_tab_drop }
+			        }
                 },
                 live_grep = {
                     preview = {
                         hide_on_startup = false
-                    }
-                }
+                    },
+                    mappings = {
+				        i = { ["<CR>"] = actions.select_tab_drop }
+			        }
+                },
+                old_files = {
+		        	mappings = {
+		        		i = { ["<CR>"] = actions.select_tab_drop }
+			        }
+		},
 
             },
 
