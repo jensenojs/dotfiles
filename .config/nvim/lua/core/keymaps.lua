@@ -19,7 +19,6 @@ local function home()
 end
 
 -- 利用bind的辅助函数封装了vim.keymap.系列的函数
--- 虽然咋一看上去有点不直观, 但是是值得的
 local keymaps = {
     -----------------
     --   窗口管理   --

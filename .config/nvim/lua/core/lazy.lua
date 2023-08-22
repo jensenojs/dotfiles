@@ -40,6 +40,9 @@ require("lazy").setup({
         -- 让neo-vim有ide能力的插件
         import = "plugins.ide"
     }, {
+        -- 让neo-vim有调试能力的插件
+        import = "plugins.dap"
+    }, {
         -- which-key
         import = "plugins"
     }},
@@ -48,7 +51,7 @@ require("lazy").setup({
         -- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.
         -- If you know what you're doing, you can set this to `true` to have all your custom plugins lazy-loaded by default.
         lazy = false, -- 不懒加载, 目前懒加载会导致coc-nvim有些问题
-        -- version = "*" -- 尝试安装支持语义化版本控制的插件的最新稳定版本。
+        -- version = "*" -- 尝试安装支持语义化版本控制的插件的最新稳定版本, 不能用这个, 不然telescope会出问题
         version = false -- 不显示版本信息, 总是使用最新的插件
     },
 

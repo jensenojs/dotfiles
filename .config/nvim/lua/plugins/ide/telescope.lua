@@ -122,51 +122,47 @@ return {
             },
 
             pickers = {
-                -- Default configuration for builtin pickers goes here:
-                -- picker_name = {
-                --   picker_config_key = value,
-                --   ...
-                -- }
-                -- 
-                -- Now the picker_config_key will be applied every time you call this
-                -- builtin picker
                 find_files = {
                     find_command = {"fd", "--type", "f", "--strip-cwd-prefix"},
                     mappings = {
-			        	i = { ["<CR>"] = actions.select_tab_drop }
-			        }
+                        i = { ["<CR>"] = actions.select_drop }
+                    }
                 },
+
                 buffers = {
                     show_all_buffers = true,
                     sort_lastused = true,
                     mappings = {
                         i = {
                             ["<c-d>"] = actions.delete_buffer,
-                            ["<CR>"] = actions.select_tab_drop
+                            ["<CR>"] = actions.select_drop
                         }
                     }
                 },
+
                 git_status = {
                     preview = {
                         hide_on_startup = false
                     },
                     mappings = {
-				        i = { ["<CR>"] = actions.select_tab_drop }
-			        }
+                        i = { ["<CR>"] = actions.select_drop }
+                    }
                 },
+
                 live_grep = {
                     preview = {
                         hide_on_startup = false
                     },
                     mappings = {
-				        i = { ["<CR>"] = actions.select_tab_drop }
-			        }
+                        i = { ["<CR>"] = actions.select_drop }
+                    }
                 },
+
                 old_files = {
-		        	mappings = {
-		        		i = { ["<CR>"] = actions.select_tab_drop }
-			        }
-		},
+                    mappings = {
+                        i = { ["<CR>"] = actions.select_drop }
+                    }
+                }
 
             },
 
@@ -206,6 +202,7 @@ return {
         require('telescope').load_extension('vim_bookmarks')
         require("telescope").load_extension("lazygit")
         require('telescope').load_extension('aerial')
+        require('telescope').load_extension('dap')
 
     end
 }

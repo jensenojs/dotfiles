@@ -57,9 +57,6 @@ opt.shortmess = astWAIc
 -- 关闭错误提示声音
 opt.errorbells = false
 
--- 窗口最小宽度
-opt.winminwidth = 5
-
 -- 让光标在有得选的情况下, 不会在最底部或者最顶部
 opt.scrolloff = 10
 

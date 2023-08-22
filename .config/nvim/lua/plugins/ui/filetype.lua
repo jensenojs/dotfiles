@@ -6,11 +6,11 @@ return {
     event = {"BufRead", "BufNewFile"},
     config = function()
         require("filetype").setup({
-            overrides = {
-                extensions = {
-                    h = "cpp"
-                }
-            }
+            -- overrides = {
+            --     extensions = {
+            --         h = "cpp"
+            --     }
+            -- }
         })
     end
 }
