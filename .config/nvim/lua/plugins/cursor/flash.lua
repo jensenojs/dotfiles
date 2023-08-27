@@ -18,6 +18,6 @@ bind.nvim_load_mapping(keymaps)
 
 return {
     "folke/flash.nvim",
-    event = "VeryLazy",
-    config = true
+    config = function()
+    end
 }

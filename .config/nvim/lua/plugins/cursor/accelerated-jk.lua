@@ -15,5 +15,6 @@ bind.nvim_load_mapping(keymaps)
 
 return {
     'rainbowhxch/accelerated-jk.nvim',
-    config = true
+    config = function()
+    end
 }

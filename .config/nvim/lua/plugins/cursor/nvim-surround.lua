@@ -14,6 +14,6 @@
 -- 3. autojump
 return {
     "kylechui/nvim-surround",
-    event = "VeryLazy",
+    -- event = "VeryLazy",
     config = true
 }

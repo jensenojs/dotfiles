@@ -3,7 +3,7 @@
 return function()
     local dap = require("dap")
     local debugpy = vim.fn.exepath("debugpy-adapter")
-    local utils = require("modules.utils.dap")
+    local utils = require("utils.dap")
 
     local function is_empty(s)
         return s == nil or s == ""

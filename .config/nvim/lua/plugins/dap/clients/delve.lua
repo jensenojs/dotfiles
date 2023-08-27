@@ -19,6 +19,16 @@ return function()
         end))
     end
 
+    local function filtered_pick_process()
+        local opts = {}
+        vim.ui.input({
+            prompt = "Search by process name (lua pattern), or hit enter to select from the process list: "
+        }, function(input)
+            opts["filter"] = input or ""
+        end)
+        return require("dap.utils").pick_process(opts)
+    end
+
     dap.adapters.go = {
         type = "executable",
         command = "node",
@@ -74,6 +84,13 @@ return function()
         showLog = true,
         showRegisters = true,
         stopOnEntry = false
+    }, {
+        type = "go",
+        name = "Attach",
+        mode = "local",
+        request = "attach",
+        dlvToolPath = vim.fn.exepath("dlv"),
+        processId = filtered_pick_process
     }, {
         type = "go",
         name = "Debug (using go.mod)",

@@ -31,6 +31,9 @@ require("lazy").setup({
         -- which-key and mason
         import = "plugins"
     }, {
+        -- 让neo-vim有调试能力的插件
+        import = "plugins.dap"
+    }, {
         -- 让neo-vim更漂亮的插件
         import = "plugins.ui"
     }, {
@@ -39,9 +42,6 @@ require("lazy").setup({
     }, {
         -- 让neo-vim有ide能力的插件
         import = "plugins.ide"
-    }, {
-        -- 让neo-vim有调试能力的插件
-        import = "plugins.dap"
     }},
 
     defaults = {
