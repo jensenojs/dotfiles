@@ -28,23 +28,20 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
     -- 把插件导入
     spec = {{
+        -- which-key and mason
+        import = "plugins"
+    }, {
         -- 让neo-vim更漂亮的插件
         import = "plugins.ui"
     }, {
         -- 让neo-vim输入/移动更高效的插件
         import = "plugins.cursor"
     }, {
-        -- 特定语言的支持
-        import = "plugins.lang"
-    }, {
         -- 让neo-vim有ide能力的插件
         import = "plugins.ide"
     }, {
         -- 让neo-vim有调试能力的插件
         import = "plugins.dap"
-    }, {
-        -- which-key
-        import = "plugins"
     }},
 
     defaults = {

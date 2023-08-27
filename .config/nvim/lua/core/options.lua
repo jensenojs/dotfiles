@@ -1,6 +1,7 @@
 -- Options are automatically loaded before lazy.nvim startup
 -- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
 -- Add any additional options here
+
 -- 修复markdown缩进设置
 vim.g.markdown_recommended_style = 0
 
@@ -12,7 +13,13 @@ vim.g.loaded_netrwPlugin = 1
 local opt = vim.opt
 
 -- 设置nvim显示语法高亮
-opt.syntax = "true"
+opt.syntax = "on"
+
+opt.timeout = true
+opt.timeoutlen = 1000
+
+-- 不要打开无名的buffer
+opt.hidden = false
 
 -- 设置背景色
 opt.background = "dark"

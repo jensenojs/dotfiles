@@ -238,9 +238,9 @@ return {
         })
 
         -- 自动打开nvim-tree, 这个东西不能放在setup里面
-        vim.api.nvim_create_autocmd("Vimenter", {
-            callback = open_nvim_tree
-        })
+        -- vim.api.nvim_create_autocmd("Vimenter", {
+        --     callback = open_nvim_tree
+        -- })
 
         -- 自动关闭的脚本, 其实也看不懂, 用着先吧, 这个东西也不能放在setup里面
         vim.api.nvim_create_autocmd("WinClosed", {

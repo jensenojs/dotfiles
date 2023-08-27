@@ -24,10 +24,10 @@ local keymaps = {
     --   窗口管理   --
     -----------------
     -- vim的窗口管理逻辑和一般的ide不一样
-    ["n|<s-l>"] = map_cmd("<C-w>l"):with_noremap():with_silent():with_desc("窗口:光标向右移动"),
-    ["n|<s-h>"] = map_cmd("<C-w>h"):with_noremap():with_silent():with_desc("窗口:光标向左移动"),
-    ["n|<s-k>"] = map_cmd("<C-w>k"):with_noremap():with_silent():with_desc("窗口:光标向上移动"),
-    ["n|<s-j>"] = map_cmd("<C-w>j"):with_noremap():with_silent():with_desc("窗口:光标向下移动"),
+    ["n|<c-l>"] = map_cmd("<C-w>l"):with_noremap():with_silent():with_desc("窗口:光标向右移动"),
+    ["n|<c-h>"] = map_cmd("<C-w>h"):with_noremap():with_silent():with_desc("窗口:光标向左移动"),
+    ["n|<c-k>"] = map_cmd("<C-w>k"):with_noremap():with_silent():with_desc("窗口:光标向上移动"),
+    ["n|<c-j>"] = map_cmd("<C-w>j"):with_noremap():with_silent():with_desc("窗口:光标向下移动"),
 
     ["n|<c-s-up>"] = map_cmd("<C-w>+"):with_noremap():with_silent():with_desc("窗口:增加当前的高度"),
     ["n|<c-s-down>"] = map_cmd("<C-w>-"):with_noremap():with_silent():with_desc("窗口:减少当前的高度"),
@@ -50,8 +50,32 @@ local keymaps = {
     ["n|tc"] = map_cmd(":tabc<CR>"):with_noremap():with_silent():with_desc("标签:关闭当前tab"),
     ["n|to"] = map_cmd(":tabo<CR>"):with_noremap():with_silent():with_desc(
         "标签:关闭除了当前tab以外的其他tab"),
-    ["n|<c-l>"] = map_cr("+tabnext"):with_noremap():with_silent():with_desc("标签:移动到右tab"),
-    ["n|<c-h>"] = map_cr("-tabnext"):with_noremap():with_silent():with_desc("标签:移动到左tab"),
+    ["n|tn"] = map_callback(function()
+        -- 获取当前标签页的索引
+        local current_tab = vim.fn.tabpagenr()
+        -- 获取标签页总数
+        local total_tabs = vim.fn.tabpagenr('$')
+        -- 如果当前标签页不是最左边的标签页，则向左移动
+        if current_tab < total_tabs then
+            vim.cmd('tabnext')
+        else
+        -- 否则跳转回开始
+            vim.cmd('tabfirst')
+        end
+    end):with_noremap():with_silent():with_desc("标签:移动到右tab"),
+    ["n|tp"] = map_callback(function()
+        -- 获取当前标签页的索引
+        local current_tab = vim.fn.tabpagenr()
+        -- 获取标签页总数
+        local total_tabs = vim.fn.tabpagenr('$')
+        -- 如果当前标签页不是最右边的标签页，则向右移动
+        if current_tab > 1 then
+            vim.cmd('tabprevious')
+        else
+        -- 否则跳转回最后
+            vim.cmd('tablast')
+        end
+    end):with_noremap():with_silent():with_desc("标签:移动到左tab"),
 
     -----------------
     --   保存与退出  --

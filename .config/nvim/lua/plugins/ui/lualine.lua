@@ -8,7 +8,7 @@ return {
                 theme = "gruxbox_light"
             },
             sections = {
-                lualine_x = {"aerial"},
+                lualine_x = {"aerial"}
             }
         })
     end

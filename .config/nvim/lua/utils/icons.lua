@@ -1,3 +1,4 @@
+-- 如果这里的icon你都看不到，你需要nerd font 字体
 local icons = {}
 
 local data = {

@@ -7,7 +7,7 @@ return {
     -- version = '2.*',
     -- config = function()
     --     require('window-picker').setup({
-    --         -- hint = 'floating-big-letter',
+    --         hint = 'floating-big-letter',
     --     })
     -- end,
 }

@@ -1,11 +1,13 @@
--- https://github.com/mfussenegger/nvim-dap/tree/master
--- 
+-- https://github.com/mfussenegger/nvim-dap
+-- 调试器的协议
 local bind = require("utils.bind")
 local map_callback = bind.map_callback
+local map_cmd = bind.map_cmd
 
 local keymaps = {
     ["n|<F5>"] = map_callback(function()
-        require('telescope').extensions.dap.configurations{}
+        -- require('telescope').extensions.dap.configurations{}
+        require('dap').continue()
     end):with_noremap():with_silent():with_desc("调试: 选择配置文件进入"),
 
     ["n|<F9>"] = map_callback(function()
@@ -31,7 +33,7 @@ local keymaps = {
     ["n|<leader>dr"] = map_callback(function()
         require('dap').repl.open()
     end):with_noremap():with_silent():with_desc("调试: 跳出"),
-   
+
     ["n|<leader>dl"] = map_callback(function()
         require('dap').run_last()
     end):with_noremap():with_silent():with_desc("调试: 跳出"),
@@ -52,65 +54,52 @@ local keymaps = {
     ["nv|<leader>ds"] = map_callback(function()
         local widgets = require('dap.ui.widgets')
         widgets.centered_float(widgets.scopes)
-    end):with_noremap():with_silent():with_desc("调试: 跳出"),
+    end):with_noremap():with_silent():with_desc("调试: 跳出")
 }
 
 bind.nvim_load_mapping(keymaps)
 
---- go
--- dap.adapters.delve = {
---     type = 'server',
---     port = '${port}',
---     executable = {
---         command = 'dlv',
---         args = {'dap', '-l', '127.0.0.1:${port}'}
---     }
--- }
-
 -- https://github.com/go-delve/delve/blob/master/Documentation/usage/dlv_dap.md
--- dap.configurations.go = {{
---     type = "delve",
---     name = "Debug",
---     request = "launch",
---     program = "${file}"
--- }, {
---     type = "delve",
---     name = "Debug test", -- configuration for debugging test files
---     request = "launch",
---     mode = "test",
---     program = "${file}"
--- }, -- works with go.mod packages and sub packages 
--- {
---     type = "delve",
---     name = "Debug test (go.mod)",
---     request = "launch",
---     mode = "test",
---     program = "./${relativeFileDirname}"
--- }}
-
 return {
     'mfussenegger/nvim-dap',
-    dependencies = {
-        'nvim-telescope/telescope-dap.nvim',
-    },
+    dependencies = {'theHamsta/nvim-dap-virtual-text', "rcarriga/nvim-dap-ui", "LiadOz/nvim-dap-repl-highlights"},
 
     config = function()
-        local dap = require('dap')
-
-        dap.adapters.python = {
-            type = 'executable',
-            command = '/usr/bin/python3',
-            args = {'-m', 'debugpy.adapter'}
+        local icons = {
+            dap = require("utils.icons").get("dap")
         }
 
-        dap.configurations.python = {{
-            type = 'python',
-            request = 'launch',
-            name = "Launch file",
-            program = "${file}",
-            pythonPath = function()
-                return '/usr/bin/python3'
-            end
-        }}
+        -- 设置icon
+        vim.fn.sign_define("DapBreakpoint", {
+            text = icons.dap.Breakpoint,
+            texthl = "DapBreakpoint",
+            linehl = "",
+            numhl = ""
+        })
+        vim.fn.sign_define("DapBreakpointCondition", {
+            text = icons.dap.BreakpointCondition,
+            texthl = "DapBreakpoint",
+            linehl = "",
+            numhl = ""
+        })
+        vim.fn.sign_define("DapStopped", {
+            text = icons.dap.Stopped,
+            texthl = "DapStopped",
+            linehl = "",
+            numhl = ""
+        })
+        vim.fn.sign_define("DapBreakpointRejected", {
+            text = icons.dap.BreakpointRejected,
+            texthl = "DapBreakpoint",
+            linehl = "",
+            numhl = ""
+        })
+        vim.fn.sign_define("DapLogPoint", {
+            text = icons.dap.LogPoint,
+            texthl = "DapLogPoint",
+            linehl = "",
+            numhl = ""
+        })
+
     end
 }

@@ -80,11 +80,6 @@ local keymaps = {
         return replace_keycodes('<c-d>')
     end):with_silent():with_expr():with_desc("聪明的<s-tab>"),
 
-    -- Use <c-space> to trigger completion
-    -- ["i|<c-space>"] = map_callback(function()
-    --     return vim.fn['coc#refresh']()
-    -- end):with_noremap():with_silent():with_expr():with_desc("触发代码补全"),
-
     ["i|<c-j>"] = map_cmd("<Plug>(coc-snippets-expand-jump)"):with_noremap():with_silent():with_desc(
         "触发代码片段补齐"),
 
@@ -107,7 +102,7 @@ local keymaps = {
     ["n|<leader>rn"] = map_cmd("<Plug>(coc-rename)"):with_silent():with_desc("变量重命名"),
 
     -- show docs
-    ["n|<c-k>"] = map_callback(function()
+    ["n|<s-k>"] = map_callback(function()
         -- Use K to show documentation in preview window
         local cw = vim.fn.expand('<cword>')
         if vim.fn.index({'vim', 'help'}, vim.bo.filetype) >= 0 then
@@ -120,15 +115,15 @@ local keymaps = {
     end):with_silent():with_desc("显示光标所在处的文档"),
 
     -- format code, coc-formatselect can not work with go
-    ["nx|<leader>f"] = map_cmd("<Plug>(coc-format)"):with_silent():with_desc("格式化当前代码文件")
+    -- ["nx|<leader>f"] = map_cmd("<Plug>(coc-format)"):with_silent():with_desc("格式化当前代码文件")
 }
 
 bind.nvim_load_mapping(keymaps)
 
 -- 设置支持的语言
 vim.g.coc_global_extensions = {'coc-marketplace', 'coc-highlight', 'coc-snippets', 'coc-dictionary', 'coc-pairs',
-                                -- 非LSP插件
-'coc-json', 'coc-xml', 'coc-yaml', 'coc-toml', -- 配置语言
+-- 非LSP插件
+                               'coc-json', 'coc-xml', 'coc-yaml', 'coc-toml', -- 配置语言
 'coc-pyright', 'coc-clangd', 'coc-go', 'coc-java', 'coc-java-intellicode', 'coc-rls', 'coc-sql', 'coc-sumneko-lua',
                                'coc-rust-analyzer', -- LSP
 'coc-vimlsp', 'coc-docker', 'coc-sh', 'coc-imselect' -- 其他

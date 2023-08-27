@@ -1,15 +1,50 @@
--- Add any additional keymaps here
+-- https://github.com/nvim-telescope/telescope.nvim
 -- define common options
-local opts = {
-    noremap = true, -- non-recursive
-    silent = true -- do not show message
+local bind = require("utils.bind")
+local map_callback = bind.map_callback
+local map_cr = bind.map_cr
+
+local keymaps = {
+    ["n|<leader>/"] = map_callback(function()
+        -- You can pass additional configuration to telescope to change theme, layout, etc.
+        require('telescope.builtin').current_buffer_fuzzy_find(
+            require('telescope.themes').get_dropdown {
+                winblend = 10,
+            })
+    end):with_noremap():with_silent():with_desc("模糊搜索当前文件"),
+
+    ["n|<leader>?"] = map_cr(":Telescope coc diagnostics"):with_noremap():with_silent():with_desc("列出本文件下warm/error"),
+    ["n|<leader><c-?>"] = map_cr(":Telescope coc workspace_diagnostics"):with_noremap():with_silent():with_desc("列出所有warm/error"),
+
+    ["n|<leader>a"] = map_cr(":Telescope coc code_actions"):with_noremap():with_silent():with_desc("列出code actions"),
+
+    ["n|<leader>b"] = map_callback(function()
+        require('telescope.builtin').buffers()
+    end):with_noremap():with_silent():with_desc("打开缓冲区列表"),
+
+    -- 也许更常用的该是lazyGit.?
+    ["n|<leader>G"] = map_callback(function()
+        require('telescope.builtin').git_status()
+    end):with_noremap():with_silent():with_desc("列出当前git项目下哪些文件"),
+
+    ["n|<c-p>"] = map_callback(function()
+        require('telescope.builtin').find_files()
+    end):with_noremap():with_silent():with_desc("查找文件"),
+
+    ["n|<c-t>"] = map_cr(":Telescope coc workspace_symbols"):with_noremap():with_silent():with_desc(
+        "查找当前项目下的符号")
 }
+
+bind.nvim_load_mapping(keymaps)
 
 -- 对预览的设置
 -- Ignore files bigger than a threshold
 -- and don't preview binaries
-local new_maker = function(filepath, bufnr, opts)
-    opts = opts or {}
+local preview_setting = function(filepath, bufnr, opts)
+    local opts = {
+        noremap = true, -- non-recursive
+        silent = true -- do not show message
+    }
     filepath = vim.fn.expand(filepath)
 
     local previewers = require("telescope.previewers")
@@ -49,46 +84,11 @@ return {
     dependencies = {"nvim-lua/plenary.nvim", {
         'nvim-telescope/telescope-fzf-native.nvim',
         build = 'make'
-    }, 'nvim-telescope/telescope-ui-select.nvim', 'fannheyward/telescope-coc.nvim',
+    }, 'nvim-telescope/telescope-ui-select.nvim', 'fannheyward/telescope-coc.nvim', 'nvim-telescope/telescope-dap.nvim',
                     'tom-anders/telescope-vim-bookmarks.nvim', 'nvim-tree/nvim-web-devicons'},
 
     config = function()
-        local builtin = require('telescope.builtin')
         local actions = require('telescope.actions')
-
-        vim.keymap.set('n', '<leader>/', function()
-            -- You can pass additional configuration to telescope to change theme, layout, etc.
-            require('telescope.builtin').current_buffer_fuzzy_find(
-                require('telescope.themes').get_dropdown {
-                    winblend = 10,
-                    previewer = false
-                })
-        end, opts, {
-            desc = '<leader>+/ : 在当前文件下模糊搜索'
-        })
-        vim.keymap.set('n', '<leader>?', builtin.oldfiles, opts, {
-            desc = '<leader>+? : 查找打开过的文件'
-        })
-        vim.keymap.set('n', '<leader>g', builtin.git_status, opts, {
-            desc = '<leader>+g : 列出当前git项目下做了哪些修改'
-        })
-        vim.keymap.set('n', '<leader>a', ':Telescope coc code_actions<cr>', opts, {
-            desc = '采取行动'
-        })
-
-        -- 适应vscode的快捷键
-        vim.keymap.set('n', '<c-p>', builtin.find_files, opts, {
-            desc = '查找文件'
-        })
-        -- vim.keymap.set('n', '<c-s-o>', ':Telescope coc document_symbols<cr>', opts, {
-        --     desc = '搜索当前文件下的符号'
-        -- })
-        vim.keymap.set('n', '<c-s-o>', ':Telescope aerial<cr>', opts, {
-            desc = '搜索当前文件下的符号'
-        })
-        vim.keymap.set('n', '<c-t>', ':Telescope coc workspace_symbols<cr>', opts, {
-            desc = '搜索当前项目下的符号'
-        })
 
         require('telescope').setup {
             defaults = {
@@ -99,7 +99,7 @@ return {
                                      "--column", "--smart-case", "--hidden", "--glob=!.git/"},
 
                 -- 让预览的设置生效
-                buffer_previewer_maker = new_maker,
+                buffer_previewer_maker = preview_setting,
 
                 -- Default configuration for telescope goes here:
                 mappings = {
@@ -110,14 +110,7 @@ return {
                         -- e.g. git_{create, delete, ...}_branch for the git_branches picker
                         ["<c-u>"] = false, --  clear prompt
                         ["<c-h>"] = "which_key" -- 显示快捷指令的作用
-
-                        -- 上下移动, 但是tab和shift+tab已经能用了
-                        -- ["<c-j>"] = actions.move_selection_next,
-                        -- ["<c-k>"] = actions.move_selection_previous
-                    },
-
-                    -- normal mode
-                    n = {}
+                    }
                 }
             },
 
@@ -125,7 +118,9 @@ return {
                 find_files = {
                     find_command = {"fd", "--type", "f", "--strip-cwd-prefix"},
                     mappings = {
-                        i = { ["<CR>"] = actions.select_drop }
+                        i = {
+                            ["<CR>"] = actions.select_drop
+                        }
                     }
                 },
 
@@ -145,7 +140,9 @@ return {
                         hide_on_startup = false
                     },
                     mappings = {
-                        i = { ["<CR>"] = actions.select_drop }
+                        i = {
+                            ["<CR>"] = actions.select_drop
+                        }
                     }
                 },
 
@@ -154,13 +151,17 @@ return {
                         hide_on_startup = false
                     },
                     mappings = {
-                        i = { ["<CR>"] = actions.select_drop }
+                        i = {
+                            ["<CR>"] = actions.select_drop
+                        }
                     }
                 },
 
                 old_files = {
                     mappings = {
-                        i = { ["<CR>"] = actions.select_drop }
+                        i = {
+                            ["<CR>"] = actions.select_drop
+                        }
                     }
                 }
 
@@ -174,14 +175,7 @@ return {
                     override_file_sorter = true, -- override the file sorter
                     case_mode = "smart_case" -- or "ignore_case" or "respect_case"
                 },
-                ["ui-select"] = {require("telescope.themes").get_cursor {
-                    borderchars = {" ", " ", " ", " ", " ", " ", " ", " "}
-                    -- borderchars = {
-                    -- prompt = { "─", "│", " ", "│", "┌", "┐", "│", "│" },
-                    -- results = { "─", "│", "─", "│", "├", "┤", "┘", "└" },
-                    -- preview = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
-                    -- }
-                }},
+                ["ui-select"] = {require("telescope.themes").get_dropdown {}},
                 coc = {
                     -- always use Telescope locations to preview definitions/declarations/implementations etc
                     prefer_locations = true
@@ -190,12 +184,13 @@ return {
                     -- Display symbols as <root>.<parent>.<symbol>
                     show_nesting = {
                         ['_'] = false, -- This key will be the default
-                        json = true, -- You can set the option for specific filetypes
-                        yaml = true
+                        json = false, -- You can set the option for specific filetypes
+                        yaml = false
                     }
                 }
             }
         }
+
         require('telescope').load_extension('fzf')
         require('telescope').load_extension('ui-select')
         require('telescope').load_extension('coc')
@@ -203,6 +198,5 @@ return {
         require("telescope").load_extension("lazygit")
         require('telescope').load_extension('aerial')
         require('telescope').load_extension('dap')
-
     end
 }
