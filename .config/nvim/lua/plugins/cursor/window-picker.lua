@@ -3,11 +3,40 @@
 return {
     -- 's1n7ax/nvim-window-picker',
     -- name = 'window-picker',
-    -- event = 'VeryLazy',
     -- version = '2.*',
     -- config = function()
-    --     require('window-picker').setup({
+    --     local picker = require('window-picker')
+    --     picker.setup({
+    --         autoselect_one = true,
+    --         include_current = false,
     --         hint = 'floating-big-letter',
+    --         filter_rules = {
+    --             -- filter using buffer options
+    --             bo = {
+    --                 -- if the file type is one of following, the window will be ignored
+    --                 filetype = {'notify'}
+    --             }
+    --         },
+    --         highlights = {
+    --             statusline = {
+    --                 focused = {
+    --                     bg = '#e35e4f',
+    --                     bold = true
+    --                 },
+    --                 unfocused = {
+    --                     bg = '#e35e4f',
+    --                     bold = true
+    --                 }
+    --             }
+    --         }
     --     })
-    -- end,
+
+    --     vim.keymap.set('n', '<Leader>W', function()
+    --         local picked_window_id = picker.pick_window() or vim.api.nvim_get_current_win()
+    --         vim.api.nvim_set_current_win(picked_window_id)
+    --     end, {
+    --         desc = 'Pick a window'
+    --     })
+
+    -- end
 }

@@ -9,12 +9,14 @@ local keymaps = {
         -- You can pass additional configuration to telescope to change theme, layout, etc.
         require('telescope.builtin').current_buffer_fuzzy_find(
             require('telescope.themes').get_dropdown {
-                winblend = 10,
+                winblend = 10
             })
     end):with_noremap():with_silent():with_desc("模糊搜索当前文件"),
 
-    ["n|<leader>?"] = map_cr(":Telescope coc diagnostics"):with_noremap():with_silent():with_desc("列出本文件下warm/error"),
-    ["n|<leader><c-?>"] = map_cr(":Telescope coc workspace_diagnostics"):with_noremap():with_silent():with_desc("列出所有warm/error"),
+    ["n|<leader>?"] = map_cr(":Telescope coc diagnostics"):with_noremap():with_silent():with_desc(
+        "列出本文件下warm/error"),
+    ["n|<leader><c-?>"] = map_cr(":Telescope coc workspace_diagnostics"):with_noremap():with_silent():with_desc(
+        "列出所有warm/error"),
 
     ["n|<leader>a"] = map_cr(":Telescope coc code_actions"):with_noremap():with_silent():with_desc("列出code actions"),
 
@@ -33,7 +35,8 @@ local keymaps = {
 
     ["n|<c-s>"] = map_cr(":Telescope aerial"):with_noremap():with_silent():with_desc("查找当前文件下的符号"),
 
-    ["n|<c-t>"] = map_cr(":Telescope coc workspace_symbols"):with_noremap():with_silent():with_desc("查找当前项目下的符号")
+    ["n|<c-t>"] = map_cr(":Telescope coc workspace_symbols"):with_noremap():with_silent():with_desc(
+        "查找当前项目下的符号")
 }
 
 bind.nvim_load_mapping(keymaps)
@@ -42,12 +45,7 @@ bind.nvim_load_mapping(keymaps)
 -- Ignore files bigger than a threshold
 -- and don't preview binaries
 local preview_setting = function(filepath, bufnr, opts)
-    local opts = {
-        noremap = true, -- non-recursive
-        silent = true -- do not show message
-    }
     filepath = vim.fn.expand(filepath)
-
     local previewers = require("telescope.previewers")
     local Job = require("plenary.job")
 
@@ -179,7 +177,7 @@ return {
                 ["ui-select"] = {require("telescope.themes").get_dropdown {}},
                 coc = {
                     -- always use Telescope locations to preview definitions/declarations/implementations etc
-                    prefer_locations = true,
+                    prefer_locations = true
                 },
                 aerial = {
                     -- Display symbols as <root>.<parent>.<symbol>

@@ -1,5 +1,6 @@
 -- https://github.com/mfussenegger/nvim-dap
 -- 调试器的协议
+-- https://github.com/mfussenegger/nvim-dap/issues/20
 local bind = require("utils.bind")
 local map_callback = bind.map_callback
 local map_cmd = bind.map_cmd

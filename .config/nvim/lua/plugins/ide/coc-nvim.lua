@@ -89,8 +89,8 @@ local keymaps = {
 
     -- ["n|gd"] = map_cr(":Telescope coc definitions"):with_silent():with_desc("跳转到定义"),
     ["n|gd"] = map_cmd("<Plug>(coc-definition)"):with_silent():with_desc("跳转到定义"),
-    -- ["n|gr"] = map_cr("Telescope coc references"):with_silent():with_desc("跳转到引用"),
-    ["n|gr"] = map_cmd("<Plug>(coc-references)"):with_silent():with_desc("跳转到引用"),
+    ["n|gr"] = map_cr("Telescope coc references"):with_silent():with_desc("跳转到引用"),
+    -- ["n|gr"] = map_cmd("<Plug>(coc-references)"):with_silent():with_desc("跳转到引用"),
     ["n|gi"] = map_cr("Telescope coc "):with_silent():with_desc("跳转到实现"),
 
     -- ["n|<leader>B"] = map_cr("Telescope coc diagnostics"):with_silent() :with_desc("查看当前buffer下的所有报错"),

@@ -2,7 +2,6 @@
 -- 在Insert模式下，按<Tab>可以跳出括号
 return {
     "abecodes/tabout.nvim",
-    lazy = true,
     event = {"InsertEnter"},
     config = function()
         require("tabout").setup({
