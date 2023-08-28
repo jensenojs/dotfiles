@@ -80,7 +80,7 @@ local keymaps = {
         return replace_keycodes('<c-d>')
     end):with_silent():with_expr():with_desc("聪明的<s-tab>"),
 
-    ["i|<c-j>"] = map_cmd("<Plug>(coc-snippets-expand-jump)"):with_noremap():with_silent():with_desc(
+    ["i|<c-n>"] = map_cmd("<Plug>(coc-snippets-expand-jump)"):with_noremap():with_silent():with_desc(
         "触发代码片段补齐"),
 
     -----------------
@@ -89,14 +89,14 @@ local keymaps = {
 
     -- ["n|gd"] = map_cr(":Telescope coc definitions"):with_silent():with_desc("跳转到定义"),
     ["n|gd"] = map_cmd("<Plug>(coc-definition)"):with_silent():with_desc("跳转到定义"),
-    ["n|gr"] = map_cr("Telescope coc references"):with_silent():with_desc("跳转到引用"),
+    -- ["n|gr"] = map_cr("Telescope coc references"):with_silent():with_desc("跳转到引用"),
+    ["n|gr"] = map_cmd("<Plug>(coc-references)"):with_silent():with_desc("跳转到引用"),
     ["n|gi"] = map_cr("Telescope coc "):with_silent():with_desc("跳转到实现"),
 
-    ["n|<leader>b"] = map_cr("Telescope coc diagnostics"):with_silent()
-        :with_desc("查看当前buffer下的所有报错"),
+    -- ["n|<leader>B"] = map_cr("Telescope coc diagnostics"):with_silent() :with_desc("查看当前buffer下的所有报错"),
     -- Use `[b` and `]b` to navigate diagnostics
-    ["n|[b"] = map_cmd("<Plug>(coc-diagnostic-prev)"):with_silent():with_desc("跳转到下个错误处"),
-    ["n|]b"] = map_cmd("<Plug>(coc-diagnostic-next)"):with_silent():with_desc("跳转到上个错误处"),
+    -- ["n|[b"] = map_cmd("<Plug>(coc-diagnostic-prev)"):with_silent():with_desc("跳转到下个错误处"),
+    -- ["n|]b"] = map_cmd("<Plug>(coc-diagnostic-next)"):with_silent():with_desc("跳转到上个错误处"),
 
     -- symbol renaming
     ["n|<leader>rn"] = map_cmd("<Plug>(coc-rename)"):with_silent():with_desc("变量重命名"),

@@ -34,14 +34,14 @@ local keymaps = {
     ["n|<c-s-left>"] = map_cmd("<C-w>>"):with_noremap():with_silent():with_desc("窗口:增加当前的宽度"),
     ["n|<c-s-right>"] = map_cmd("<C-w><"):with_noremap():with_silent():with_desc("窗口:减少当前的宽度"),
 
-    ["n|<c-s>l"] = map_cmd(":set splitright<CR>:vsplit<CR>"):with_noremap():with_silent():with_desc(
-        "窗口:将当前窗口垂直切分,并将光标focus在右窗口"),
-    ["n|<c-s>h"] = map_cmd(":set nosplitright<CR>:vsplit<CR>"):with_noremap():with_silent():with_desc(
-        "窗口:将当前窗口垂直切分,并将光标focus在左窗口"),
-    ["n|<c-s>k"] = map_cmd(":set nosplitbelow<CR>:split<CR>"):with_noremap():with_silent():with_desc(
-        "窗口:将当前窗口垂直切分,并将光标focus在上窗口"),
-    ["n|<c-s>j"] = map_cmd(":set splitbelow<CR>:split<CR>"):with_noremap():with_silent():with_desc(
-        "窗口:将当前窗口垂直切分,并将光标focus在下窗口"),
+    -- ["n|<c-s>l"] = map_cmd(":set splitright<CR>:vsplit<CR>"):with_noremap():with_silent():with_desc(
+    --     "窗口:将当前窗口垂直切分,并将光标focus在右窗口"),
+    -- ["n|<c-s>h"] = map_cmd(":set nosplitright<CR>:vsplit<CR>"):with_noremap():with_silent():with_desc(
+    --     "窗口:将当前窗口垂直切分,并将光标focus在左窗口"),
+    -- ["n|<c-s>k"] = map_cmd(":set nosplitbelow<CR>:split<CR>"):with_noremap():with_silent():with_desc(
+    --     "窗口:将当前窗口垂直切分,并将光标focus在上窗口"),
+    -- ["n|<c-s>j"] = map_cmd(":set splitbelow<CR>:split<CR>"):with_noremap():with_silent():with_desc(
+    --     "窗口:将当前窗口垂直切分,并将光标focus在下窗口"),
 
     -----------------
     --  标签页管理   --
@@ -50,7 +50,7 @@ local keymaps = {
     ["n|tc"] = map_cmd(":tabc<CR>"):with_noremap():with_silent():with_desc("标签:关闭当前tab"),
     ["n|to"] = map_cmd(":tabo<CR>"):with_noremap():with_silent():with_desc(
         "标签:关闭除了当前tab以外的其他tab"),
-    ["n|tn"] = map_callback(function()
+    ["n|<c-s-l>"] = map_callback(function()
         -- 获取当前标签页的索引
         local current_tab = vim.fn.tabpagenr()
         -- 获取标签页总数
@@ -63,7 +63,7 @@ local keymaps = {
             vim.cmd('tabfirst')
         end
     end):with_noremap():with_silent():with_desc("标签:移动到右tab"),
-    ["n|tp"] = map_callback(function()
+    ["n|<c-s-h>"] = map_callback(function()
         -- 获取当前标签页的索引
         local current_tab = vim.fn.tabpagenr()
         -- 获取标签页总数

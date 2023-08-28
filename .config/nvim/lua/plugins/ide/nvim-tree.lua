@@ -8,7 +8,6 @@
 -- x : 剪切一个文件到剪切版或者从剪切版移除一个剪切
 -- c : 拷贝一个文件到剪切版或者从剪切版移除一个拷贝
 -- p : 粘贴文件或者目录
-
 local function my_on_attach(bufnr)
     local api = require "nvim-tree.api"
 
@@ -113,7 +112,6 @@ local icons = {
     git = require("utils.icons").get("git"),
     ui = require("utils.icons").get("ui")
 }
-
 
 return {
     "nvim-tree/nvim-tree.lua",
@@ -251,6 +249,12 @@ return {
             nested = true
         })
 
-        vim.keymap.set('n', '<F2>', ':NvimTreeToggle<CR>', opts)
+        vim.keymap.set('n', '<F2>', function()
+            local api = require "nvim-tree.api"
+            api.tree.toggle {
+                find_file = true,
+                focus = false,
+            }
+        end, opts)
     end
 }

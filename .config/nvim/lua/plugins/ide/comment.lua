@@ -1,7 +1,8 @@
--- https://github.com/numToStr/Comment.nvim
+-- https://github.com/terrortylor/nvim-comment
 -- 注释
 return {
-    'numToStr/Comment.nvim',
-    config = function()
+    "terrortylor/nvim-comment",
+    config = function ()
+        require('nvim_comment').setup()
     end
 }

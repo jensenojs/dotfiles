@@ -31,8 +31,9 @@ local keymaps = {
         require('telescope.builtin').find_files()
     end):with_noremap():with_silent():with_desc("查找文件"),
 
-    ["n|<c-t>"] = map_cr(":Telescope coc workspace_symbols"):with_noremap():with_silent():with_desc(
-        "查找当前项目下的符号")
+    ["n|<c-s>"] = map_cr(":Telescope aerial"):with_noremap():with_silent():with_desc("查找当前文件下的符号"),
+
+    ["n|<c-t>"] = map_cr(":Telescope coc workspace_symbols"):with_noremap():with_silent():with_desc("查找当前项目下的符号")
 }
 
 bind.nvim_load_mapping(keymaps)
@@ -178,7 +179,7 @@ return {
                 ["ui-select"] = {require("telescope.themes").get_dropdown {}},
                 coc = {
                     -- always use Telescope locations to preview definitions/declarations/implementations etc
-                    prefer_locations = true
+                    prefer_locations = true,
                 },
                 aerial = {
                     -- Display symbols as <root>.<parent>.<symbol>
