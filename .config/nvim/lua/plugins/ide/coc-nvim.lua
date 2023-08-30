@@ -2,6 +2,9 @@
 -- Make your Vim/Neovim as smart as VS Code
 local opt = vim.opt
 
+--  https: //github.com/folke/trouble.nvim/issues/203
+-- https://github.com/neoclide/coc.nvim/discussions/4102#discussioncomment-3482741
+
 -- Some servers have issues with backup files, see #649
 vim.opt.backup = false
 vim.opt.writebackup = false
@@ -93,11 +96,6 @@ local keymaps = {
     -- ["n|gr"] = map_cmd("<Plug>(coc-references)"):with_silent():with_desc("跳转到引用"),
     ["n|gi"] = map_cr("Telescope coc "):with_silent():with_desc("跳转到实现"),
 
-    -- ["n|<leader>B"] = map_cr("Telescope coc diagnostics"):with_silent() :with_desc("查看当前buffer下的所有报错"),
-    -- Use `[b` and `]b` to navigate diagnostics
-    -- ["n|[b"] = map_cmd("<Plug>(coc-diagnostic-prev)"):with_silent():with_desc("跳转到下个错误处"),
-    -- ["n|]b"] = map_cmd("<Plug>(coc-diagnostic-next)"):with_silent():with_desc("跳转到上个错误处"),
-
     -- symbol renaming
     ["n|<leader>rn"] = map_cmd("<Plug>(coc-rename)"):with_silent():with_desc("变量重命名"),
 
@@ -112,10 +110,7 @@ local keymaps = {
         else
             vim.api.nvim_command('!' .. vim.o.keywordprg .. ' ' .. cw)
         end
-    end):with_silent():with_desc("显示光标所在处的文档"),
-
-    -- format code, coc-formatselect can not work with go
-    -- ["nx|<leader>f"] = map_cmd("<Plug>(coc-format)"):with_silent():with_desc("格式化当前代码文件")
+    end):with_silent():with_desc("显示光标所在处的文档")
 }
 
 bind.nvim_load_mapping(keymaps)
@@ -142,14 +137,6 @@ return {
             desc = "Highlight symbol under cursor on CursorHold"
         })
 
-        -- Setup formatexpr specified filetype(s)
-        vim.api.nvim_create_autocmd("FileType", {
-            group = "CocGroup",
-            pattern = "typescript,json,go,c,c++,sql",
-            command = "setl formatexpr=CocAction('formatSelected')",
-            desc = "Setup formatexpr specified filetype(s)"
-        })
-
         -- Update signature help on jump placeholder
         vim.api.nvim_create_autocmd("User", {
             group = "CocGroup",
@@ -157,8 +144,5 @@ return {
             command = "call CocActionAsync('showSignatureHelp')",
             desc = "Update signature help on jump placeholder"
         })
-
-        -- Add `:Format` command to format current buffer
-        vim.api.nvim_create_user_command("Format", "call CocAction('format')", {})
     end
 }

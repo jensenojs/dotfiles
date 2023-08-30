@@ -15,6 +15,7 @@ local keymaps = {
 
     ["n|<leader>?"] = map_cr(":Telescope coc diagnostics"):with_noremap():with_silent():with_desc(
         "列出本文件下warm/error"),
+
     ["n|<leader><c-?>"] = map_cr(":Telescope coc workspace_diagnostics"):with_noremap():with_silent():with_desc(
         "列出所有warm/error"),
 
@@ -24,7 +25,6 @@ local keymaps = {
         require('telescope.builtin').buffers()
     end):with_noremap():with_silent():with_desc("打开缓冲区列表"),
 
-    -- 也许更常用的该是lazyGit.?
     ["n|<leader>G"] = map_callback(function()
         require('telescope.builtin').git_status()
     end):with_noremap():with_silent():with_desc("列出当前git项目下哪些文件"),

@@ -13,9 +13,18 @@
     "go.goplsOptions": {
         "completeUnimported": true
     },
+    "diagnostic.locationlistUpdate": true,
+    "diagnostic.refreshOnInsertMode": true,
     "diagnostic.virtualText": true,
-    "diagnostic.virtualTextCurrentLineOnly": false,
+    "diagnostic.virtualTextCurrentLineOnl" : true,
     "imselect.defaultInput": "com.apple.keylayout.ABC",
+    "coc.preferences.formatOnSaveFiletypes": [
+        "rust",
+        "go",
+        "cpp",
+        "c",
+        "sh"
+    ],
     "suggest.completionItemKindLabels": {
         "constructor": "\ufb25",
         "keyword": "\uf1de",

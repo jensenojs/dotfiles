@@ -2,8 +2,6 @@
 -- 将各种提示显示为弹窗
 return {
     'rcarriga/nvim-notify',
-    -- lazy = true,
-    -- event = "VeryLazy",
     config = function()
         local notify = require("notify")
         local icons = {
