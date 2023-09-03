@@ -1,3 +1,3 @@
 return {
-    "jay-babu/mason-nvim-dap.nvim",
+    -- "jay-babu/mason-nvim-dap.nvim",
 }
