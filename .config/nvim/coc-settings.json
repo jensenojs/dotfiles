@@ -16,7 +16,6 @@
     "diagnostic.locationlistUpdate": true,
     "diagnostic.refreshOnInsertMode": true,
     "diagnostic.virtualText": true,
-    "diagnostic.virtualTextCurrentLineOnl" : true,
     "imselect.defaultInput": "com.apple.keylayout.ABC",
     "coc.preferences.formatOnSaveFiletypes": [
         "rust",

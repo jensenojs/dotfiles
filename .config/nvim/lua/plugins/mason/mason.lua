@@ -12,7 +12,6 @@ return {
             return
         end
 
-
         local formatlist = require("utils.mason-list").get("format", true)
         local mason_registry = require("mason-registry")
         -- local mason_dap = require("mason-nvim-dap")

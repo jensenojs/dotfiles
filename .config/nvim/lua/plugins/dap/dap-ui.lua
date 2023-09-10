@@ -2,7 +2,6 @@
 -- 调试界面的配置
 _G._debugging = false
 
-
 local bind = require("utils.bind")
 local map_cmd = bind.map_cmd
 local icons = {
@@ -23,7 +22,6 @@ function M.load_extras()
         did_load_debug_mappings = true
     end
 end
-
 
 return {
     "rcarriga/nvim-dap-ui",
@@ -88,7 +86,7 @@ return {
                 reset = true
             })
         end
-        -- 关闭调试界面的时候, 代码窗口打开目录树和大纲
+        -- 关闭调试界面的时候, 代码窗口打开大纲和目录树
         dap.listeners.before.event_terminated["dapui_config"] = function()
             if _debugging then
                 _G._debugging = false
@@ -100,7 +98,7 @@ return {
                 })
             end
         end
-        -- 关闭调试界面的时候, 代码窗口打开目录树和大纲
+        -- 关闭调试界面的时候, 代码窗口打开大纲和目录树
         dap.listeners.before.event_exited["dapui_config"] = function()
             if _debugging then
                 _G._debugging = false

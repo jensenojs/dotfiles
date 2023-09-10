@@ -119,8 +119,7 @@ bind.nvim_load_mapping(keymaps)
 vim.g.coc_global_extensions = {'coc-marketplace', 'coc-highlight', 'coc-snippets', 'coc-dictionary', 'coc-pairs',
 -- 非LSP插件
                                'coc-json', 'coc-xml', 'coc-yaml', 'coc-toml', -- 配置语言
-'coc-pyright', 'coc-clangd', 'coc-go', 'coc-java', 'coc-java-intellicode', 'coc-rls', 'coc-sql', 'coc-sumneko-lua',
-                               'coc-rust-analyzer', -- LSP
+'coc-pyright', 'coc-clangd', 'coc-go', 'coc-java', 'coc-java-intellicode', 'coc-rls', 'coc-sql',                               'coc-rust-analyzer', -- LSP
 'coc-vimlsp', 'coc-docker', 'coc-sh', 'coc-imselect' -- 其他
 }
 

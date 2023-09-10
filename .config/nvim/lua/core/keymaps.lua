@@ -34,15 +34,6 @@ local keymaps = {
     ["n|<c-s-left>"] = map_cmd("<C-w>>"):with_noremap():with_silent():with_desc("窗口:增加当前的宽度"),
     ["n|<c-s-right>"] = map_cmd("<C-w><"):with_noremap():with_silent():with_desc("窗口:减少当前的宽度"),
 
-    -- ["n|<c-s>l"] = map_cmd(":set splitright<CR>:vsplit<CR>"):with_noremap():with_silent():with_desc(
-    --     "窗口:将当前窗口垂直切分,并将光标focus在右窗口"),
-    -- ["n|<c-s>h"] = map_cmd(":set nosplitright<CR>:vsplit<CR>"):with_noremap():with_silent():with_desc(
-    --     "窗口:将当前窗口垂直切分,并将光标focus在左窗口"),
-    -- ["n|<c-s>k"] = map_cmd(":set nosplitbelow<CR>:split<CR>"):with_noremap():with_silent():with_desc(
-    --     "窗口:将当前窗口垂直切分,并将光标focus在上窗口"),
-    -- ["n|<c-s>j"] = map_cmd(":set splitbelow<CR>:split<CR>"):with_noremap():with_silent():with_desc(
-    --     "窗口:将当前窗口垂直切分,并将光标focus在下窗口"),
-
     -----------------
     --  标签页管理   --
     -----------------
