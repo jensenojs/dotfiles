@@ -127,6 +127,10 @@ opt.number = true
 -- 设置相对行号
 opt.relativenumber = true
 
+if vim.fn.executable("nvr") == 1 then
+  vim.env.GIT_EDITOR = "nvr --remote-tab-wait +'set bufhidden=delete'"
+end
+
 -- 如果是nvim-0.9.0版本以上，则设置splitkeep和shortmess选项
 if vim.fn.has("nvim-0.9.0") == 1 then
     opt.splitkeep = "screen"

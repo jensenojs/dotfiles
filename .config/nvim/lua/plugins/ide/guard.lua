@@ -12,10 +12,10 @@ return {
 
         local ft = require('guard.filetype')
 
-        ft('json'):fmt('jq'):fmt({
-            cmd = "jq",
-            stdin = true
-        })
+        -- ft('json'):fmt('jq'):fmt({
+        --     cmd = "jq",
+        --     stdin = true
+        -- })
 
         ft('sh'):fmt({
             cmd = 'shfmt',
