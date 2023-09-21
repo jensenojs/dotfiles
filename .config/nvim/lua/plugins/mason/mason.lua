@@ -3,7 +3,6 @@
 -- Easily install and manage LSP servers, DAP servers, linters, and formatters.
 return {
     "williamboman/mason.nvim",
-    dependencies = {"mfussenegger/nvim-dap","jay-babu/mason-nvim-dap.nvim"},
 
     config = function()
         local status, mason = pcall(require, "mason")

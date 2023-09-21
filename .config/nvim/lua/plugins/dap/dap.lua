@@ -63,7 +63,7 @@ bind.nvim_load_mapping(keymaps)
 -- https://github.com/go-delve/delve/blob/master/Documentation/usage/dlv_dap.md
 return {
     'mfussenegger/nvim-dap',
-    dependencies = {'theHamsta/nvim-dap-virtual-text', "rcarriga/nvim-dap-ui", "LiadOz/nvim-dap-repl-highlights"},
+    dependencies = {'theHamsta/nvim-dap-virtual-text', "rcarriga/nvim-dap-ui", "LiadOz/nvim-dap-repl-highlights", "williamboman/mason.nvim" },
 
     config = function()
         local icons = {

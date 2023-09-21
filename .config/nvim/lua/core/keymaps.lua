@@ -37,11 +37,13 @@ local keymaps = {
     -----------------
     --  标签页管理   --
     -----------------
-    ["n|tt"] = map_cr("tabe"):with_noremap():with_silent():with_desc("标签:新建一个tab"),
-    ["n|tc"] = map_cmd(":tabc<CR>"):with_noremap():with_silent():with_desc("标签:关闭当前tab"),
-    ["n|to"] = map_cmd(":tabo<CR>"):with_noremap():with_silent():with_desc(
+    ["n|<a-t>"] = map_cr("tabe"):with_noremap():with_silent():with_desc("标签:新建一个tab"),
+    ["n|<a-c>"] = map_cmd(":tabc<CR>"):with_noremap():with_silent():with_desc("标签:关闭当前tab"),
+    ["n|<a-o>"] = map_cmd(":tabo<CR>"):with_noremap():with_silent():with_desc(
         "标签:关闭除了当前tab以外的其他tab"),
-    ["n|<c-s-l>"] = map_callback(function()
+    
+    -- 之所以用这个奇怪的快捷键是想要让它低成本地在tmux中也能用...
+    ["n|<a-s-l>"] = map_callback(function()
         -- 获取当前标签页的索引
         local current_tab = vim.fn.tabpagenr()
         -- 获取标签页总数
@@ -54,7 +56,7 @@ local keymaps = {
             vim.cmd('tabfirst')
         end
     end):with_noremap():with_silent():with_desc("标签:移动到右tab"),
-    ["n|<c-s-h>"] = map_callback(function()
+    ["n|<a-s-h>"] = map_callback(function()
         -- 获取当前标签页的索引
         local current_tab = vim.fn.tabpagenr()
         -- 获取标签页总数

@@ -128,7 +128,7 @@ opt.number = true
 opt.relativenumber = true
 
 if vim.fn.executable("nvr") == 1 then
-  vim.env.GIT_EDITOR = "nvr --remote-tab-wait +'set bufhidden=delete'"
+  vim.env.GIT_EDITOR = "nvr -cc split --remote-wait +'set bufhidden=wipe'"
 end
 
 -- 如果是nvim-0.9.0版本以上，则设置splitkeep和shortmess选项
