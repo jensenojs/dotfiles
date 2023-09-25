@@ -4,7 +4,7 @@ local bind = require("utils.bind")
 local map_cr = bind.map_cr
 
 local keymaps = {
-    ["n|<leader>g"] = map_cr("LazyGit"):with_noremap():with_silent():with_desc("打开LazyGit")
+    ["n|<leader>G"] = map_cr("LazyGit"):with_noremap():with_silent():with_desc("打开LazyGit")
 }
 
 bind.nvim_load_mapping(keymaps)

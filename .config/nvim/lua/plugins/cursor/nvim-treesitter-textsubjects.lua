@@ -12,8 +12,8 @@
 -- https://github.com/RRethy/nvim-treesitter-textsubjects/pull/36
 return {
     "RRethy/nvim-treesitter-textsubjects",
-    -- lazy = true,
-    -- event = {"User FileOpened"},
+    lazy = true,
+    event = {"User FileOpened"},
 
     dependencies = {"nvim-treesitter/nvim-treesitter"},
     config = function()

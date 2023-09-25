@@ -14,7 +14,7 @@ local keymaps = {
     end):with_noremap():with_silent():with_desc("模糊搜索当前文件"),
 
     ["n|<leader>?"] = map_cr(":Telescope coc diagnostics"):with_noremap():with_silent():with_desc(
-        "列出本文件下warm/error"),
+        "列出本项目下的warm/error"),
 
     ["n|<leader><c-?>"] = map_cr(":Telescope coc workspace_diagnostics"):with_noremap():with_silent():with_desc(
         "列出所有warm/error"),
@@ -25,7 +25,7 @@ local keymaps = {
         require('telescope.builtin').buffers()
     end):with_noremap():with_silent():with_desc("打开缓冲区列表"),
 
-    ["n|<leader>G"] = map_callback(function()
+    ["n|<leader>g"] = map_callback(function()
         require('telescope.builtin').git_status()
     end):with_noremap():with_silent():with_desc("列出当前git项目下哪些文件"),
 

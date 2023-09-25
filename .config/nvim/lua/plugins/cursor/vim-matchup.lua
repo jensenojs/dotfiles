@@ -5,11 +5,6 @@ return {
     'andymass/vim-matchup',
 
     config = function()
-        require'nvim-treesitter.configs'.setup {
-            matchup = {
-                enable = true -- mandatory, false will disable the whole extension
-            }
-        }
         vim.g.matchup_matchparen_offscreen = {
             method = "popup"
         }

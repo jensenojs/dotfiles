@@ -35,8 +35,8 @@ bind.nvim_load_mapping(keymaps)
 
 return {
     "chrisgrieser/nvim-various-textobjs",
-    -- lazy = true,
-    -- event = {"User FileOpened"},
+    lazy = true,
+    event = {"User FileOpened"},
     config = function()
         require("various-textobjs").setup({
             useDefaultKeymaps = false,
