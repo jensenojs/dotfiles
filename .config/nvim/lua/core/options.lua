@@ -8,6 +8,7 @@ vim.g.markdown_recommended_style = 0
 -- 来自nvim-tree的要求
 -- disable netrw at the very start of your init.lua
 vim.g.loaded_netrw = 1
+
 vim.g.loaded_netrwPlugin = 1
 
 local opt = vim.opt
@@ -16,7 +17,11 @@ local opt = vim.opt
 opt.syntax = "on"
 
 opt.timeout = true
+
 opt.timeoutlen = 1000
+
+-- pattern uses more memory than ‘maxmempattern’
+opt.maxmempattern = 5000
 
 -- 不要打开无名的buffer
 opt.hidden = false
@@ -55,10 +60,11 @@ opt.grepformat = "%f:%l:%c:%m"
 opt.grepprg = "rg --vimgrep"
 
 -- 自动折行
-opt.wrap = true
+opt.wrap = false
 
 -- 禁用掉按键失效时的vim的回应
 opt.report = 99999
+
 opt.shortmess = astWAIc
 
 -- 关闭错误提示声音
@@ -128,7 +134,7 @@ opt.number = true
 opt.relativenumber = true
 
 if vim.fn.executable("nvr") == 1 then
-  vim.env.GIT_EDITOR = "nvr -cc split --remote-wait +'set bufhidden=wipe'"
+    vim.env.GIT_EDITOR = "nvr -cc split --remote-wait +'set bufhidden=wipe'"
 end
 
 -- 如果是nvim-0.9.0版本以上，则设置splitkeep和shortmess选项

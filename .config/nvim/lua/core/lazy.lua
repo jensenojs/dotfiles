@@ -4,7 +4,6 @@ local is_mac = global.is_mac
 local vim_path = global.vim_path
 local data_dir = global.data_dir
 local lazy_path = data_dir .. "lazy/lazy.nvim"
-local modules_dir = vim_path .. "/lua/modules"
 
 local icons = {
     kind = require("utils.icons").get("kind"),

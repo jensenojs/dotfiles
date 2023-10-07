@@ -76,6 +76,8 @@ end
 local load = function()
     if vim.g.vscode then
         -- VSCode extension
+        require("core.keymaps")
+        require("core.options")
     else
         clipboard_config()
         shell_config()
