@@ -15,8 +15,12 @@
 --
 -- bind.nvim_load_mapping(keymaps)
 -- Example keybindings
-vim.keymap.set('n', '<c-space>', '<CMD>lua require("FTerm").toggle()<CR>')
-vim.keymap.set('t', '<c-space>', '<C-\\><C-n><CMD>lua require("FTerm").toggle()<CR>')
+vim.keymap.set('n', '<c-leader>', '<CMD>lua require("FTerm").toggle()<CR>')
+vim.keymap.set('t', '<c-leader>', '<C-\\><C-n><CMD>lua require("FTerm").toggle()<CR>')
+
+-- option key for map
+vim.keymap.set('n', '<A-space>', '<CMD>lua require("FTerm").toggle()<CR>')
+vim.keymap.set('t', '<A-space>', '<C-\\><C-n><CMD>lua require("FTerm").toggle()<CR>')
 
 return {
     "numToStr/FTerm.nvim",
