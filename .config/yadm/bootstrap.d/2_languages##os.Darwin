@@ -1,0 +1,37 @@
+#!/bin/bash
+
+source $HOME/.config/yadm/utils.sh
+
+# 安装node.js
+if ! executable_exists node; then
+	step "Installing Node.js ..."
+
+	# layouts.download.codeBox.installsNvm
+	curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+
+	# layouts.download.codeBox.downloadAndInstallNodejsRestartTerminal
+	nvm install 22
+
+	if executable_exists node; then
+		info "node.js install successfully"
+	fi
+
+fi
+
+# 安装golang
+if ! executable_exists go; then
+	step "Installing golang ..."
+	info "go https://go.dev/doc/install to install golang manually"
+fi
+
+# 安装rust
+if ! executable_exists rustc; then
+	step "Installing rustc ..."
+	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+	info "尚未将rustc的环境变量添加"
+
+	if executable_exists rustc; then
+		info "golang install successfully"
+	fi
+fi

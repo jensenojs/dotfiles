@@ -1,0 +1,25 @@
+#!/bin/bash
+
+source $HOME/.config/yadm/utils.sh
+
+# https://github.com/ohmyzsh/ohmyzsh/wiki
+
+ZSH_USERS_URL="https://github.com/zsh-users"
+
+function omz_install_plugin() {
+	declare plugin="$1"
+	git clone "$ZSH_USERS_URL/${plugin}" \
+		"${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/${plugin}"
+}
+
+if [ -d ~/.oh-my-zsh ]; then
+	info "oh-my-zsh is already installed"
+else
+	sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    omz_install_plugin "zsh-autosuggestions"
+    omz_install_plugin "zsh-completions"
+    omz_install_plugin "zsh-syntax-highlighting"
+    omz_install_plugin "colored-man-pages"
+fi
+
+
