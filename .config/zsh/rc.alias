@@ -1,0 +1,12 @@
+#!/usr/bin/env zsh
+
+#TODO
+
+alias reprofile='source ~/.zshenv; source ~/.zshrc'
+alias _=sudo
+alias d='dirs -v | head -10'
+
+alias lg='lazygit'
+
+
+

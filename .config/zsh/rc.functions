@@ -1,0 +1,106 @@
+#!/usr/bin/env zsh
+
+# read markdown files like manpages
+function mdman() {
+    pandoc -s -f markdown -t man "$*" | nroff -man
+}
+
+# Pretty path print
+function path() {
+  echo $PATH | tr ":" "\n" | \
+  awk "{ \
+    sub(\"/usr\",   \"$fg[green]/usr$reset_color\"); \
+    sub(\"/bin\",   \"$fg[blue]/bin$reset_color\"); \
+    sub(\"/opt\",   \"$fg[cyan]/opt$reset_color\"); \
+    sub(\"/sbin\",  \"$fg[magenta]/sbin$reset_color\"); \
+    sub(\"/local\", \"$fg[yellow]/local$reset_color\"); \
+    print }"
+}
+
+# This was written entirely by Mikael Magnusson (Mikachu)
+# Type '...' to get '../..' with successive .'s adding /..
+function _rationalise-dot {
+  local MATCH # keep the regex match from leaking to the environment
+  if [[ $LBUFFER =~ '(^|/| |      |'$'\n''|\||;|&)\.\.$' ]]; then
+    LBUFFER+=/
+    zle self-insert
+    zle self-insert
+  else
+    zle self-insert
+  fi
+}
+zle -N _rationalise-dot
+bindkey . _rationalise-dot
+bindkey -M isearch . self-insert # without this, typing . aborts incr history search
+setopt auto_cd
+
+function _venv_status() {
+  if [ -z $VIRTUAL_ENV ]; then
+    echo "Inactive"
+  else
+    if [ "$POETRY_ACTIVE" -eq 1 -a "$SHLVL" -gt 1 ]; then
+      echo "Subshell"
+    else
+      echo "Activated"
+    fi
+  fi
+}
+
+# Small wrapper around poetry to provide activate/deactivate commands
+function po() {
+  if [[ $# = 1 && ${#1} > 1 ]]; then
+    if [[ 'activate' =~ "^$1" ]]; then
+      local script="venv/bin/activate"
+      local git="$(git rev-parse --show-toplevel 2> /dev/null)/"
+      local SCRIPT_PLACES=(".$script" "$script" "$git.$script" "$git$script")
+      typeset -U SCRIPT_PLACES # remove duplicates from path
+      for scrpt in $SCRIPT_PLACES; do
+        if [ -f $scrpt ]; then
+          source $scrpt
+          echo "$fg_bold[green]Activated '$VIRTUAL_ENV'$reset_color"
+          return
+        fi
+      done
+      echo "$fg_bold[red]No virtual environment found.$reset_color"
+
+    elif [[ 'deactivate' =~ "^$1" ]]; then
+      local s=$(_venv_status)
+      if [ "$s" = "Activated" ]; then
+        echo "$fg_bold[green]Deactivating '$VIRTUAL_ENV'$reset_color"
+        deactivate
+      elif [ "$s" = "Subshell" ]; then
+        echo "$fg_bold[green]Exiting '$VIRTUAL_ENV' subshell$reset_color"
+        exit 0
+      else
+        echo "$fg_bold[red]No virtual environment active.$reset_color"
+      fi
+
+    elif [[ 'status' =~ "^$1" ]]; then
+      local s=$(_venv_status)
+      if [ "$s" != "Inactive" ]; then
+        local ve=" ($VIRTUAL_ENV)"
+      fi
+      echo "Python venv: $s$ve"
+      poetry --version
+
+    elif [[ 'changelog' =~ "^$1" ]]; then
+      curl -vs https://raw.githubusercontent.com/python-poetry/poetry/master/CHANGELOG.md 2>/dev/null | pandoc -f markdown -t plain | more
+
+    else
+      poetry $@
+    fi
+  else
+    poetry $@
+  fi
+}
+
+# From: https://news.ycombinator.com/item?id=38471822
+function frg {
+    rg --ignore-case --color=always --line-number --no-heading "$@" |
+      fzf --ansi \
+          --color 'hl:-1:underline,hl+:-1:underline:reverse' \
+          --delimiter ':' \
+          --preview "bat --color=always {1} --theme='Solarized (light)' --highlight-line {2}" \
+          --preview-window 'up,60%,border-bottom,+{2}+3/3,~3' \
+          --bind "enter:become($EDITOR +{2} {1})"
+}
