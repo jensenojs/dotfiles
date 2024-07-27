@@ -1,0 +1,55 @@
+#!/bin/bash
+
+echo Linux
+
+# Save this file as ~/.config/yadm/bootstrap and make it executable. It will
+# execute all executable files (excluding templates and editor backups) in the
+# ~/.config/yadm/bootstrap.d directory when run.
+
+# -e：当脚本中的任何命令返回非零状态时，脚本将立即退出。
+# -u：当脚本尝试使用未初始化的变量时，脚本将立即退出。
+# set -o pipefail：使管道中任何一个命令失败（返回非零状态）时，整个管道的执行结果就是失败状态，而不是只考虑最后一个命令的状态
+set -euo pipefail
+
+# Ask for the administrator password upfront
+# sudo -v
+
+# Keep-alive: update existing `sudo` time stamp until `.macos` has finished
+# while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+
+if [[ $# == 1 && $1 == '--dryrun' ]]; then
+	dryrun=1
+else
+	dryrun=0
+fi
+
+# Directory to look for bootstrap executables in
+BOOTSTRAP_D="${BASH_SOURCE[0]}.d"
+if [[ ! -d "$BOOTSTRAP_D" ]]; then
+	echo "Error: bootstrap directory '$BOOTSTRAP_D' not found" >&2
+	exit 1
+fi
+
+# find命令用于在目录树中搜索文件。
+# -L选项告诉find命令在遇到符号链接时，自动跟随链接到其指向的文件或目录
+# "$BOOTSTRAP_D"是环境变量或之前定义的变量，指向需要搜索的目录
+# -type f选项限制搜索结果只包括文件(不包括目录等)
+# find -L "$BOOTSTRAP_D" -type f -maxdepth 1 |
+#     # 管道| 将find命令的输出传递给sort命令，后者将文件名按字典顺序排序
+# 	sort |
+#     # while IFS= read -r bootstrap; do
+#     # 循环遍历排序后的文件名列表。这里IFS=是为了防止文件名中包含空格、制表符等导致的问题，-r选项防止对反斜杠进行转义
+# 	while IFS= read -r bootstrap; do
+#         echo "read $bootstrap"
+# 		# -x $bootstrap""检查文件是否具有执行权限
+# 		# ! "$bootstrap" =~ "##"和! "$bootstrap" =~ "~$"是两个额外的条件，用于过滤文件名
+# 		if [[ -x "$bootstrap" && ! "$bootstrap" =~ "##" && ! "$bootstrap" =~ "~$" ]]; then
+#             echo "enter $bootstrap"
+# 			# explicitly set stdin as the controlling terminal
+# 			# (accessing stdin otherwise would terminate the loop)
+# 			if ! "$bootstrap" </dev/tty; then
+# 				echo "Error: bootstrap '$bootstrap' failed" >&2
+# 				exit 1
+# 			fi
+# 		fi
+# 	done

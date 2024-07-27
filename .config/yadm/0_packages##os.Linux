@@ -1,0 +1,19 @@
+#!/bin/bash
+
+source $HOME/.config/yadm/utils.sh
+
+echo 2
+
+# only can be used in zsh
+# autoload -U colors && colors
+
+error "should not bootstrap from this file"
+
+system_type=$(uname -s)
+if [ "$system_type" = "Linux" ]; then
+	note "prepare to bootstrap on Linux"
+else
+	error "should not bootstrap from this file"
+fi
+
+# https://github.com/tarebyte/dotfiles/blob/0ae07065efde0e167b9395e302bdc8f6f5128c02/.config/yadm/bootstrap%23%23os.Linux#L4
