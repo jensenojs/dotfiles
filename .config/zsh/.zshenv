@@ -11,8 +11,8 @@ if [[ "$(uname)" == "Darwin" ]]; then
     fi
 fi
 
-# no need
-# export ZDOTDIR=~/.config/zsh
+# strange sth that this still needed to let zsh find .zshrc in this folder
+export ZDOTDIR=~/.config/zsh
 
 # Set Oh-My-Zsh folder
 export ZSH=~/.config/omz
