@@ -22,35 +22,38 @@ plugins=(
 	z
 	fzf
 	git
+    sudo
 	vscode
-    	copypath
-    	copyfile
-    	zsh-vi-mode
+    copypath
+    copyfile
+    # zsh-vi-mode
 	zsh-autosuggestions
 	zsh-syntax-highlighting
 	colored-man-pages
 )
 
+
+# Configure ZSH Vi-mode
+# function zvm_before_init() {
+# 	zvm_bindkey viins '^[[A' history-substring-search-up
+# 	zvm_bindkey viins '^[[B' history-substring-search-down
+# 	zvm_bindkey vicmd '^[[A' history-beginning-search-backward
+# 	zvm_bindkey vicmd '^[[B' history-beginning-search-forward
+# 	zvm_bindkey vicmd 'k' history-substring-search-up
+# 	zvm_bindkey vicmd 'j' history-substring-search-down
+# }
+
+# function zvm_after_init() {
+#   [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+#   [ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
+# }
+
+# Source Oh My ZSH
+source $ZSH/oh-my-zsh.sh
+#
 # setting for zsh-you-should-know
 export YSU_MESSAGE_FORMAT="$(tput setaf 1)Hey! I found this %alias_type for %command: %alias$(tput sgr0)"
 
 # setting for autosuggestions
 bindkey ',' autosuggest-accept
 
-# Configure ZSH Vi-mode
-function zvm_before_init() {
-	zvm_bindkey viins '^[[A' history-substring-search-up
-	zvm_bindkey viins '^[[B' history-substring-search-down
-	zvm_bindkey vicmd '^[[A' history-beginning-search-backward
-	zvm_bindkey vicmd '^[[B' history-beginning-search-forward
-	zvm_bindkey vicmd 'k' history-substring-search-up
-	zvm_bindkey vicmd 'j' history-substring-search-down
-}
-
-function zvm_after_init() {
-  [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-  [ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
-}
-
-# Source Oh My ZSH
-source $ZSH/oh-my-zsh.sh
