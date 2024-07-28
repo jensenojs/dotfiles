@@ -22,6 +22,8 @@ fi
 if ! executable_exists go; then
 	step "Installing golang ..."
 	info "go https://go.dev/doc/install to install golang manually"
+
+    info "尚未将golang添加入环境变量"
 fi
 
 # 安装rust
@@ -29,7 +31,8 @@ if ! executable_exists rustc; then
 	step "Installing rustc ..."
 	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
-	info "尚未将rustc的环境变量添加"
+    # 将rust装载入环境变量
+    . "$HOME/.cargo/env"
 
 	if executable_exists rustc; then
 		info "golang install successfully"

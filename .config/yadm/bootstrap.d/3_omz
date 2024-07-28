@@ -1,0 +1,82 @@
+#!/bin/bash
+
+source $HOME/.config/yadm/utils.sh
+
+ZSH_USERS_URL="https://github.com/zsh-users"
+
+function omz_install_plugin() {
+	declare url="$1"
+	declare plugin="$2"
+
+	if [[ $url == "$ZSH_USERS_URL" ]]; then
+		git clone --depth 1 "$url/$plugin" \
+			"${ZSH_CUSTOM:-$ZSH}/custom/plugins/$plugin"
+	else
+        
+		git clone --depth 1 "$url" \
+			"${ZSH_CUSTOM:-$ZSH}/custom/plugins/$plugin"
+	fi
+}
+
+if directory_exists $ZSH; then
+	info "oh-my-zsh is already installed"
+else
+	step "Installing oh-my-zsh and its plugin ..."
+	sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+fi
+
+# themes
+if  directory_exists $ZSH/custom/themes/powerlevel10k; then
+	info "powerlevel10k is already installed"
+else
+	info "install powerlevel10k"
+	git clone --depth 1 https://github.com/romkatv/powerlevel10k.git $ZSH/custom/themes/powerlevel10k
+fi
+
+# zsh-autosuggestions
+# https://github.com/zsh-users/zsh-autosuggestions
+if  directory_exists $ZSH/custom/plugins/zsh-autosuggestions; then
+	info "zsh-autosuggestions is already installed"
+else
+	info "install zsh-autosuggestions"
+	omz_install_plugin $ZSH_USERS_URL "zsh-autosuggestions"
+fi
+
+# zsh-syntax-highlighting
+# https://github.com/valentinocossar/vscode
+if  directory_exists $ZSH/custom/plugins/zsh-syntax-highlighting; then
+	info "zsh-syntax-highlighting is already installed"
+else
+	info "install zsh-syntax-highlighting"
+	omz_install_plugin $ZSH_USERS_URL "zsh-syntax-highlighting"
+fi
+
+# zsh-you-should-use
+# https://github.com/MichaelAquilina/zsh-you-should-use
+if directory_exists $ZSH/custom/plugins/you-should-use; then
+	info "zsh-you-should-use is already installed"
+else
+	info "install zsh-you-should-use"
+	omz_install_plugin "https://github.com/MichaelAquilina/zsh-you-should-use.git" \
+		"you-should-use"
+fi
+
+# vscode
+# https://github.com/valentinocossar/vscode
+if directory_exists $ZSH/custom/plugins/vscode; then
+	info "zsh-vscode is already installed"
+else
+	info "install zsh-vscode"
+	omz_install_plugin "https://github.com/valentinocossar/vscode.git" \
+		"vscode"
+fi
+
+# zsh-vi-mode
+# https://github.com/jeffreytse/zsh-vi-mode
+if directory_exists $ZSH/custom/plugins/zsh-vi-mode; then
+	info "zsh-vi-mode is already installed"
+else
+	info "install zsh-vi-mode"
+	omz_install_plugin "https://github.com/jeffreytse/zsh-vi-mode" \
+		"zsh-vi-mode"
+fi

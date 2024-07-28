@@ -1,0 +1,13 @@
+
+# Golang
+export GOPATH="$HOME/go"
+export PATH="$GOPATH/bin:$PATH"
+
+# Rust
+. "$HOME/.cargo/env"
+
+# riscv-toolchain
+PATH=$PATH:/usr/local/opt/riscv-gnu-toolchain/bin
+
+# proxy setting
+source /Users/jensen/Projects/scripts/proxy.sh set
