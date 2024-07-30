@@ -71,7 +71,7 @@ else
 		"vscode"
 fi
 
-# zsh-vi-mode
+# zsh-vi-mode, but i am not use 
 # https://github.com/jeffreytse/zsh-vi-mode
 if directory_exists $ZSH/custom/plugins/zsh-vi-mode; then
 	info "zsh-vi-mode is already installed"
@@ -80,3 +80,16 @@ else
 	omz_install_plugin "https://github.com/jeffreytse/zsh-vi-mode" \
 		"zsh-vi-mode"
 fi
+
+
+# fzf-tab
+# https://github.com/Aloxaf/fzf-tab?tab=readme-ov-file#fzf-tab
+if directory_exists $ZSH/custom/plugins/fzf-tab; then
+	info "fzf-tab is already installed"
+else
+	info "install zsh-vi-mode"
+	omz_install_plugin "https://github.com/Aloxaf/fzf-tab" \
+		"fzf-tab"
+fi
+
+

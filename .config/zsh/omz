@@ -19,17 +19,19 @@ export ZSH=~/.config/omz
 
 # Load plugins
 plugins=(
-	z
-	fzf
-	git
+    z
+    fzf
+    git
     sudo
-	vscode
+    vscode
+    fzf-tab
     copypath
     copyfile
     # zsh-vi-mode
-	zsh-autosuggestions
-	zsh-syntax-highlighting
-	colored-man-pages
+    you-should-use
+    colored-man-pages
+    zsh-autosuggestions
+    zsh-syntax-highlighting
 )
 
 
@@ -50,10 +52,28 @@ plugins=(
 
 # Source Oh My ZSH
 source $ZSH/oh-my-zsh.sh
-#
+
+# ===============================================================================
+
 # setting for zsh-you-should-know
-export YSU_MESSAGE_FORMAT="$(tput setaf 1)Hey! I found this %alias_type for %command: %alias$(tput sgr0)"
+export YSU_MESSAGE_FORMAT="Hey! I found this %alias_type for %command: %alias"
 
 # setting for autosuggestions
 bindkey ',' autosuggest-accept
 
+# setting for fzf-tab
+# disable sort when completing `git checkout`
+zstyle ':completion:*:git-checkout:*' sort false
+# set descriptions format to enable group support
+# NOTE: don't use escape sequences here, fzf-tab will ignore them
+zstyle ':completion:*:descriptions' format '[%d]'
+# set list-colors to enable filename colorizing
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# force zsh not to show completion menu, which allows fzf-tab to capture the unambiguous prefix
+zstyle ':completion:*' menu no
+# preview directory's content with eza when completing cd
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
+# switch group using `<` and `>`
+zstyle ':fzf-tab:*' switch-group '<' '>'
+
+zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup

@@ -169,7 +169,7 @@ brew "minimal-racket"
 # Protocol buffers (Google's data interchange format)
 brew "protobuf@21", link: true
 # Open source relational database management system
-brew "mysql"
+brew "mysql", restart_service: true
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
 # Control nvim processes using `nvr` command-line tool
@@ -230,6 +230,8 @@ brew "wireguard-tools"
 brew "yadm"
 # Shell extension to navigate your filesystem faster
 brew "zoxide"
+# UNIX shell (command interpreter)
+brew "zsh"
 # Switch your input method through terminal
 brew "daipeihust/tap/im-select"
 # RISC-V Compiler GNU Toolchain using newlib

@@ -1,12 +1,12 @@
 #!/bin/bash
 
-system_type=$(uname -s)
-if [ "$system_type" = "Darwin" ]; then
-	if grep -q "Ubuntu" /etc/os-release; then
-    	note "prepare to bootstrap on Ubuntu"
-	else
-	    error "currently, only support bootstrap Ubuntu"
-	fi
-else
-	error "should not bootstrap from this file"
-fi
+# system_type=$(uname -s)
+# if [ "$system_type" = "Darwin" ]; then
+# 	if grep -q "Ubuntu" /etc/os-release; then
+#     	note "prepare to bootstrap on Ubuntu"
+# 	else
+# 	    error "currently, only support bootstrap Ubuntu"
+# 	fi
+# else
+# 	error "should not bootstrap from this file"
+# fi

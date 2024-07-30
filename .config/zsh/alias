@@ -3,9 +3,10 @@
 # vim
 alias ni='nvim'
 alias vi='vim'
-alias vf='vim $(fzf)'
+alias nf='nvim $(fzf)'
+alias cf='cd $(find * -type d | fzf)'
 
-alias reprofile='source ~/.zshenv; source ~/.zshrc'
+alias reprofile='source ~/.zshenv; source ~/.config/zsh/.zshrc'
 alias _=sudo
 
 # lazygit
