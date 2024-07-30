@@ -27,4 +27,13 @@ alias pip='pip3'
 alias python='python3'
 
 # better tools
-alias cat='bat'
+alias 
+
+# color
+alias \
+    cat='bat'
+    diff="diff --color=auto" \
+    make="colormake" \
+    ping="gping" \
+    grep="grep --color=auto" \
+    ip="ip -color=auto" \
