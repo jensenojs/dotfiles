@@ -21,7 +21,7 @@ function step() {
 }
 
 function ask_password() {
-	print $TERTIARY "\nEnter your password to begin with the installation\n"
+	note "Enter your password to begin with the installation"
 
 	# Ask for sudo beforehand, so that the script doesn't halt installation in the
 	# later sections.
@@ -29,14 +29,14 @@ function ask_password() {
 
 	# Keep sudo session persistent, taken from -- https://gist.github.com/cowboy/3118588
 	while true; do
-		sudo -n true
-		sleep 60
-		kill -0 "$$" || exit
-	done 2>/dev/null &
+		sudo -n true         # 使用 -n 选项检查当前的 sudo 会话是否仍然有效
+		sleep 60             # 每隔 60 秒执行一次检查。
+		kill -0 "$$" || exit # 使用 kill -0 检查当前进程（即脚本自身）是否仍然存活，如果进程不存在了就退出循环(也就是结束保活操作)
+	done 2>/dev/null &    # 将整个保活操作放在后台执行
 }
 
 # 检验某个命令是否可以执行
-function executab地le_exists() {
+function executable_exists() {
 	command -v "$1" >/dev/null 2>&1
 }
 

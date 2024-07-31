@@ -1,7 +1,0 @@
-#!/bin/bash
-
-source $HOME/.config/yadm/utils.sh
-
-#TODO
-
-# https://github.com/tarebyte/dotfiles/blob/0ae07065efde0e167b9395e302bdc8f6f5128c02/.config/yadm/bootstrap%23%23os.Linux#L4
