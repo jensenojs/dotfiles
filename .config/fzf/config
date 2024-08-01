@@ -8,12 +8,11 @@ export FZF_DEFAULT_COMMAND="fd \
     "
 
 # Open in tmux popup if on tmux, otherwise use --height mode
+# Since fzf is a general-purpose text filter rather than a file finder, it is not a good idea to add --preview option to your $FZF_DEFAULT_OPTS.
 export FZF_DEFAULT_OPTS='--height 90%
                          --layout=reverse
                          --bind=alt-j:down,alt-k:up,alt-i:toggle+down
-                         --border
-                         --preview "bat --color=always --style=numbers --line-range=:30 {}"
-                         --preview-window=down'
+                         --border'
 
 # Scheme name: Gruvbox dark, soft
 # Scheme system: base16
@@ -43,7 +42,6 @@ export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS"\
 " --color=bg+:$color01,bg:$color00,spinner:$color0C,hl:$color0D"\
 " --color=fg:$color04,header:$color0D,info:$color0A,pointer:$color0C"\
 " --color=marker:$color0C,fg+:$color06,prompt:$color0A,hl+:$color0D"
-
 }
 
 _gen_fzf_default_opts

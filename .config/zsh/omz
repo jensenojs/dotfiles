@@ -16,6 +16,8 @@ ENABLE_CORRECTION="false"
 
 export ZSH=~/.config/omz
 
+autoload -U compinit; compinit
+
 # Load plugins
 plugins=(
     z
@@ -60,10 +62,10 @@ zstyle ':completion:*:descriptions' format '[%d]'
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 zstyle ':fzf-tab:complete:*:*' extra-opts --preview=$extract";$PREVIEW \$in"
 # force zsh not to show completion menu, which allows fzf-tab to capture the unambiguous prefix
-zstyle ':completion:*' menu no
+# zstyle ':completion:*' menu no
 # switch group using `<` and `>`
 zstyle ':fzf-tab:*' switch-group '<' '>'
-zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
+# zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
 
 
 # ===============================================================================

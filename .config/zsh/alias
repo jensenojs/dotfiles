@@ -3,7 +3,8 @@
 # vim
 alias ni='nvim'
 alias vi='vim'
-alias nf='nvim $(fzf)'
+# better than vim $(fzf)
+alias nf="fzf --bind 'enter:become(nvim {})'"
 alias cf='cd $(find * -type d | fzf)'
 
 alias reprofile='source ~/.zshenv; source ~/.config/zsh/.zshrc'

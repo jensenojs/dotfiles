@@ -11,10 +11,13 @@ local keymaps = {
     -- <c-`> tmux识别不了, 这个快捷键没法和vscode兼容
 
     ["n|<space>ho"] = map_cr("lua _btop_toggle()")
-        :with_noremap():with_silent():with_desc("查看htop"),
+        :with_noremap():with_silent():with_desc("查看btop"),
 
     ["n|<space>my"] = map_cr("lua _mysql_toggle()")
-        :with_noremap():with_silent():with_desc("连接mysql")
+        :with_noremap():with_silent():with_desc("连接mysql"),
+
+    ["n|<space>mo"] = map_cr("lua _matrixone_toggle()")
+        :with_noremap():with_silent():with_desc("连接matrixone"),
 }
 
 bind.nvim_load_mapping(keymaps)
@@ -54,16 +57,27 @@ return {
         end
 
         local mysql = Terminal:new({
-            cmd = "mysql -h 127.0.0.1 -P3306 -uroot -p111",
+            cmd = "mysql -uroot -p123",
             hidden = true,
             direction = "float",
             float_opts = {
                 border = "double",
             },
         })
-
         function _mysql_toggle()
             mysql:toggle()
+        end
+
+        local matrixone = Terminal:new({
+            cmd = "mysql -h 127.0.0.1 -P6001 -uroot -p111 --local-infile",
+            hidden = true,
+            direction = "float",
+            float_opts = {
+                border = "double",
+            },
+        })
+        function _matrixone_toggle()
+            matrixone:toggle()
         end
 
     end,
