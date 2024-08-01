@@ -24,7 +24,7 @@ opt.timeoutlen = 1000
 opt.maxmempattern = 5000
 
 -- 不要打开无名的buffer
-opt.hidden = false
+opt.hidden = true
 
 -- 设置背景色
 opt.background = "dark"
