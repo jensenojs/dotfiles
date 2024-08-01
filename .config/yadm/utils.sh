@@ -40,6 +40,15 @@ function executable_exists() {
 	command -v "$1" >/dev/null 2>&1
 }
 
+# 检验某个路径下的文件是否存在
+function file_exists() {
+    if [ -f "$1" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 # 检验某个路径下的目录是否存在
 function directory_exists() {
 	if [ -d "$1" ]; then

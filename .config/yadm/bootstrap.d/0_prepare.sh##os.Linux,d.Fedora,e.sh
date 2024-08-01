@@ -16,6 +16,66 @@ else
 fi
 
 # ================================================================================================
+# 设置 XDG_CONFIG_HOME、XDG_DATA_HOME 以及 XDG_STATE_HOME 等, 尽可能将配置文件梳理干净
+# https://ios.sspai.com/post/90480
+
+# 检查操作系统类型
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    target_file="/etc/profile"
+elif [[ "$OSTYPE" == "linux-gnu" ]]; then
+    if grep -q "Ubuntu" /etc/os-release; then
+        target_file="/etc/environment"
+    elif grep -q "Fedora" /etc/os-release; then
+        target_file="/etc/profile"
+    else
+        error "Unsupported Linux distribution. Exiting."
+    fi
+else
+    error "Unsupported operating system. Exiting."
+fi
+
+# 检查文件是否存在
+if ! file_exists "$target_file" ; then
+    error "Target file $target_file does not exist. Exiting."
+fi
+
+# 软件的配置文件 - XDG_CONFIG_HOME - ~/.config
+if grep -q "XDG_CONFIG_HOME" "$target_file"; then
+    info "XDG_CONFIG_HOME already set. Skipping."
+else
+    info "set XDG_CONFIG_HOME"
+    echo "" >> "$target_file"
+    echo 'export XDG_CONFIG_HOME="${HOME}/.config"' >> "$target_file"
+fi
+
+# 软件的数据文件 - XDG_DATA_HOME - ~/.local/share/
+if grep -q "XDG_DATA_HOME" "$target_file"; then
+    info "XDG_DATA_HOME already set. Skipping."
+else
+    info "set XDG_DATA_HOME"
+    echo "" >> "$target_file"
+    echo 'export XDG_DATA_HOME="${HOME}/.local/share"' >> "$target_file"
+fi
+
+# 软件的状态文件 - XDG_STATE_HOME - ~/.local/state
+if grep -q "XDG_STATE_HOME" "$target_file"; then
+    info "XDG_STATE_HOME already set. Skipping."
+else
+    info "set XDG_STATE_HOME"
+    echo "" >> "$target_file"
+    echo 'export XDG_STATE_HOME="${HOME}/.local/state"' >> "$target_file"
+fi
+
+# 软件的缓存文件 - XDG_STATE_HOME - ~/.cache
+if grep -q "XDG_CACHE_HOME" "$target_file"; then
+    info "XDG_CACHE_HOME already set. Skipping."
+else
+    info "set XDG_CACHE_HOME"
+    echo "" >> "$target_file"
+    echo 'export XDG_CACHE_HOME="${HOME}/.cache"' >> "$target_file"
+fi
+
+# ================================================================================================
 # 设置软件源
 
 step "Configure the software source to tsinghua"
@@ -101,3 +161,7 @@ run sudo sed -i '/^pool.*/pool cn.ntp.org.cn/' /etc/chrony.conf
 
 # 重新启动 chronyd 服务以使更改生效
 run sudo systemctl restart chronyd
+
+# ================================================================================================
+# 启动蓝牙
+sudo systemctl enable --now bluetooth
