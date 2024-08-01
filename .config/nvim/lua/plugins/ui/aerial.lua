@@ -21,10 +21,6 @@ return {
         require('aerial').setup({
             -- optionally use on_attach to set keymaps when aerial has attached to a buffer
 
-            keymaps = {
-                ["H"] = "actions.close"
-            },
-
             on_attach = function(bufnr)
                 -- Jump forwards/backwards with '{' and '}'
                 vim.keymap.set('n', '{', '<cmd>AerialPrev<CR>', {
@@ -33,21 +29,10 @@ return {
                 vim.keymap.set('n', '}', '<cmd>AerialNext<CR>', {
                     buffer = bufnr
                 })
-                -- vim.keymap.set('n', '<s-h>', '<cmd>AerialNext<CR>', {
-                --     buffer = bufnr
-                -- })
             end
 
         })
 
-        -- 自动打开
-        vim.api.nvim_create_autocmd("Vimenter", {
-            callback = function()
-                require('aerial').open({
-                    focus = false
-                })
-            end
-        })
     end
 
 }
