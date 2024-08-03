@@ -25,7 +25,7 @@ if ! executable_exists node; then
 	# layouts.download.codeBox.installsNvm
 	curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 
-	. "$NVM_DIR/nvm.sh" && nvm install 22
+	. "$NVM_DIR/nvm.sh" && nvm install --lts
 
 	# Your user’s .npmrc file (${HOME}/.npmrc)
 	# has a `globalconfig` and/or a `prefix` setting, which are incompatible with nvm.

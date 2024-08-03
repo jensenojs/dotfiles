@@ -33,7 +33,7 @@ fi
 # -L选项告诉find命令在遇到符号链接时，自动跟随链接到其指向的文件或目录
 # "$BOOTSTRAP_D"是环境变量或之前定义的变量，指向需要搜索的目录
 # -type f选项限制搜索结果只包括文件(不包括目录等)
-find -L "$BOOTSTRAP_D" -type f -maxdepth 1 |
+find -L "$BOOTSTRAP_D" -type f |
 	# 管道| 将find命令的输出传递给sort命令，后者将文件名按字典顺序排序
 	sort |
 	# while IFS= read -r bootstrap; do

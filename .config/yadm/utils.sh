@@ -25,7 +25,12 @@ function ask_password() {
 
 	# Ask for sudo beforehand, so that the script doesn't halt installation in the
 	# later sections.
-	sudo -v
+    sudo -v || {
+        echo "Please enter your sudo password:"
+        read -s sudo_password
+        sudo -S <<< "$sudo_password"
+    }
+
 
 	# Keep sudo session persistent, taken from -- https://gist.github.com/cowboy/3118588
 	while true; do

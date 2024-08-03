@@ -1,19 +1,42 @@
 
-# Golang
-export GOROOT="$XDG_DATA_HOME/go"
-export GOPATH="$HOME/Projects/go"
-export PATH="$GOROOT/bin:$PATH"
+# golang
+if [ -d "$XDG_DATA_HOME/go" ]; then
+    export GOROOT="$XDG_DATA_HOME/go"
+fi
+if [ -d "$HOME/Projects/go" ]; then
+    export GOPATH="$HOME/Projects/go"
+fi
+if [ -d "$GOROOT/bin" ]; then
+    export PATH="$GOROOT/bin:$PATH"
+fi
 
 # Rust
-export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
-export CARGO_HOME="$HOME/Projects/cargo"
-. "$CARGO_HOME/env"
+if [ -d "$XDG_DATA_HOME/rustup" ]; then
+    export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
+fi
+if [ -d "$HOME/Projects/cargo" ]; then
+    export CARGO_HOME="$HOME/Projects/cargo"
+   . "$CARGO_HOME/env"
+fi
 
 # Node.js
-export PATH="$XDG_DATA_HOME/nvm/bin:$PATH"
-    
+if [ -s "$NVM_DIR/nvm.sh" ]; then
+   . "$NVM_DIR/nvm.sh"  # This loads nvm
+fi
+if [ -s "$NVM_DIR/bash_completion" ]; then
+   . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+fi
+if [ -d "$NVM_DIR/bin" ]; then
+    export PATH="$NVM_DIR/bin:$PATH"
+fi
+
 # riscv-toolchain
-PATH=$PATH:/usr/local/opt/riscv-gnu-toolchain/bin
+if [ -d "/usr/local/opt/riscv-gnu-toolchain/bin" ]; then
+    PATH=$PATH:/usr/local/opt/riscv-gnu-toolchain/bin
+fi
 
 # proxy setting
-source /Users/jensen/Projects/scripts/proxy.sh set
+
+if [ -f "$HOME/Projects/scripts/proxy.sh" ]; then
+    source "$HOME/Projects/scripts/proxy.sh" set
+fi

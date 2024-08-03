@@ -21,5 +21,6 @@ path+=(
   $path
 )
 
+
 export PATH
 . "/Users/jensen/Projects/cargo/env"

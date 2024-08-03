@@ -6,7 +6,7 @@ source ${HOME}/.config/yadm/utils.sh
 
 # 包含了一系列用于开发的基本工具和库
 info "install Devalopment tools"
-run sudo dnf groupinstall -y "Development Tools"
+run sudo dnf groupinstall -y development-tools
 
 run sudo dnf install -y readline-devel
 run sudo dnf install -y SDL2-devel # 开发需要图形、声音或输入处理的应用程序
@@ -14,9 +14,9 @@ run sudo dnf install -y llvm-devel # 编译器基础设施项目，提供了与�
 
 # NVIDIA
 info "install things about NVIDIA"
-run sudo dnf install nvidia-gpu-firmware
-run sudo dnf install -y akmod-nvidia
-run sudo modprobe nvidia
+run sudo dnf install -y nvidia-gpu-firmware
+run sudo dnf install -y akmod-nvidia #"kerner-devel-uname-r == $(uname -r)"
+# run sudo modprobe nvidia
 
 note "try nvidia-smi after reboot"
 
@@ -35,6 +35,7 @@ packages=(
 	direnv
 	neovim
 	graphviz
+	python3-pip
 	fd-find # better find
 	ripgrep # better grep
 	dconf-editor
@@ -42,22 +43,62 @@ packages=(
 	# language-serer
 	shfmt
 	mysql
+	#
 	rclone
-	kubectl
 	sysbench
 	hyperfine
 )
 
 run sudo dnf install -y "${packages[@]}"
 
-# ================================================================================================
+
+step "Install from flatapk, you can view from https://flathub.org"
+
+info "Configure the software source to sjtu"
+flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+sudo flatpak remote-modify flathub --url=https://mirror.sjtu.edu.cn/flathub
 
 # ================================================================================================
 # 安装vscode
 step "Install vscode"
-run sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-run sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
-run sudo dnf install -y code
+flatpak install -y https://flathub.org/repo/appstream/com.visualstudio.code.flatpakref
+
+# ================================================================================================
+# bilibili
+step "Install bilibili"
+# flatpak install -y flathub cn.xfangfang.wiliwili
+
+# ================================================================================================
+# 安装网易云音乐
+step "Install cloud music"
+flatpak install -y flathub com.netease.CloudMusic
+
+# ================================================================================================
+# 安装WPS
+step "Install WPS"
+flatpak install -y flathub com.wps.Office
+
+# ================================================================================================
+# 安装QQ, 腾讯会议
+step "Install tecents"
+flatpak install -y flathub com.qq.QQ
+flatpak install -y flathub com.tencent.wemeet
+flatpak install -y flathub com.tencent.WeChat
+
+# ================================================================================================
+# Obsidian
+step "Install Obsidian"
+flatpak install -y flathub md.obsidian.Obsidian
+
+# ================================================================================================
+# zotero
+step "Install zotero"
+flatpak install -y flathub org.zotero.Zotero
+
+# ================================================================================================
+# VLC
+step "Install VLC"
+flatpak install -y flathub org.videolan.VLC
 
 # ================================================================================================
 # 安装 Gnome 优化和扩展应用程序
@@ -65,7 +106,7 @@ run sudo dnf install -y code
 
 step "install Gnome extension"
 
-run sudo dnf install gnome-tweaks gnome-extensions-app sassc murrine-engine gnome-themes-extra gtk-murrine-engine
+run sudo dnf install -y gnome-tweaks gnome-extensions-app sassc murrine-engine gnome-themes-extra
 
 # 使用 gsettings 工具来更改 GNOME Shell 的设置。gsettings 是 GNOME 桌面环境用来存储和检索配置数据的低级接口。这些命令通常在脚本中运行以自动化配置过程
 gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ next-tab '<Control>Tab'        #用于切换到下一个标签页
@@ -106,3 +147,12 @@ info "go https://github.com/Fausto-Korpsvart/Gruvbox-GTK-Theme to config further
 #    - Just Perfection (https://extensions.gnome.org/extension/3843/just-perfection/)
 
 # https://github.com/tmux-plugins/tpm/blob/master/docs/automatic_tpm_installation.md
+
+# ================================================================================================
+# 安装neovim 依赖
+# https://github.com/gelguy/wilder.nvim/issues/16#issuecomment-547083057
+
+# step "Install nvim plugins"
+# run pip3 install pynvim
+# run nvim --headless UpdateRemotePlugin
+# run nvim --headless 
