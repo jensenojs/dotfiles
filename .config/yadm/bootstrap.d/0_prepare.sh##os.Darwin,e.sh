@@ -17,7 +17,7 @@ target_file="${HOME}/.zshenv"
 
 # 检查文件是否存在
 if ! file_exists "$target_file"; then
-    touch "${HOME}/.zshenv"
+	touch "${HOME}/.zshenv"
 fi
 
 # 软件的配置文件 - XDG_CONFIG_HOME - ~/.config
@@ -27,8 +27,7 @@ else
 	info "set XDG_CONFIG_HOME to $target_file"
 	echo "" >>"$target_file"
 	echo 'export XDG_CONFIG_HOME="${HOME}/.config"' >>"$target_file"
-    export XDG_CONFIG_HOME="${HOME}/.config"
-
+	export XDG_CONFIG_HOME="${HOME}/.config"
 
 fi
 
@@ -39,7 +38,7 @@ else
 	info "set XDG_DATA_HOME to $target_file"
 	echo "" >>"$target_file"
 	echo 'export XDG_DATA_HOME="${HOME}/.local/share"' >>"$target_file"
-    export XDG_DATA_HOME="${HOME}/.local/share"
+	export XDG_DATA_HOME="${HOME}/.local/share"
 fi
 
 # 软件的状态文件 - XDG_STATE_HOME - ~/.local/state
@@ -49,7 +48,7 @@ else
 	info "set XDG_STATE_HOME to $target_file"
 	echo "" >>"$target_file"
 	echo 'export XDG_STATE_HOME="${HOME}/.local/state"' >>"$target_file"
-    export XDG_STATE_HOME="${HOME}/.local/state"
+	export XDG_STATE_HOME="${HOME}/.local/state"
 fi
 
 # 软件的缓存文件 - XDG_STATE_HOME - ~/.cache
@@ -59,9 +58,9 @@ else
 	info "set XDG_CACHE_HOME to $target_file"
 	echo "" >>"$target_file"
 	echo 'export XDG_CACHE_HOME="${HOME}/.cache"' >>"$target_file"
-    export XDG_CACHE_HOME="${HOME}/.cache"
+	export XDG_CACHE_HOME="${HOME}/.cache"
 fi
 
-if ! directory_exists  "${HOME}/Projects"; then
-    run mkdir "${HOME}/Projects"
+if ! directory_exists "${HOME}/Projects"; then
+	run mkdir "${HOME}/Projects"
 fi

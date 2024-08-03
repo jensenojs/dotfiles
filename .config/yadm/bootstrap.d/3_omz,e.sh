@@ -10,16 +10,16 @@ else
 	step "Installing oh-my-zsh and its plugin ..."
 
 	if [ -z "$XDG_DATA_HOME" ]; then
-        error "should set XDG_DATA_HOME before install oh-my-zsh"
-    else
-        export ZSH="$XDG_DATA_HOME/omz"
-        sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-    fi
+		error "should set XDG_DATA_HOME before install oh-my-zsh"
+	else
+		export ZSH="$XDG_DATA_HOME/omz"
+		sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+	fi
 fi
 
 if [ -z "$ZSH_CUSTOM" ]; then
-    export ZSH_CUSTOM="$ZSH/custom"
-    info "setting ZSH_CUSTOM as $ZSH_CUSTOM"
+	export ZSH_CUSTOM="$ZSH/custom"
+	info "setting ZSH_CUSTOM as $ZSH_CUSTOM"
 fi
 
 function omz_install_plugin() {
@@ -34,7 +34,6 @@ function omz_install_plugin() {
 			"${ZSH_CUSTOM}/plugins/$plugin"
 	fi
 }
-
 
 # themes
 if directory_exists $ZSH_CUSTOM/themes/powerlevel10k; then

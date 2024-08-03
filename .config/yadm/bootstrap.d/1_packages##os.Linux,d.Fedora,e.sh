@@ -12,7 +12,6 @@ run sudo dnf install -y readline-devel
 run sudo dnf install -y SDL2-devel # 开发需要图形、声音或输入处理的应用程序
 run sudo dnf install -y llvm-devel # 编译器基础设施项目，提供了与编译器相关的各种工具和库，包括优化器、代码生成器等
 
-
 # NVIDIA
 info "install things about NVIDIA"
 run sudo dnf install nvidia-gpu-firmware
@@ -30,27 +29,26 @@ packages=(
 	vim
 	zsh
 	tmux
-    wine
+	wine
 	wget
 	btop # better top
 	direnv
 	neovim
-    graphviz
+	graphviz
 	fd-find # better find
 	ripgrep # better grep
-    dconf-editor
+	dconf-editor
 	the_silver_searcher # better ack
 	# language-serer
-    shfmt
-    mysql
+	shfmt
+	mysql
 	rclone
 	kubectl
-    sysbench
+	sysbench
 	hyperfine
 )
 
 run sudo dnf install -y "${packages[@]}"
-
 
 # ================================================================================================
 

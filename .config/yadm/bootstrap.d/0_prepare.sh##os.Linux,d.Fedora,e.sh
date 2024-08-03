@@ -15,7 +15,7 @@ else
     error "should not bootstrap from this file"
 fi
 
-if ! directory_exists  "${HOME}/Projects"; then
+if ! directory_exists "${HOME}/Projects"; then
     run mkdir "${HOME}/Projects"
 fi
 
@@ -37,7 +37,7 @@ else
 fi
 
 # 检查文件是否存在
-if ! file_exists "$target_file" ; then
+if ! file_exists "$target_file"; then
     error "Target file $target_file does not exist. Exiting."
 fi
 
@@ -46,8 +46,8 @@ if grep -q "XDG_CONFIG_HOME" "$target_file"; then
     info "XDG_CONFIG_HOME already set. Skipping."
 else
     info "set XDG_CONFIG_HOME to $target_file"
-    echo "" >> "$target_file"
-    echo 'export XDG_CONFIG_HOME="${HOME}/.config"' >> "$target_file"
+    echo "" >>"$target_file"
+    echo 'export XDG_CONFIG_HOME="${HOME}/.config"' >>"$target_file"
     export XDG_CONFIG_HOME="${HOME}/.config"
 fi
 
@@ -56,8 +56,8 @@ if grep -q "XDG_DATA_HOME" "$target_file"; then
     info "XDG_DATA_HOME already set. Skipping."
 else
     info "set XDG_DATA_HOME to $target_file"
-    echo "" >> "$target_file"
-    echo 'export XDG_DATA_HOME="${HOME}/.local/share"' >> "$target_file"
+    echo "" >>"$target_file"
+    echo 'export XDG_DATA_HOME="${HOME}/.local/share"' >>"$target_file"
     export XDG_DATA_HOME="${HOME}/.local/share"
 fi
 
@@ -66,8 +66,8 @@ if grep -q "XDG_STATE_HOME" "$target_file"; then
     info "XDG_STATE_HOME already set. Skipping."
 else
     info "set XDG_STATE_HOME to $target_file"
-    echo "" >> "$target_file"
-    echo 'export XDG_STATE_HOME="${HOME}/.local/state"' >> "$target_file"
+    echo "" >>"$target_file"
+    echo 'export XDG_STATE_HOME="${HOME}/.local/state"' >>"$target_file"
     export XDG_STATE_HOME="${HOME}/.local/state"
 fi
 
@@ -76,8 +76,8 @@ if grep -q "XDG_CACHE_HOME" "$target_file"; then
     info "XDG_CACHE_HOME already set. Skipping."
 else
     info "set XDG_CACHE_HOME to $target_file"
-    echo "" >> "$target_file"
-    echo 'export XDG_CACHE_HOME="${HOME}/.cache"' >> "$target_file"
+    echo "" >>"$target_file"
+    echo 'export XDG_CACHE_HOME="${HOME}/.cache"' >>"$target_file"
     export XDG_CACHE_HOME="${HOME}/.cache"
 fi
 
