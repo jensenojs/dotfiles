@@ -1,0 +1,13 @@
+[user]
+	name = Jensen
+	email = jensenojs@qq.com
+[url "https://github.com/"]
+	insteadOf = git://github.com/
+[core]
+	editor = nvim
+[init]
+	defaultBranch = main
+; [http]
+	; proxy = http://127.0.0.1:7890
+; [https]
+	; proxy = http://127.0.0.1:7890

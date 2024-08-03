@@ -1,6 +1,7 @@
 #
 # All shell startup stuff
 #
+
 export LANG="zh_CN.UTF-8"
 
 if [[ "$(uname)" == "Darwin" ]]; then
@@ -11,26 +12,14 @@ if [[ "$(uname)" == "Darwin" ]]; then
     fi
 fi
 
-# strange sth that this still needed to let zsh find .zshrc in this folder
-export ZDOTDIR=~/.config/zsh
-
-# Set Oh-My-Zsh folder
-export ZSH=~/.config/omz
-export ZSH_THEME="powerlevel10k/powerlevel10k"
-
 export EDITOR="nvim"
-
-# XDG Dirs
-export XDG_CONFIG_HOME="$HOME/.config"
-export XDG_CACHE_HOME="$HOME/.cache"
-export XDG_DATA_HOME="$HOME/.local/share"
-
 
 # Add paths to PATH
 path+=(
-  $HOME/bin
+  $HOME/.local/bin
   /usr/local/bin
   $path
 )
 
 export PATH
+. "/Users/jensen/Projects/cargo/env"

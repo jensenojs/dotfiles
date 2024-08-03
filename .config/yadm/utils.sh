@@ -42,11 +42,11 @@ function executable_exists() {
 
 # 检验某个路径下的文件是否存在
 function file_exists() {
-    if [ -f "$1" ]; then
-        return 0
-    else
-        return 1
-    fi
+	if [ -f "$1" ]; then
+		return 0
+	else
+		return 1
+	fi
 }
 
 # 检验某个路径下的目录是否存在
@@ -84,8 +84,13 @@ function error() {
 
 function run() {
 	echo "Run:" $*
-	if [[ $dryrun == 0 ]]; then
-		eval $*
+	if [[ $dryrun == 1 ]]; then
+		note "not execute this command because dryrun is set"
+	else
+		result=$(eval $* 2>&1)
+		if [[ $? -ne 0 ]]; then
+			error "failed becase of $result"
+		fi
 	fi
 }
 

@@ -1,11 +1,17 @@
 
 # Golang
-export GOPATH="$HOME/go"
-export PATH="$GOPATH/bin:$PATH"
+export GOROOT="$XDG_DATA_HOME/go"
+export GOPATH="$HOME/Projects/go"
+export PATH="$GOROOT/bin:$PATH"
 
 # Rust
-. "$HOME/.cargo/env"
+export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
+export CARGO_HOME="$HOME/Projects/cargo"
+. "$CARGO_HOME/env"
 
+# Node.js
+export PATH="$XDG_DATA_HOME/nvm/bin:$PATH"
+    
 # riscv-toolchain
 PATH=$PATH:/usr/local/opt/riscv-gnu-toolchain/bin
 

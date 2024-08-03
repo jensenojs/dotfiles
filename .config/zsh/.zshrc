@@ -4,13 +4,17 @@
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
+export ZSH_THEME="powerlevel10k/powerlevel10k"
 
-export HISTFILE=~/.zsh_history
+# export HISTFILE=~/.zsh_history
+mkdir -p "${XDG_STATE_HOME}./zsh"
+export HISTFILE="${XDG_STATE_HOME}/zsh/history"
 export HISTSIZE=1000
 export SAVEHIST=10000
 
+
 # cd can be omitted for changing directory
-setopt autocd
+setopt autoc~/.zsh_historyd
 # Allow extended glob for matching files
 setopt extendedglob
 # Sort files numerically
@@ -30,10 +34,13 @@ setopt hist_expire_dups_first
 
 # Load Oh My ZSH
 source $ZDOTDIR/omz
+
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
 source $ZDOTDIR/.p10k.zsh
+
 # Load aliases
 source $ZDOTDIR/alias
+
 # Load specific config for environment
 source $ZDOTDIR/zshrc_ext
 

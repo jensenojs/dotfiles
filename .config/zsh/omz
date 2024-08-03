@@ -11,10 +11,11 @@ DISABLE_UPDATE_PROMPT="true"
 # How often to auto update (in days)
 export UPDATE_ZSH_DAY=7
 
+# place where we install oh-my-zsh
+export ZSH="${XDG_DATA_HOME}/omz"
+
 # Enable command correction
 ENABLE_CORRECTION="false"
-
-export ZSH=~/.config/omz
 
 autoload -U compinit; compinit
 
