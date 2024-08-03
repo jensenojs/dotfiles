@@ -46,8 +46,8 @@ if grep -q "XDG_CONFIG_HOME" "$target_file"; then
     info "XDG_CONFIG_HOME already set. Skipping."
 else
     info "set XDG_CONFIG_HOME to $target_file"
-    echo "" >>"$target_file"
-    echo 'export XDG_CONFIG_HOME="${HOME}/.config"' >>"$target_file"
+    run sudo echo "" >>"$target_file"
+    run sudo echo 'export XDG_CONFIG_HOME="${HOME}/.config"' >>"$target_file"
     export XDG_CONFIG_HOME="${HOME}/.config"
 fi
 
@@ -56,8 +56,8 @@ if grep -q "XDG_DATA_HOME" "$target_file"; then
     info "XDG_DATA_HOME already set. Skipping."
 else
     info "set XDG_DATA_HOME to $target_file"
-    echo "" >>"$target_file"
-    echo 'export XDG_DATA_HOME="${HOME}/.local/share"' >>"$target_file"
+    run sudo echo "" >>"$target_file"
+    run sudo echo 'export XDG_DATA_HOME="${HOME}/.local/share"' >>"$target_file"
     export XDG_DATA_HOME="${HOME}/.local/share"
 fi
 
@@ -66,8 +66,8 @@ if grep -q "XDG_STATE_HOME" "$target_file"; then
     info "XDG_STATE_HOME already set. Skipping."
 else
     info "set XDG_STATE_HOME to $target_file"
-    echo "" >>"$target_file"
-    echo 'export XDG_STATE_HOME="${HOME}/.local/state"' >>"$target_file"
+    run sudo echo "" >>"$target_file"
+    run sudo echo 'export XDG_STATE_HOME="${HOME}/.local/state"' >>"$target_file"
     export XDG_STATE_HOME="${HOME}/.local/state"
 fi
 
@@ -76,8 +76,8 @@ if grep -q "XDG_CACHE_HOME" "$target_file"; then
     info "XDG_CACHE_HOME already set. Skipping."
 else
     info "set XDG_CACHE_HOME to $target_file"
-    echo "" >>"$target_file"
-    echo 'export XDG_CACHE_HOME="${HOME}/.cache"' >>"$target_file"
+    run sudo echo "" >>"$target_file"
+    run sudo echo 'export XDG_CACHE_HOME="${HOME}/.cache"' >>"$target_file"
     export XDG_CACHE_HOME="${HOME}/.cache"
 fi
 
@@ -85,13 +85,13 @@ fi
 # 设置软件源
 
 step "Configure the software source to tsinghua"
-run sed -e 's|^metalink=|#metalink=|g' \
+run sudo sed -e 's|^metalink=|#metalink=|g' \
     -e 's|^#baseurl=http://download.example/pub/fedora/linux|baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora|g' \
     -i.bak \
     /etc/yum.repos.d/fedora.repo \
-    /etc/yum.repos.d/fedora-modular.repo \
+    # /etc/yum.repos.d/fedora-modular.repo \
     /etc/yum.repos.d/fedora-updates.repo \
-    /etc/yum.repos.d/fedora-updates-modular.repo
+    # /etc/yum.repos.d/fedora-updates-modular.repo
 
 sudo dnf config-manager --add-repo https://repo.vivaldi.com/stable/vivaldi-fedora.repo
 sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
@@ -144,13 +144,13 @@ run sudo dnf autoremove && sudo dnf remove --oldinstallonly
 # ================================================================================================
 # 安装用于电池健康管理的 TLP
 
-run dnf install tlp tlp-rdw
+run sudo dnf install tlp tlp-rdw
 # 卸载有冲突的 power-profiles-daemon 软件包
-run dnf remove power-profiles-daemon
+run sudo dnf remove power-profiles-daemon
 # 设置开机启动 TLP 的服务
 run sudo systemctl enable tlp.service
 # 屏蔽以下服务以避免冲突，确保 TLP 的无线设备(蓝牙、wifi等)切换选项的能够正确操作
-sudo systemctl mask systemd-rfkill.service systemd-rfkill.socket
+sudo sudo systemctl mask systemd-rfkill.service systemd-rfkill.socket
 
 # ================================================================================================
 # 配置 NTP 以获得准确的时间
@@ -159,7 +159,7 @@ step "config Network Time Protocol"
 
 # 检查是否存在 chrony.conf.bak，如果不存在则备份
 if [! -f /etc/chrony.conf.bak ]; then
-    sudo cp /etc/chrony.conf /etc/chrony.conf.bak
+    sudo sudo cp /etc/chrony.conf /etc/chrony.conf.bak
 fi
 
 # 使用 sed 命令修改 pool 的值
