@@ -104,3 +104,5 @@ info "go https://github.com/Fausto-Korpsvart/Gruvbox-GTK-Theme to config further
 #    - Caffeine (https://extensions.gnome.org/extension/517/caffeine/)
 #    - Clipboard History (https://extensions.gnome.org/extension/4839/clipboard-history/)
 #    - Just Perfection (https://extensions.gnome.org/extension/3843/just-perfection/)
+
+# https://github.com/tmux-plugins/tpm/blob/master/docs/automatic_tpm_installation.md
