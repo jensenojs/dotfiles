@@ -14,7 +14,7 @@ export SAVEHIST=10000
 
 
 # cd can be omitted for changing directory
-setopt autoc~/.zsh_historyd
+setopt autocd 
 # Allow extended glob for matching files
 setopt extendedglob
 # Sort files numerically
