@@ -106,7 +106,7 @@ flatpak install -y flathub org.videolan.VLC
 
 step "install Gnome extension"
 
-run sudo dnf install -y gnome-tweaks gnome-extensions-app sassc murrine-engine gnome-themes-extra
+run sudo dnf install -y gnome-tweaks gnome-extensions-app sassc gnome-themes-extra
 
 # 使用 gsettings 工具来更改 GNOME Shell 的设置。gsettings 是 GNOME 桌面环境用来存储和检索配置数据的低级接口。这些命令通常在脚本中运行以自动化配置过程
 gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ next-tab '<Control>Tab'        #用于切换到下一个标签页

@@ -59,6 +59,13 @@ if ! executable_exists go; then
 		run mkdir "${HOME}/Projects/go"
 	fi
 
+		if ! directory_exists "${XDG_DATA_HOME}/go"; then
+		run mkdir "${XDG_DATA_HOME}/go"
+	else
+		run rm -rf "${XDG_DATA_HOME}/go"
+		run mkdir "${XDG_DATA_HOME}/go"
+	fi
+
 	# 得到最新的稳定版本的编号
 	info "trying to get lastest statle go version from go.dev"
 	lastest_stable_go_version=$(curl -s https://go.dev/dl/ | grep -oE 'go[0-9]+\.[0-9]+\.[0-9]+' | head -1)
