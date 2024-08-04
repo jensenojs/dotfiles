@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 source ${HOME}/.config/yadm/utils.sh
 
@@ -13,11 +13,11 @@ if ! executable_exists node; then
 		run mkdir "${XDG_DATA_HOME}/nvm"
 	fi
 
-	if ! directory_exists "${HOME}/Projects/npm"; then
-		run mkdir "${HOME}/Projects/npm"
+	if ! directory_exists "${HOME}/Projects/site-package/npm"; then
+		run mkdir "${HOME}/Projects/site-package/npm"
 	else
-		run rm -rf "${HOME}/Projects/npm"
-		run mkdir "${HOME}/Projects/npm"
+		run rm -rf "${HOME}/Projects/site-package/npm"
+		run mkdir "${HOME}/Projects/site-package/npm"
 	fi
 
 	export NVM_DIR="${XDG_DATA_HOME}/nvm"
@@ -31,7 +31,7 @@ if ! executable_exists node; then
 	# has a `globalconfig` and/or a `prefix` setting, which are incompatible with nvm.
 	# Run `nvm use --delete-prefix v22.5.1` to unset it.
 	# Creating default alias: default -> 22 (-> v22.5.1)
-	# run npm config set prefix "${HOME}/Projects/npm"
+	# run npm config set prefix "${HOME}/Projects/site-package/npm"
 
 	if executable_exists node; then
 		info "node.js install successfully"
@@ -52,11 +52,11 @@ if ! executable_exists go; then
 		toinstall="linux-amd64"
 	fi
 
-	if ! directory_exists "${HOME}/Projects/go"; then
-		run mkdir "${HOME}/Projects/go"
+	if ! directory_exists "${HOME}/Projects/site-package/go"; then
+		run mkdir "${HOME}/Projects/site-package/go"
 	else
-		run rm -rf "${HOME}/Projects/go"
-		run mkdir "${HOME}/Projects/go"
+		run rm -rf "${HOME}/Projects/site-package/go"
+		run mkdir "${HOME}/Projects/site-package/go"
 	fi
 
 		if ! directory_exists "${XDG_DATA_HOME}/go"; then
@@ -75,11 +75,7 @@ if ! executable_exists go; then
 	# 下载安装包
 	run wget -P "${XDG_DATA_HOME}" "https://go.dev/dl/${lastest_stable_go_version}.${toinstall}.tar.gz"
 
-	if file_exists "${XDG_DATA_HOME}/go"; then
-		run sudo rm -rf "${XDG_DATA_HOME}/go"
-	fi
-
-	run tar -C "${XDG_DATA_HOME}" -xzf "${lastest_stable_go_version}.${toinstall}.tar.gz"
+	run tar -C "${XDG_DATA_HOME}" -xzf "${XDG}/${lastest_stable_go_version}.${toinstall}.tar.gz"
 
 	if executable_exists ${XDG_DATA_HOME}/go/bin/go; then
 		info "golang install successfully"
@@ -95,11 +91,11 @@ fi
 if ! executable_exists rustc; then
 	step "Installing rustc ..."
 
-	if ! directory_exists "${HOME}/Projects/cargo"; then
-		run mkdir "${HOME}/Projects/cargo"
+	if ! directory_exists "${HOME}/Projects/site-package/cargo"; then
+		run mkdir "${HOME}/Projects/site-package/cargo"
 	else
-		run rm -rf "${HOME}/Projects/cargo"
-		run mkdir "${HOME}/Projects/cargo"
+		run rm -rf "${HOME}/Projects/site-package/cargo"
+		run mkdir "${HOME}/Projects/site-package/cargo"
 	fi
 
 	if ! directory_exists "${XDG_DATA_HOME}/rustup"; then
@@ -109,7 +105,7 @@ if ! executable_exists rustc; then
 		run mkdir "${XDG_DATA_HOME}/rustup"
 	fi
 
-	export CARGO_HOME="${HOME}/Projects/cargo"
+	export CARGO_HOME="${HOME}/Projects/site-package/cargo"
 	export RUSTUP_HOME="${XDG_DATA_HOME}/rustup"
 
 	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh

@@ -100,9 +100,3 @@ else
 	omz_install_plugin "https://github.com/Aloxaf/fzf-tab" \
 		"fzf-tab"
 fi
-
-# 获取当前用户
-user=$(whoami)
-
-# 使用 chsh 命令更改默认 shell 为 zsh
-run sudo chsh -s /usr/bin/zsh "$user"

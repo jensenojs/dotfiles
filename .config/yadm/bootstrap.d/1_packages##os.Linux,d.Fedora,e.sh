@@ -156,3 +156,9 @@ info "go https://github.com/Fausto-Korpsvart/Gruvbox-GTK-Theme to config further
 # run pip3 install pynvim
 # run nvim --headless UpdateRemotePlugin
 # run nvim --headless 
+
+# 获取当前用户
+user=$(whoami)
+
+# 使用 chsh 命令更改默认 shell 为 zsh
+run sudo chsh -s /bin/zsh "$user"
