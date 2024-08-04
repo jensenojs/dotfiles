@@ -3,26 +3,28 @@
 if [ -d "$XDG_DATA_HOME/go" ]; then
     export GOROOT="$XDG_DATA_HOME/go"
 fi
-if [ -d "$HOME/Projects/go" ]; then
-    export GOPATH="$HOME/Projects/go"
-fi
 if [ -d "$GOROOT/bin" ]; then
     export PATH="$GOROOT/bin:$PATH"
+fi
+if [ -d "$HOME/Projects/site-package/go" ]; then
+    export GOPATH="$HOME/Projects/site-package/go"
 fi
 
 # Rust
 if [ -d "$XDG_DATA_HOME/rustup" ]; then
     export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
 fi
-if [ -d "$HOME/Projects/cargo" ]; then
-    export CARGO_HOME="$HOME/Projects/cargo"
+if [ -d "$HOME/Projects/site-package/cargo" ]; then
+    export CARGO_HOME="$HOME/Projects/site-package/cargo"
    . "$CARGO_HOME/env"
 fi
 
 # Node.js
+export NVM_DIR="${XDG_DATA_HOME}/nvm"
 if [ -s "$NVM_DIR/nvm.sh" ]; then
    . "$NVM_DIR/nvm.sh"  # This loads nvm
 fi
+
 if [ -s "$NVM_DIR/bash_completion" ]; then
    . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 fi
@@ -36,7 +38,6 @@ if [ -d "/usr/local/opt/riscv-gnu-toolchain/bin" ]; then
 fi
 
 # proxy setting
-
 if [ -f "$HOME/Projects/scripts/proxy.sh" ]; then
     source "$HOME/Projects/scripts/proxy.sh" set
 fi

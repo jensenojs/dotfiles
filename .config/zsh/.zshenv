@@ -22,3 +22,4 @@ path+=(
 )
 
 export PATH
+. "/Users/jensen/Projects/site-package/cargo/env"

@@ -2,6 +2,8 @@
 
 source ${HOME}/.config/yadm/utils.sh
 
+mkdir -p ${HOME}/Projects/site-package
+
 # 安装node.js, coc-nvim 需要它
 if ! executable_exists node; then
 	step "Installing Node.js ..."
@@ -75,7 +77,7 @@ if ! executable_exists go; then
 	# 下载安装包
 	run wget -P "${XDG_DATA_HOME}" "https://go.dev/dl/${lastest_stable_go_version}.${toinstall}.tar.gz"
 
-	run tar -C "${XDG_DATA_HOME}" -xzf "${XDG}/${lastest_stable_go_version}.${toinstall}.tar.gz"
+	run tar -C "${XDG_DATA_HOME}" -xzf "${XDG_DATA_HOME}/${lastest_stable_go_version}.${toinstall}.tar.gz"
 
 	if executable_exists ${XDG_DATA_HOME}/go/bin/go; then
 		info "golang install successfully"
