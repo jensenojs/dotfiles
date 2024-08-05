@@ -49,34 +49,14 @@ packages=(
 	hyperfine
 )
 
-run sudo dnf install -y "${packages[@]}"
 
+run sudo dnf install -y "${packages[@]}"
 
 step "Install from flatapk, you can view from https://flathub.org"
 
 info "Configure the software source to sjtu"
 flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 sudo flatpak remote-modify flathub --url=https://mirror.sjtu.edu.cn/flathub
-
-# ================================================================================================
-# 安装vscode
-step "Install vscode"
-flatpak install -y https://flathub.org/repo/appstream/com.visualstudio.code.flatpakref
-
-# ================================================================================================
-# bilibili
-step "Install bilibili"
-# flatpak install -y flathub cn.xfangfang.wiliwili
-
-# ================================================================================================
-# 安装网易云音乐
-step "Install cloud music"
-flatpak install -y flathub com.netease.CloudMusic
-
-# ================================================================================================
-# 安装WPS
-step "Install WPS"
-flatpak install -y flathub com.wps.Office
 
 # ================================================================================================
 # 安装QQ, 腾讯会议
@@ -95,10 +75,10 @@ flatpak install -y flathub md.obsidian.Obsidian
 step "Install zotero"
 flatpak install -y flathub org.zotero.Zotero
 
-# ================================================================================================
-# VLC
-step "Install VLC"
-flatpak install -y flathub org.videolan.VLC
+# # ================================================================================================
+# # VLC
+# step "Install VLC"
+# flatpak install -y flathub org.videolan.VLC
 
 # ================================================================================================
 # 安装 Gnome 优化和扩展应用程序
@@ -106,23 +86,12 @@ flatpak install -y flathub org.videolan.VLC
 
 step "install Gnome extension"
 
-run sudo dnf install -y gnome-tweaks gnome-extensions-app sassc gnome-themes-extra
+run sudo dnf install -y gnome-tweaks gnome-extensions-app sassc gnome-themes-extra gtk4-devel
 
 # 使用 gsettings 工具来更改 GNOME Shell 的设置。gsettings 是 GNOME 桌面环境用来存储和检索配置数据的低级接口。这些命令通常在脚本中运行以自动化配置过程
 gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ next-tab '<Control>Tab'        #用于切换到下一个标签页
 gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ prev-tab '<Control><Shift>Tab' #用于切换到上一个标签页
-gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'                             #设置窗口管理器的按钮布局，这里设置为：应用菜单、最小化、最大化、关闭
-# gsettings set org.gnome.desktop.interface enable-animations false
-gsettings set org.gnome.desktop.wm.keybindings maximize ['<Super>k']                         # 设置窗口最大化的快捷键为 Super + k
-gsettings set org.gnome.desktop.wm.keybindings unmaximize ['<Super>j']                       # 设置窗口还原（取消最大化）的快捷键为 Super + j
-gsettings set org.gnome.mutter.keybindings toggle-tiled-right ['<Super>l']                   # 设置将窗口平铺到右侧的快捷键为 Super + l
-gsettings set org.gnome.mutter.keybindings toggle-tiled-left ['<Super>h']                    # 设置将窗口平铺到左侧的快捷键为 Super + h
-gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-right ['<Control><Super>l'] # 设置将窗口移动到右侧工作区的快捷键为 Ctrl + Super + l
-gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-left ['<Control><Super>h']  # 设置将窗口移动到左侧工作区的快捷键为 Ctrl + Super + h
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 ['<Super>1']            # 设置切换到第一个工作区的快捷键为 Super + 1
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-2 ['<Super>2']
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-3 ['<Super>3']
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-4 ['<Super>4']
+gsettings set org.gnome.desktop.wm.preferences button-layout 'close,minimize,maximize:menu'                                #设置窗口管理器的按钮布局，mac风格
 gsettings set org.gnome.TextEditor keybindings vim # 为 GNOME 文本编辑器设置 Vim 模式的快捷键
 
 # Calendar
@@ -151,11 +120,13 @@ info "go https://github.com/Fausto-Korpsvart/Gruvbox-GTK-Theme to config further
 # ================================================================================================
 # 安装neovim 依赖
 # https://github.com/gelguy/wilder.nvim/issues/16#issuecomment-547083057
+run sudo pip3 install pynvim
+info "first time enter neovim, need to run :UpdateRemotePlugins"
 
 # step "Install nvim plugins"
 # run pip3 install pynvim
 # run nvim --headless UpdateRemotePlugin
-# run nvim --headless 
+# run nvim --headless
 
 # 获取当前用户
 user=$(whoami)
