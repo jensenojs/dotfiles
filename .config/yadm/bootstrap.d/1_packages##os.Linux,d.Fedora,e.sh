@@ -55,8 +55,8 @@ run sudo dnf install -y "${packages[@]}"
 step "Install from flatapk, you can view from https://flathub.org"
 
 info "Configure the software source to sjtu"
-flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-sudo flatpak remote-modify flathub --url=https://mirror.sjtu.edu.cn/flathub
+wget https://mirror.sjtu.edu.cn/flathub/flathub.gpg
+sudo flatpak remote-modify --gpg-import=flathub.gpg flathub
 
 # ================================================================================================
 # 安装QQ, 腾讯会议
@@ -86,13 +86,15 @@ flatpak install -y flathub org.zotero.Zotero
 
 step "install Gnome extension"
 
-run sudo dnf install -y gnome-tweaks gnome-extensions-app sassc gnome-themes-extra gtk4-devel
+run sudo dnf install -y gnome-tweaks gnome-extensions-app sassc gnome-themes-extra gtk3-devel gtk4-devel gtk-murrine-engine
 
 # 使用 gsettings 工具来更改 GNOME Shell 的设置。gsettings 是 GNOME 桌面环境用来存储和检索配置数据的低级接口。这些命令通常在脚本中运行以自动化配置过程
 gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ next-tab '<Control>Tab'        #用于切换到下一个标签页
 gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ prev-tab '<Control><Shift>Tab' #用于切换到上一个标签页
 gsettings set org.gnome.desktop.wm.preferences button-layout 'close,minimize,maximize:menu'                                #设置窗口管理器的按钮布局，mac风格
 gsettings set org.gnome.TextEditor keybindings vim # 为 GNOME 文本编辑器设置 Vim 模式的快捷键
+
+gsettings set org.gnome.mutter experimental-features "['scale-monitor-framebuffer']" # 添加缩放因子的选项
 
 # Calendar
 gsettings set org.gnome.desktop.calendar show-weekdate "true"
@@ -120,6 +122,7 @@ info "go https://github.com/Fausto-Korpsvart/Gruvbox-GTK-Theme to config further
 # ================================================================================================
 # 安装neovim 依赖
 # https://github.com/gelguy/wilder.nvim/issues/16#issuecomment-547083057
+# buggy
 run sudo pip3 install pynvim
 info "first time enter neovim, need to run :UpdateRemotePlugins"
 

@@ -12,7 +12,7 @@ else
 	if [ -z "$XDG_DATA_HOME" ]; then
 		error "should set XDG_DATA_HOME before install oh-my-zsh"
 	else
-		export ZSH="$XDG_DATA_HOME/omz"
+		# export ZSH="$XDG_DATA_HOME/omz"
 		# sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 		sh -c "$(curl -fsSL https://install.ohmyz.sh/)"
 	fi
