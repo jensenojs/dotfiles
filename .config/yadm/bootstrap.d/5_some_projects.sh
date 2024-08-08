@@ -2,7 +2,7 @@
 
 source ${HOME}/.config/yadm/utils.sh
 
-cd ~/Projects
+run cd ~/Projects
 
 run mkdir -p scripts
 
@@ -40,6 +40,8 @@ run cd ~/Projects
 
 run mkdir -p Databases
 
+run cd Databases
+
 if ! directory_exists velox; then
     run git clone git@github.com:jensenojs/velox.git
 fi
@@ -68,9 +70,11 @@ fi
 # ================================================================================================
 # quant
 
-cd ~/Projects
+run cd ~/Projects
 
-mkdir -p quant
+run mkdir -p quant
+
+run cd quant
 
 if ! directory_exists evaluate-factor; then
     run git clone git@github.com:jensenojs/evaluate-factor.git

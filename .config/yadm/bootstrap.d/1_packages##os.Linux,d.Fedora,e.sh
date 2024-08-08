@@ -52,6 +52,11 @@ packages=(
 
 run sudo dnf install -y "${packages[@]}"
 
+# ================================================================================================
+step "Install lazygit"
+sudo dnf copr enable atim/lazygit -y
+sudo dnf -y install lazygit
+
 step "Install from flatapk, you can view from https://flathub.org"
 
 info "Configure the software source to sjtu"
