@@ -3,7 +3,7 @@
 -- 默认配置是足够好的, 可以去瞅瞅我的README.md, 这里给个tldr的版本
 -- 1. basic
 --    add : ys, delete : ds, change : cs
---    
+--
 --    Old text                    Command         New text
 --    local str = H*ello          ysiw"           local str = "Hello"
 -- 2. alias, 注意下面的例子中yss是ys的一种变体
@@ -13,6 +13,6 @@
 --    sample* text                yssb            (sample text)
 -- 3. autojump
 return {
-    "kylechui/nvim-surround",
-    config = true
+	"kylechui/nvim-surround",
+	config = true,
 }

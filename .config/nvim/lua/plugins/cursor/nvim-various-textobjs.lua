@@ -22,28 +22,34 @@ local bind = require("utils.bind")
 local map_callback = bind.map_callback
 
 local keymaps = {
-    ["ox|aS"] = map_callback(function()
-        require("various-textobjs").subword(false)
-    end):with_noremap():with_silent():with_desc("textobj: inner subword(treating -, _, and . as word delimiters)"),
+	["ox|aS"] = map_callback(function()
+			require("various-textobjs").subword(false)
+		end)
+		:with_noremap()
+		:with_silent()
+		:with_desc("textobj: inner subword(treating -, _, and . as word delimiters)"),
 
-    ["ox|iS"] = map_callback(function()
-        require("various-textobjs").subword(true)
-    end):with_noremap():with_silent():with_desc("textobj: outer subword(includes trailing _,-, or space)")
+	["ox|iS"] = map_callback(function()
+			require("various-textobjs").subword(true)
+		end)
+		:with_noremap()
+		:with_silent()
+		:with_desc("textobj: outer subword(includes trailing _,-, or space)"),
 }
 
 bind.nvim_load_mapping(keymaps)
 
 return {
-    "chrisgrieser/nvim-various-textobjs",
-    lazy = true,
-    event = {"User FileOpened"},
-    config = function()
-        require("various-textobjs").setup({
-            useDefaultKeymaps = false,
+	"chrisgrieser/nvim-various-textobjs",
+	lazy = true,
+	event = { "User FileOpened" },
+	config = function()
+		require("various-textobjs").setup({
+			useDefaultKeymaps = false,
 
-            -- lines to seek forwards for "small" textobjs (mostly characterwise textobjs)
-            -- set to 0 to only look in the current line
-            lookForwardLines = 10
-        })
-    end
+			-- lines to seek forwards for "small" textobjs (mostly characterwise textobjs)
+			-- set to 0 to only look in the current line
+			lookForwardLines = 10,
+		})
+	end,
 }

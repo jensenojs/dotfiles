@@ -4,25 +4,34 @@ local bind = require("utils.bind")
 local map_callback = bind.map_callback
 
 local keymaps = {
-    ["n|<leader>cc"] = map_callback(function()
-        require("persistence").load()
-    end):with_noremap():with_silent():with_desc("恢复当前目录下的session连接"),
+	["n|<leader>cc"] = map_callback(function()
+			require("persistence").load()
+		end)
+		:with_noremap()
+		:with_silent()
+		:with_desc("恢复当前目录下的session连接"),
 
-    ["n|<leader>cl"] = map_callback(function()
-        require("persistence").load({
-            last = true
-        })
-    end):with_noremap():with_silent():with_desc("恢复上一次session连接"),
+	["n|<leader>cl"] = map_callback(function()
+			require("persistence").load({
+				last = true,
+			})
+		end)
+		:with_noremap()
+		:with_silent()
+		:with_desc("恢复上一次session连接"),
 
-    ["n|<leader>cd"] = map_callback(function()
-        require("persistence").stop()
-    end):with_noremap():with_silent():with_desc("这次的会话不要在退出时保存")
+	["n|<leader>cd"] = map_callback(function()
+			require("persistence").stop()
+		end)
+		:with_noremap()
+		:with_silent()
+		:with_desc("这次的会话不要在退出时保存"),
 }
 
 bind.nvim_load_mapping(keymaps)
 
 return {
-    "folke/persistence.nvim",
-    -- event = "BufReadPre", -- this will only start session saving when an actual file was opened
-    config = true
+	"folke/persistence.nvim",
+	-- event = "BufReadPre", -- this will only start session saving when an actual file was opened
+	config = true,
 }

@@ -24,124 +24,154 @@ local map_cr = bind.map_cr
 
 -- Replace termcodes in input string (e.g. converts '<C-a>' -> '').
 local function replace_keycodes(str)
-    return vim.api.nvim_replace_termcodes(str, true, true, true)
+	return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
 
 local keymaps = {
-    -----------------
-    --    insert   --
-    -----------------
+	-----------------
+	--    insert   --
+	-----------------
 
-    -- Make <CR> to accept selected completion item or notify coc.nvim to format
-    -- https://salferrarello.com/vim-keymap-set-coc-to-confirm-completion-with-lua/
-    -- not work
-    ["i|<CR>"] = map_cmd("coc#pum#visible() ? coc#pum#confirm() : \"<CR>\""):with_silent():with_expr():with_noremap()
-        :with_desc("自动补全:选中光标所在"),
+	-- Make <CR> to accept selected completion item or notify coc.nvim to format
+	-- https://salferrarello.com/vim-keymap-set-coc-to-confirm-completion-with-lua/
+	-- not work
+	["i|<CR>"] = map_cmd('coc#pum#visible() ? coc#pum#confirm() : "<CR>"')
+		:with_silent()
+		:with_expr()
+		:with_noremap()
+		:with_desc("自动补全:选中光标所在"),
 
-    ["i|<tab>"] = map_callback(function()
-        -- Used in Tab mapping above. If the popup menu is visible, switch to next item in that. Else prints a tab if previous
-        -- char was empty or whitespace. Else triggers completion.
-        local check_after_cursor = function()
-            local col = vim.api.nvim_win_get_cursor(0)[2]
-            local line = vim.api.nvim_get_current_line()
-            local text_after_cursor = line:sub(col + 1)
-            return text_after_cursor:match('[%]},%)`"\']') and true
-        end
+	["i|<tab>"] = map_callback(function()
+			-- Used in Tab mapping above. If the popup menu is visible, switch to next item in that. Else prints a tab if previous
+			-- char was empty or whitespace. Else triggers completion.
+			local check_after_cursor = function()
+				local col = vim.api.nvim_win_get_cursor(0)[2]
+				local line = vim.api.nvim_get_current_line()
+				local text_after_cursor = line:sub(col + 1)
+				return text_after_cursor:match("[%]},%)`\"']") and true
+			end
 
-        local check_back_space = function()
-            local col = vim.api.nvim_win_get_cursor(0)[2]
-            return (col == 0 or vim.api.nvim_get_current_line():sub(col, col):match('%s')) and true
-        end
+			local check_back_space = function()
+				local col = vim.api.nvim_win_get_cursor(0)[2]
+				return (col == 0 or vim.api.nvim_get_current_line():sub(col, col):match("%s")) and true
+			end
 
-        if (vim.fn['coc#pum#visible']() ~= 0) then
-            return vim.fn['coc#pum#next'](1)
-        elseif (check_back_space()) then
-            return replace_keycodes('<Tab>')
-        elseif (check_after_cursor()) then
-            -- 使得光标自动地跳过右括号等
-            return replace_keycodes('<Plug>(Tabout)')
-        end
-        -- trigger completion
-        return vim.fn['coc#refresh']()
-    end):with_silent():with_expr():with_desc("聪明的tab"),
+			if vim.fn["coc#pum#visible"]() ~= 0 then
+				return vim.fn["coc#pum#next"](1)
+			elseif check_back_space() then
+				return replace_keycodes("<Tab>")
+			elseif check_after_cursor() then
+				-- 使得光标自动地跳过右括号等
+				return replace_keycodes("<Plug>(Tabout)")
+			end
+			-- trigger completion
+			return vim.fn["coc#refresh"]()
+		end)
+		:with_silent()
+		:with_expr()
+		:with_desc("聪明的tab"),
 
-    ["i|<s-tab>"] = map_callback(function()
-        local check_before_cursor = function()
-            local col = vim.api.nvim_win_get_cursor(0)[2]
-            local line = vim.api.nvim_get_current_line()
-            local text_before_cursor = line:sub(1, col)
-            return text_before_cursor:match('[[{%(`"\']') and true
-        end
+	["i|<s-tab>"] = map_callback(function()
+			local check_before_cursor = function()
+				local col = vim.api.nvim_win_get_cursor(0)[2]
+				local line = vim.api.nvim_get_current_line()
+				local text_before_cursor = line:sub(1, col)
+				return text_before_cursor:match("[[{%(`\"']") and true
+			end
 
-        if (vim.fn['coc#pum#visible']() ~= 0) then
-            return vim.fn['coc#pum#prev'](1)
-        elseif (check_before_cursor()) then
-            -- 使得光标自动地跳过左括号等
-            return replace_keycodes('<Plug>(TaboutBack)')
-        end
-        -- map shift-tab to inverse tab, similar as << / >>
-        return replace_keycodes('<c-d>')
-    end):with_silent():with_expr():with_desc("聪明的<s-tab>"),
+			if vim.fn["coc#pum#visible"]() ~= 0 then
+				return vim.fn["coc#pum#prev"](1)
+			elseif check_before_cursor() then
+				-- 使得光标自动地跳过左括号等
+				return replace_keycodes("<Plug>(TaboutBack)")
+			end
+			-- map shift-tab to inverse tab, similar as << / >>
+			return replace_keycodes("<c-d>")
+		end)
+		:with_silent()
+		:with_expr()
+		:with_desc("聪明的<s-tab>"),
 
-    ["i|<c-n>"] = map_cmd("<Plug>(coc-snippets-expand-jump)"):with_noremap():with_silent():with_desc(
-        "触发代码片段补齐"),
+	["i|<c-n>"] = map_cmd("<Plug>(coc-snippets-expand-jump)")
+		:with_noremap()
+		:with_silent()
+		:with_desc("触发代码片段补齐"),
 
-    -----------------
-    --    normal   --
-    -----------------
+	-----------------
+	--    normal   --
+	-----------------
 
-    -- ["n|gd"] = map_cr(":Telescope coc definitions"):with_silent():with_desc("跳转到定义"),
-    ["n|gd"] = map_cmd("<Plug>(coc-definition)"):with_silent():with_desc("跳转到定义"),
-    ["n|gr"] = map_cr("Telescope coc references"):with_silent():with_desc("跳转到引用"),
-    -- ["n|gr"] = map_cmd("<Plug>(coc-references)"):with_silent():with_desc("跳转到引用"),
-    ["n|gi"] = map_cr("Telescope coc "):with_silent():with_desc("跳转到实现"),
+	-- ["n|gd"] = map_cr(":Telescope coc definitions"):with_silent():with_desc("跳转到定义"),
+	["n|gd"] = map_cmd("<Plug>(coc-definition)"):with_silent():with_desc("跳转到定义"),
+	["n|gr"] = map_cr("Telescope coc references"):with_silent():with_desc("跳转到引用"),
+	-- ["n|gr"] = map_cmd("<Plug>(coc-references)"):with_silent():with_desc("跳转到引用"),
+	["n|gi"] = map_cr("Telescope coc "):with_silent():with_desc("跳转到实现"),
 
-    -- symbol renaming
-    ["n|<leader>rn"] = map_cmd("<Plug>(coc-rename)"):with_silent():with_desc("变量重命名"),
+	-- symbol renaming
+	["n|<leader>rn"] = map_cmd("<Plug>(coc-rename)"):with_silent():with_desc("变量重命名"),
 
-    -- show docs
-    ["n|<s-k>"] = map_callback(function()
-        -- Use K to show documentation in preview window
-        local cw = vim.fn.expand('<cword>')
-        if vim.fn.index({'vim', 'help'}, vim.bo.filetype) >= 0 then
-            vim.api.nvim_command('h ' .. cw)
-        elseif vim.api.nvim_eval('coc#rpc#ready()') then
-            vim.fn.CocActionAsync('doHover')
-        else
-            vim.api.nvim_command('!' .. vim.o.keywordprg .. ' ' .. cw)
-        end
-    end):with_silent():with_desc("显示光标所在处的文档")
+	-- show docs
+	["n|<s-k>"] = map_callback(function()
+			-- Use K to show documentation in preview window
+			local cw = vim.fn.expand("<cword>")
+			if vim.fn.index({ "vim", "help" }, vim.bo.filetype) >= 0 then
+				vim.api.nvim_command("h " .. cw)
+			elseif vim.api.nvim_eval("coc#rpc#ready()") then
+				vim.fn.CocActionAsync("doHover")
+			else
+				vim.api.nvim_command("!" .. vim.o.keywordprg .. " " .. cw)
+			end
+		end)
+		:with_silent()
+		:with_desc("显示光标所在处的文档"),
 }
 
 bind.nvim_load_mapping(keymaps)
 
 -- 设置支持的语言
-vim.g.coc_global_extensions = {'coc-marketplace', 'coc-highlight', 'coc-snippets', 'coc-dictionary', 'coc-pairs',
--- 非LSP插件
-                               'coc-json',  'coc-yaml', 'coc-toml', -- 配置语言
-'coc-pyright', 'coc-clangd', 'coc-go', 'coc-java', 'coc-java-intellicode', 'coc-rls', 'coc-sql',                               'coc-rust-analyzer', -- LSP
-'coc-vimlsp', 'coc-docker', 'coc-sh', 'coc-imselect' -- 其他
+vim.g.coc_global_extensions = {
+	"coc-marketplace",
+	"coc-highlight",
+	"coc-snippets",
+	"coc-dictionary",
+	"coc-pairs",
+	-- 非LSP插件
+	"coc-json",
+	"coc-yaml",
+	"coc-toml", -- 配置语言
+	"coc-pyright",
+	"coc-clangd",
+	"coc-go",
+	"coc-java",
+	"coc-java-intellicode",
+	"coc-rls",
+	"coc-sql",
+	"coc-rust-analyzer", -- LSP
+	"coc-vimlsp",
+	"coc-docker",
+	"coc-sh",
+	"coc-imselect", -- 其他
 }
 
 return {
-    "neoclide/coc.nvim",
-    branch = "release",
+	"neoclide/coc.nvim",
+	branch = "release",
 
-    config = function()
-        -- Highlight the symbol and its references on a CursorHold event(cursor is idle)
-        vim.api.nvim_create_augroup("CocGroup", {})
-        vim.api.nvim_create_autocmd("CursorHold", {
-            group = "CocGroup",
-            command = "silent call CocActionAsync('highlight')",
-            desc = "Highlight symbol under cursor on CursorHold"
-        })
+	config = function()
+		-- Highlight the symbol and its references on a CursorHold event(cursor is idle)
+		vim.api.nvim_create_augroup("CocGroup", {})
+		vim.api.nvim_create_autocmd("CursorHold", {
+			group = "CocGroup",
+			command = "silent call CocActionAsync('highlight')",
+			desc = "Highlight symbol under cursor on CursorHold",
+		})
 
-        -- Update signature help on jump placeholder
-        vim.api.nvim_create_autocmd("User", {
-            group = "CocGroup",
-            pattern = "CocJumpPlaceholder",
-            command = "call CocActionAsync('showSignatureHelp')",
-            desc = "Update signature help on jump placeholder"
-        })
-    end
+		-- Update signature help on jump placeholder
+		vim.api.nvim_create_autocmd("User", {
+			group = "CocGroup",
+			pattern = "CocJumpPlaceholder",
+			command = "call CocActionAsync('showSignatureHelp')",
+			desc = "Update signature help on jump placeholder",
+		})
+	end,
 }

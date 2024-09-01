@@ -1,6 +1,6 @@
 -- better lisp editing
 return {
-    -- "eraserhd/parinfer-rust",
-    -- ft = {"lisp", "scheme"},
-    -- build = "cargo build --release"
+	-- "eraserhd/parinfer-rust",
+	-- ft = {"lisp", "scheme"},
+	-- build = "cargo build --release"
 }

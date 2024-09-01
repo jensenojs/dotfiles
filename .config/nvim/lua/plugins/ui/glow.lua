@@ -10,7 +10,7 @@ local map_cr = bind.map_cr
 -- bind.nvim_load_mapping(keymaps)
 
 return {
-    "ellisonleao/glow.nvim",
-    config = true,
-    cmd = "Glow"
+	"ellisonleao/glow.nvim",
+	config = true,
+	cmd = "Glow",
 }

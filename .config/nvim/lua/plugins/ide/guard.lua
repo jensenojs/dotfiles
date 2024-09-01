@@ -1,61 +1,68 @@
 -- https://github.com/nvimdev/guard.nvim
 -- 自动格式化, 比formatter好用一些
 return {
-    'nvimdev/guard.nvim',
-    event = "VeryLazy",
-    config = function()
-        local status, guard = pcall(require, "guard")
-        if not status then
-            vim.notify("not found guard")
-            return {}
-        end
+	"nvimdev/guard.nvim",
+	-- Builtin configuration, optional
+	dependencies = {
+		"nvimdev/guard-collection",
+	},
 
-        local ft = require('guard.filetype')
+	event = "VeryLazy",
+	config = function()
+		local status, guard = pcall(require, "guard")
+		if not status then
+			vim.notify("not found guard")
+			return {}
+		end
 
-        -- ft('json'):fmt('jq'):fmt({
-        --     cmd = "jq",
-        --     stdin = true
-        -- })
+		local ft = require("guard.filetype")
 
-        ft('sh'):fmt({
-            cmd = 'shfmt',
-            stdin = true
-        })
+		ft("json"):fmt({
+			cmd = "jq",
+			stdin = true,
+		})
 
-        ft('python'):fmt({
-            cmd = "black",
-            stdin = true
-        }):append({
-            cmd = "isort",
-            stdin = true
-        })
+		ft("sh"):fmt({
+			cmd = "shfmt",
+			stdin = true,
+		})
 
-        ft('c'):fmt({
-            cmd = 'clang-format',
-            stdin = true
-        }) -- :lint('clang-tidy')
+		ft("python"):fmt({
+			cmd = "black",
+			stdin = true,
+		}):append({
+			cmd = "isort",
+			stdin = true,
+		})
 
-        ft("go"):fmt({
-            cmd = "gofmt",
-            stdin = true
-        }):append({
-            cmd = "goimports",
-            stdin = true
-        })
+		ft("c"):fmt({
+			cmd = "clang-format",
+			stdin = true,
+		}) -- :lint('clang-tidy')
 
-        ft("sql"):fmt({
-            cmd = "sqlfmt",
-            stdin = true
-        })
+		ft("go"):fmt({
+			cmd = "gofmt",
+			stdin = true,
+		}):append({
+			cmd = "goimports",
+			stdin = true,
+		})
 
-        -- Call setup() LAST!
-        require('guard').setup({
-            -- the only options for the setup function
-            fmt_on_save = false,
-            -- Use lsp if no formatter was defined for this filetype
-            lsp_as_default_formatter = false
-        })
-    end,
+		ft("sql"):fmt({
+			cmd = "sqlfmt",
+			stdin = true,
+		})
 
-    vim.keymap.set("n", "<leader>f", ":GuardFmt<CR>")
+		ft("lua"):fmt("lsp"):append("stylua"):lint("selene")
+
+		-- Call setup() LAST!
+		require("guard").setup({
+			-- the only options for the setup function
+			fmt_on_save = false,
+			-- Use lsp if no formatter was defined for this filetype
+			lsp_as_default_formatter = false,
+		})
+	end,
+
+	vim.keymap.set("n", "<leader>f", ":GuardFmt<CR>"),
 }

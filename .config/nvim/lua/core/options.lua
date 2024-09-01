@@ -92,7 +92,7 @@ opt.wildmenu = true
 opt.termguicolors = true
 
 -- 解决vim中delete键无法向左删除的问题
-opt.backspace = 'indent,eol,start'
+opt.backspace = "indent,eol,start"
 
 -- 设置制表符宽度为 4
 opt.tabstop = 4
@@ -125,7 +125,7 @@ opt.clipboard = "unnamedplus"
 opt.incsearch = true
 
 -- 启用鼠标使用（所有模式）
-opt.mouse = 'a'
+opt.mouse = "a"
 
 -- 显示行号
 opt.number = true
@@ -134,13 +134,13 @@ opt.number = true
 opt.relativenumber = true
 
 if vim.fn.executable("nvr") == 1 then
-    vim.env.GIT_EDITOR = "nvr -cc split --remote-wait +'set bufhidden=wipe'"
+	vim.env.GIT_EDITOR = "nvr -cc split --remote-wait +'set bufhidden=wipe'"
 end
 
 -- 如果是nvim-0.9.0版本以上，则设置splitkeep和shortmess选项
 if vim.fn.has("nvim-0.9.0") == 1 then
-    opt.splitkeep = "screen"
-    opt.shortmess:append({
-        C = true
-    })
+	opt.splitkeep = "screen"
+	opt.shortmess:append({
+		C = true,
+	})
 end

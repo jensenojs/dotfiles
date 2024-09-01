@@ -1,11 +1,15 @@
 
 # golang
-if [ -d "$XDG_DATA_HOME/go" ]; then
-    export GOROOT="$XDG_DATA_HOME/go"
-fi
-if [ -d "$GOROOT/bin" ]; then
-    export PATH="$GOROOT/bin:$PATH"
-fi
+# if [ -d "$XDG_DATA_HOME/go" ]; then
+#     export GOROOT="$XDG_DATA_HOME/go"
+# fi
+# if [ -d "$GOROOT/bin" ]; then
+#     export PATH="$GOROOT/bin:$PATH"
+# fi
+
+export GOROOT="/usr/local/go"
+export PATH="$GOROOT/bin:$PATH"
+
 if [ -d "$HOME/Projects/site-package/go" ]; then
     export GOPATH="$HOME/Projects/site-package/go"
 fi

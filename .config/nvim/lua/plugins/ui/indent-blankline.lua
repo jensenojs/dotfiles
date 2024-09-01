@@ -4,8 +4,8 @@
 -- vim.cmd [[highlight IndentBlanklineIndent guifg=#565552 gui=nocombine]]
 
 return {
-    "lukas-reineke/indent-blankline.nvim",
-    config = function ()
-        require("ibl").setup{}
-    end
+	"lukas-reineke/indent-blankline.nvim",
+	config = function()
+		require("ibl").setup({})
+	end,
 }
