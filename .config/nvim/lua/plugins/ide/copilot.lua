@@ -1,0 +1,51 @@
+-- https://github.com/CopilotC-Nvim/CopilotChat.nvim
+-- https://github.com/zbirenbaum/copilot.lua
+
+return {
+    -- bug
+}
+
+-- return {
+-- 	"robitx/gp.nvim",
+-- 	config = function()
+-- 		local conf = {
+-- 			-- For customization, refer to Install > Configuration in the Documentation/Readme
+-- 			providers = {
+-- 				openai = {
+-- 					disable = true,
+-- 					endpoint = "https://api.openai.com/v1/chat/completions",
+-- 					-- secret = os.getenv("OPENAI_API_KEY"),
+-- 				},
+-- 				copilot = {
+-- 					disable = false,
+-- 					endpoint = "https://api.githubcopilot.com/chat/completions",
+-- 					secret = {
+-- 						"bash",
+-- 						"-c",
+-- 						"cat ~/.config/github-copilot/hosts.json | sed -e 's/.*oauth_token...//;s/\".*//'",
+-- 					},
+-- 				},
+-- 			},
+-- 		}
+-- 		require("gp").setup(conf)
+--
+-- 		-- Setup shortcuts here (see Usage > Shortcuts in the Documentation/Readme)
+-- 	end,
+-- }
+
+-- return {
+-- 	{
+-- 		"CopilotC-Nvim/CopilotChat.nvim",
+-- 		branch = "canary",
+-- 		dependencies = {
+-- 			{ "zbirenbaum/copilot.lua" }, -- or github/copilot.vim
+-- 			{ "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
+-- 		},
+-- 		build = "make tiktoken", -- Only on MacOS or Linux
+-- 		opts = {
+-- 			debug = true, -- Enable debugging
+-- 			-- See Configuration section for rest
+-- 		},
+-- 		-- See Commands section for default commands if you want to lazy load on them
+-- 	},
+-- }

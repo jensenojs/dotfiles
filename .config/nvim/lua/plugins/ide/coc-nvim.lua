@@ -151,6 +151,7 @@ vim.g.coc_global_extensions = {
 	"coc-docker",
 	"coc-sh",
 	"coc-imselect", -- 其他
+    "coc-copilot",
 }
 
 return {
