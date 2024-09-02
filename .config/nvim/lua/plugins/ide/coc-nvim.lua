@@ -17,6 +17,7 @@ vim.opt.updatetime = 300
 -- diagnostics appeared/became resolved
 vim.opt.signcolumn = "yes"
 
+
 local bind = require("utils.bind")
 local map_callback = bind.map_callback
 local map_cmd = bind.map_cmd
@@ -151,7 +152,9 @@ vim.g.coc_global_extensions = {
 	"coc-docker",
 	"coc-sh",
 	"coc-imselect", -- 其他
-    "coc-copilot",
+    -- https://github.com/hexh250786313/coc-copilot
+    -- not start
+    "@hexuhua/coc-copilot",
 }
 
 return {

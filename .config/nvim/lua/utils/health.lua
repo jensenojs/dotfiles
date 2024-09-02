@@ -1,6 +1,9 @@
 -- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/health.lua
 -- 也是复制黏贴的, 看不懂hhh
 
+-- 下面这个写法更加模块化, 什么时候换成这个
+-- https://github.com/nvim-lua/kickstart.nvim/blob/master/lua/kickstart/health.lua
+
 local M = {}
 
 local start = vim.health.start or vim.health.report_start

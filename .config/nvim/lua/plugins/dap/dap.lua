@@ -1,6 +1,11 @@
 -- https://github.com/mfussenegger/nvim-dap
+--
 -- 调试器的协议
 -- https://github.com/mfussenegger/nvim-dap/issues/20
+
+-- https://github.com/nvim-lua/kickstart.nvim/blob/master/lua/kickstart/plugins/debug.lua
+-- 配置项应该从这个开始抄起
+
 local bind = require("utils.bind")
 local map_callback = bind.map_callback
 local map_cmd = bind.map_cmd
