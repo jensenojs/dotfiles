@@ -3,15 +3,16 @@
 local bind = require("utils.bind")
 local map_callback = bind.map_callback
 
+-- use <c-s> in telescope instead
 local keymaps = {
-	["n|<leader>o"] = map_callback(function()
-			require("aerial").toggle({
-				focus = false,
-			})
-		end)
-		:with_noremap()
-		:with_silent()
-		:with_desc("大纲: 打开/关闭"),
+	-- ["n|<leader>o"] = map_callback(function()
+	-- 		require("aerial").toggle({
+	-- 			focus = false,
+	-- 		})
+	-- 	end)
+	-- 	:with_noremap()
+	-- 	:with_silent()
+	-- 	:with_desc("大纲: 打开/关闭"),
 }
 
 bind.nvim_load_mapping(keymaps)
@@ -24,15 +25,15 @@ return {
 		require("aerial").setup({
 			-- optionally use on_attach to set keymaps when aerial has attached to a buffer
 
-			on_attach = function(bufnr)
-				-- Jump forwards/backwards with '{' and '}'
-				vim.keymap.set("n", "{", "<cmd>AerialPrev<CR>", {
-					buffer = bufnr,
-				})
-				vim.keymap.set("n", "}", "<cmd>AerialNext<CR>", {
-					buffer = bufnr,
-				})
-			end,
+			-- on_attach = function(bufnr)
+			-- 	-- Jump forwards/backwards with '{' and '}'
+			-- 	vim.keymap.set("n", "{", "<cmd>AerialPrev<CR>", {
+			-- 		buffer = bufnr,
+			-- 	})
+			-- 	vim.keymap.set("n", "}", "<cmd>AerialNext<CR>", {
+			-- 		buffer = bufnr,
+			-- 	})
+			-- end,
 		})
 	end,
 }

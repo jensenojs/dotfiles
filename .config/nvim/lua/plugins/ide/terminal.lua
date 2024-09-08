@@ -9,7 +9,7 @@ local keymaps = {
 	-- https://stackoverflow.com/questions/76883693/when-i-use-nvim-c-keymapping-does-not-working-in-tmux
 	-- <c-`> tmux识别不了, 这个快捷键没法和vscode兼容
 
-	["n|<space>bo"] = map_cr("lua _btop_toggle()"):with_noremap():with_silent():with_desc("查看btop"),
+	["n|<space>t"] = map_cr("lua _btop_toggle()"):with_noremap():with_silent():with_desc("查看btop"),
 
 	["n|<space>mo"] = map_cr("lua _matrixone_toggle()"):with_noremap():with_silent():with_desc("连接matrixone"),
 
