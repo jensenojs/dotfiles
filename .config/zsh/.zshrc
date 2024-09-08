@@ -4,6 +4,7 @@
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
+
 export ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # export HISTFILE=~/.zsh_history
@@ -47,3 +48,11 @@ source $ZDOTDIR/zshrc_ext
 # set fzf config
 [[ ! -f ~/.config/fzf/config ]] || source ~/.config/fzf/config
 
+function ya() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}

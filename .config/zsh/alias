@@ -16,10 +16,6 @@ alias lg='lazygit'
 # matrixorigin
 alias kmo='kill -9 $(pgrep -d',' -f mo-service)'
 
-# ranger
-# 配置ranger的缩写, 同时使得退出ranger时留在ranger最后的dir的位置
-alias ra='ranger --choosedir=$HOME/.rangerdir; LASTDIR=`cat $HOME/.rangerdir`; cd "$LASTDIR"'
-
 # thefuck
 alias fk="thefuck"
 

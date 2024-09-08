@@ -23,6 +23,7 @@ note "try nvidia-smi after reboot"
 # https://github.com/r0bobo/dotfiles/blob/f64ac7373f589207e1e8ab6e66fd976867075340/.config/yadm/bootstrap.d/10-dnf.sh#L4
 packages=(
 	# 常用的脚本工具
+    jq  # json
 	gh
 	bat # better cat
 	fzf
@@ -32,6 +33,7 @@ packages=(
 	wine
 	wget
 	btop # better top
+    zoxide
 	direnv
 	neovim
 	graphviz
