@@ -5,7 +5,7 @@ local bind = require("utils.bind")
 local map_cr = bind.map_cr
 
 local keymaps = {
-	["n|<Tab>"] = map_cr("Yazi toggle<cr>"):with_noremap():with_silent():with_desc("在当前buffer路径下打开Yazi"),
+	["n|<Tab>"] = map_cr("Yazi <cr>"):with_noremap():with_silent():with_desc("在当前buffer路径下打开Yazi"),
 	["n|<leader><Tab>"] = map_cr("Yazi cwd<cr>"):with_noremap():with_silent():with_desc("在当前nvim的工作文件夹下打开Yazi"),
 }
 
