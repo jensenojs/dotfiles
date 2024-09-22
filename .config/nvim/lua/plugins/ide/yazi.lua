@@ -2,11 +2,11 @@
 -- 用yazi取代nvim-tree
 
 local bind = require("utils.bind")
-local map_cr = bind.map_cr
+local map_cmd = bind.map_cmd
 
 local keymaps = {
-	["n|<Tab>"] = map_cr("Yazi <cr>"):with_noremap():with_silent():with_desc("在当前buffer路径下打开Yazi"),
-	["n|<leader><Tab>"] = map_cr("Yazi cwd<cr>"):with_noremap():with_silent():with_desc("在当前nvim的工作文件夹下打开Yazi"),
+	["n|<leader>y"] = map_cmd(":Yazi <cr>"):with_noremap():with_silent():with_desc("在当前buffer路径下打开Yazi"),
+	["n|<leader>Y"] = map_cmd(":Yazi cwd<cr>"):with_noremap():with_silent():with_desc("在当前nvim的工作文件夹下打开Yazi"),
 }
 
 bind.nvim_load_mapping(keymaps)

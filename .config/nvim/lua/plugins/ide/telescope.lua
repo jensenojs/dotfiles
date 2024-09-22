@@ -8,19 +8,19 @@ local keymaps = {
 	["n|<leader>/"] = map_callback(function()
 			-- You can pass additional configuration to telescope to change theme, layout, etc.
 			require("telescope.builtin").current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
-				winblend = 10,
+				winblend = 20,
 			}))
 		end)
 		:with_noremap()
 		:with_silent()
 		:with_desc("模糊搜索当前文件"),
 
-	["n|<leader>?"] = map_cr(":Telescope coc diagnostics")
-		:with_noremap()
-		:with_silent()
-		:with_desc("列出本项目下的warm/error"),
+	-- ["n|<leader>?"] = map_cr(":Telescope coc diagnostics")
+	-- 	:with_noremap()
+	-- 	:with_silent()
+	-- 	:with_desc("列出本文件下的warm/error"),
 
-	["n|<leader><c-?>"] = map_cr(":Telescope coc workspace_diagnostics")
+	["n|<leader>?"] = map_cr(":Telescope coc workspace_diagnostics")
 		:with_noremap()
 		:with_silent()
 		:with_desc("列出所有warm/error"),
@@ -53,7 +53,7 @@ local keymaps = {
 
 	["n|<c-s>"] = map_cr(":Telescope aerial"):with_noremap():with_silent():with_desc("查找当前文件下的符号"),
 
-	["n|<c-t>"] = map_cr(":Telescope coc workspace_symbols")
+	["n|<c-w>"] = map_cr(":Telescope coc workspace_symbols")
 		:with_noremap()
 		:with_silent()
 		:with_desc("查找当前项目下的符号"),
@@ -89,7 +89,7 @@ local preview_setting = function(filepath, bufnr, opts)
 		if not stat then
 			return
 		end
-		if stat.size > 100000 then
+		if stat.size > 1000000 then
 			return
 		else
 			previewers.buffer_previewer_maker(filepath, bufnr, opts)
