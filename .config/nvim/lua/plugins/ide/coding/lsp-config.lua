@@ -9,294 +9,369 @@ local map_cmd = bind.map_cmd
 -- }
 
 -- bind.nvim_load_mapping(keymaps)
+local on_attach = function(client, bufnr)
+	vim.lsp.inlay_hint.enable(true, { bufnr })
+
+	local signature_setup = {
+		hint_prefix = "🦫 ",
+	}
+
+	-- Enable completion triggered by <c-x><c-o>
+	vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
+
+	-- telescope integration
+	telescope_builtin = require("telescope.builtin")
+
+	-- 还不太理解有什么用
+	-- vim.keymap.set("n", "<space>wa", vim.lsp.buf.add_workspace_folder, bufopts)
+	-- vim.keymap.set("n", "<space>wr", vim.lsp.buf.remove_workspace_folder, bufopts)
+	-- vim.keymap.set("n", "<space>wl", function()
+	--     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+	-- end, bufopts)
+
+	local keymaps = {
+		-----------------
+		--    insert   --
+		-----------------
+
+		-----------------
+		--    normal   --
+		-----------------
+
+		-- 如果考虑进一步修改的话, lspsaga, glance 可能会进一步替换, 现在先暂时这样
+		-- https://github.com/ayamir/nvimdots/blob/main/lua/keymap/completion.lua
+		["n|gd"] = map_callback(function()
+				vim.lsp.buf.definition()
+			end)
+			:with_silent()
+			:with_buffer(bufnr)
+			:with_desc("跳转到定义"),
+
+		["n|gD"] = map_callback(function()
+				vim.lsp.buf.declaration()
+			end)
+			:with_silent()
+			:with_buffer(bufnr)
+			:with_desc("跳转到声明"),
+
+		["n|gt"] = map_callback(function()
+				telescope_builtin.lsp_type_definitions()
+			end)
+			:with_silent()
+			:with_buffer(bufnr)
+			:with_desc("跳转到符号类型定义"),
+
+		["n|gi"] = map_callback(function()
+				vim.lsp.buf.implementation()
+			end)
+			:with_silent()
+			:with_buffer(bufnr)
+			:with_desc("跳转到实现"),
+
+		["n|gr"] = map_callback(function()
+				telescope_builtin.lsp_references()
+			end)
+			:with_silent()
+			:with_buffer(bufnr)
+			:with_desc("跳转到引用"),
+
+		["n|<leader>rn"] = map_callback(function()
+				vim.lsp.buf.rename()
+			end)
+			:with_silent()
+			:with_buffer(bufnr)
+			:with_desc("变量重命名"),
+
+		-- ["n|<c-s>"] = map_cr(":Telescope aerial")
+		-- 	:with_noremap()
+		-- 	:with_silent()
+		-- 	:with_buffer(bufnr)
+		-- 	:with_desc("查找当前文件下的符号"),
+
+		["n|<c-s>"] = map_callback(function()
+				telescope_builtin.lsp_document_symbols()
+			end)
+			:with_noremap()
+			:with_silent()
+			:with_buffer(bufnr)
+			:with_desc("查找当前文件下的符号"),
+
+		["n|<c-w>"] = map_callback(function()
+				telescope_builtin.lsp_dynamic_workspace_symbols()
+			end)
+			:with_noremap()
+			:with_silent()
+			:with_buffer(bufnr)
+			:with_desc("查找当前项目下的符号"),
+
+		["n|<leader>a"] = map_callback(function()
+				require("tiny-code-action").code_action()
+			end)
+			:with_noremap()
+			:with_silent()
+			:with_buffer(bufnr)
+			:with_desc("查看有什么可以做的code action"),
+
+		-- ["n|<leader>a"] = map_callback(function()
+		-- end):with_noremap():with_silent():with_buffer(bufnr):with_desc("查看有什么可以做的code action"),
+
+		-- show docs
+		["n|<s-k>"] = map_callback(function()
+				-- Use K to show documentation in preview window
+				local cw = vim.fn.expand("<cword>")
+				if vim.fn.index({ "vim", "help" }, vim.bo.filetype) >= 0 then
+					vim.api.nvim_command("h " .. cw)
+				else
+					local bufnr = vim.api.nvim_get_current_buf()
+					local clients = vim.lsp.get_clients()
+					if #clients > 0 then
+						-- 如果有附加的 LSP 客户端，使用内置的 LSP 功能来显示文档
+						vim.lsp.buf.hover()
+					else
+						-- 否则，使用传统的 keywordprg 方式
+						vim.api.nvim_command("!" .. vim.o.keywordprg .. " " .. cw)
+					end
+				end
+			end)
+			:with_silent()
+			:with_buffer(bufnr)
+			:with_desc("显示光标所在处的文档"),
+	}
+
+	bind.nvim_load_mapping(keymaps)
+end
 
 -- Replace termcodes in input string (e.g. converts '<C-a>' -> '').
 local function replace_keycodes(str)
-    return vim.api.nvim_replace_termcodes(str, true, true, true)
+	return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
 
 return {
-    "neovim/nvim-lspconfig",
-    event = {"BufReadPre", "BufNewFile"},
-    config = function()
-        local capabilities = require("cmp_nvim_lsp").default_capabilities()
+	"neovim/nvim-lspconfig",
+	event = { "BufReadPre", "BufNewFile" },
+	config = function()
+		local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-        -- vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-        --     border = "rounded"
-        -- })
+		--------------------------------lspconfig-----------------------
+		local lspconfig = require("lspconfig")
+		local util = require("lspconfig/util")
 
-        -- -- 这个请求会在用户编写代码时触发，通常是在函数调用的参数列表内部，以显示当前光标下的函数签名信息。
-        -- vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-        --     border = "rounded"
-        -- })
+		-- Mappings : use trouble.nvim instead
+		-- See `:help vim.diagnostic.*` for documentation on any of the below functions
+		-- local opts = {
+		--     noremap = true,
+		--     silent = true
+		-- }
+		-- vim.keymap.set("n", "<space>E", vim.diagnostic.open_float, opts)
+		-- vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
+		-- vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
 
-        --------------------------------lspconfig-----------------------
-        local lspconfig = require("lspconfig")
-        local util = require("lspconfig/util")
+		-- Use an on_attach function to only map the following keys
+		-- after the language server attaches to the current buffer
 
-        -- Mappings.
-        -- See `:help vim.diagnostic.*` for documentation on any of the below functions
-        local opts = {
-            noremap = true,
-            silent = true
-        }
-        vim.keymap.set("n", "<space>E", vim.diagnostic.open_float, opts)
-        vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
-        vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
+		local lsp_flags = {
+			allow_incremental_sync = true,
+			-- This is the default in Nvim 0.7+
+			debounce_text_changes = 150,
+		}
 
-        -- Use an on_attach function to only map the following keys
-        -- after the language server attaches to the current buffer
-        local on_attach = function(client, bufnr)
-            vim.lsp.inlay_hint.enable(true, {bufnr})
+		local lsp_defaults = lspconfig.util.default_config
+		lsp_defaults.capabilities = vim.tbl_deep_extend("force", lsp_defaults.capabilities, capabilities)
 
-            local signature_setup = {
-                -- hint_prefix = "🐼 ",
-                -- hint_prefix = "🐧 ",
-                -- hint_prefix = "🦔 ",
-                hint_prefix = "🦫 "
-            }
+		local servers = {
+			"cmake",
+			"clangd", -- C/C++
+			-- "pyright", -- python
+			"ruff", -- python "pyright",
+			"rust_analyzer", -- rust
+			"gopls", -- golang
+			"sqlls", -- sql
+			"lua_ls", -- lua
+			"dockerls", -- docker
+			"jsonls", -- json
+		}
 
-            -- require("lsp_signature").on_attach(signature_setup, bufnr)
+		for _, lsp in pairs(servers) do
+			-- if lsp == "" then
+			--     lspconfig[lsp].setup({
+			-- 		settings = {
+			--
+			-- 		},
+			--         on_attach = on_attach,
+			--         flags = lsp_flags
+			if lsp == "clangd" then
+				lspconfig[lsp].setup({
+					settings = {
+						clangd = {
+							capabilities = {
+								offsetEncoding = { "utf-16" },
+							},
+							cmd = {
+								"clangd",
+								-- Neovim中语言服务器协议（LSP）的配置选项。
+								-- 这些选项用于自定义LSP服务器的行为。
+								"-j=12", -- 设置用于索引的线程数。
+								"--enable-config", -- 启用配置文件。
+								"--background-index", -- 启用后台索引。
+								"--pch-storage=memory", -- 将预编译头文件存储在内存中。
+								"--clang-tidy", -- 启用Clang-Tidy集成。
+								"--header-insertion=iwyu", -- 使用“Include What You Use”（IWYU）风格进行头文件插入。
+								"--completion-style=detailed", -- 使用详细的补全风格。
+								"--function-arg-placeholders", -- 在补全中启用函数参数占位符。
+								"--fallback-style=llvm", -- 使用LLVM编码风格作为后备。
+								"--header-insertion-decorators", -- 启用头文件插入的装饰器。
+								"--header-insertion=iwyu", -- 使用“Include What You Use”（IWYU）风格进行头文件插入（重复选项）。
+								"--limit-references=3000", -- 将服务器返回的引用数量限制为3000。
+								"--limit-results=350", -- 将服务器返回的结果数量限制为350。
+							},
+							init_options = {
+								usePlaceholders = true,
+								completeUnimported = true,
+								clangdFileStatus = true,
+							},
+						},
+					},
+					on_attach = on_attach,
+					flags = lsp_flags,
+				})
+				-- elseif lsp == "" then
+				--     lspconfig[lsp].setup({
+				-- 		settings = {
 
-            -- Enable completion triggered by <c-x><c-o>
-            vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
+				-- 		},
+				--         on_attach = on_attach,
+				--         flags = lsp_flags
+				-- 	})
+				-- elseif lsp == "" then
+				--     lspconfig[lsp].setup({
+				-- 		settings = {
 
-            -- telescope integration
-            telescope_builtin = require("telescope.builtin")
+				-- 		},
+				--         on_attach = on_attach,
+				--         flags = lsp_flags
+				-- 	})
+				-- elseif lsp == "" then
+				--     lspconfig[lsp].setup({
+				-- 		settings = {
 
-            -- Mappings.
-            -- See `:help vim.lsp.*` for documentation on any of the below functions
-            local bufopts = {
-                noremap = true,
-                silent = true,
-                buffer = bufnr
-            }
-
-            vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts)
-            vim.keymap.set("n", "<C-b>", vim.lsp.buf.signature_help, bufopts)
-
-            -- 还不太理解有什么用
-            -- vim.keymap.set("n", "<space>wa", vim.lsp.buf.add_workspace_folder, bufopts)
-            -- vim.keymap.set("n", "<space>wr", vim.lsp.buf.remove_workspace_folder, bufopts)
-            -- vim.keymap.set("n", "<space>wl", function()
-            --     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-            -- end, bufopts)
-
-            local keymaps = {
-                -----------------
-                --    insert   --
-                -----------------
-
-                -- Make <CR> to accept selected completion item or notify coc.nvim to format
-                -- https://salferrarello.com/vim-keymap-set-coc-to-confirm-completion-with-lua/
-                -- not work
-                -- ["i|<CR>"] = map_cmd('coc#pum#visible() ? coc#pum#confirm() : "<CR>"'):with_silent():with_expr()
-                --     :with_noremap():with_desc("自动补全:选中光标所在"),
-
-                -- ["i|<tab>"] = map_callback(function()
-                --     -- Used in Tab mapping above. If the popup menu is visible, switch to next item in that. Else prints a tab if previous
-                --     -- char was empty or whitespace. Else triggers completion.
-                --     local check_after_cursor = function()
-                --         local col = vim.api.nvim_win_get_cursor(0)[2]
-                --         local line = vim.api.nvim_get_current_line()
-                --         local text_after_cursor = line:sub(col + 1)
-                --         return text_after_cursor:match("[%]},%)`\"']") and true
-                --     end
-
-                --     local check_back_space = function()
-                --         local col = vim.api.nvim_win_get_cursor(0)[2]
-                --         return (col == 0 or vim.api.nvim_get_current_line():sub(col, col):match("%s")) and true
-                --     end
-
-                --     if vim.fn["coc#pum#visible"]() ~= 0 then
-                --         return vim.fn["coc#pum#next"](1)
-                --     elseif check_back_space() then
-                --         return replace_keycodes("<Tab>")
-                --     elseif check_after_cursor() then
-                --         -- 使得光标自动地跳过右括号等
-                --         return replace_keycodes("<Plug>(Tabout)")
-                --     end
-                --     -- trigger completion
-                --     return vim.fn["coc#refresh"]()
-                -- end):with_silent():with_buffer(bufnr):with_expr():with_desc("聪明的tab"),
-
-                -- ["i|<s-tab>"] = map_callback(function()
-                --     local check_before_cursor = function()
-                --         local col = vim.api.nvim_win_get_cursor(0)[2]
-                --         local line = vim.api.nvim_get_current_line()
-                --         local text_before_cursor = line:sub(1, col)
-                --         return text_before_cursor:match("[[{%(`\"']") and true
-                --     end
-
-                --     if vim.fn["coc#pum#visible"]() ~= 0 then
-                --         return vim.fn["coc#pum#prev"](1)
-                --     elseif check_before_cursor() then
-                --         -- 使得光标自动地跳过左括号等
-                --         return replace_keycodes("<Plug>(TaboutBack)")
-                --     end
-                --     -- map shift-tab to inverse tab, similar as << / >>
-                --     return replace_keycodes("<c-d>")
-                -- end):with_silent():with_buffer(bufnr):with_expr():with_desc("聪明的<s-tab>"),
-
-                -----------------
-                --    normal   --
-                -----------------
-                ["n|gd"] = map_callback(function()
-                    vim.lsp.buf.definition()
-                end):with_silent():with_buffer(bufnr):with_desc("跳转到定义"),
-
-                ["n|gt"] = map_callback(function()
-                    vim.lsp.buf.type_definition()
-                end):with_silent():with_buffer(bufnr):with_desc("跳转到符号类型定义"),
-
-                ["n|gD"] = map_callback(function()
-                    vim.lsp.buf.declaration()
-                end):with_silent():with_buffer(bufnr):with_desc("跳转到声明"),
-
-                ["n|gi"] = map_callback(function()
-                    vim.lsp.buf.implementation()
-                end):with_silent():with_buffer(bufnr):with_desc("跳转到实现"),
-
-                ["n|gr"] = map_callback(function()
-                    require('telescope.builtin').lsp_references()
-                end):with_silent():with_buffer(bufnr):with_desc("跳转到引用"),
-
-                ["n|<leader>rn"] = map_callback(function()
-                    vim.lsp.buf.rename()
-                end):with_silent():with_buffer(bufnr):with_desc("变量重命名"),
-
-                ["n|<c-s>"] = map_cr(":Telescope aerial"):with_noremap():with_silent():with_buffer(bufnr):with_desc(
-                    "查找当前文件下的符号"),
-
-                -- ["n|<c-s>"] = map_callback(function()
-                --     require('telescope.builtin').lsp_document_symbols()
-                -- end):with_noremap():with_silent():with_buffer(bufnr):with_desc("查找当前文件下的符号"),
-
-                ["n|<c-w>"] = map_callback(function()
-                    require('telescope.builtin').lsp_dynamic_workspace_symbols()
-                end):with_noremap():with_silent():with_buffer(bufnr):with_desc("查找当前项目下的符号"),
-
-                ["n|<leader>a"] = map_callback(function()
-                    require("tiny-code-action").code_action()
-                end):with_noremap():with_silent():with_buffer(bufnr):with_desc("查看有什么可以做的code action"),
-
-                ["n|<leader>?"] = map_callback(function()
-                    -- vim.diagnostic.setloclist()
-                    require'telescope.builtin'.diagnostics()
-                end):with_noremap():with_silent():with_buffer(bufnr):with_desc("列出所有warm/error")
-
-                -- ["n|<leader>a"] = map_callback(function()
-
-                -- end):with_noremap():with_silent():with_buffer(bufnr):with_desc("查看有什么可以做的code action"),
-
-                -- show docs
-                -- ["n|<s-k>"] = map_callback(function()
-                --     -- Use K to show documentation in preview window
-                --     local cw = vim.fn.expand("<cword>")
-                --     if vim.fn.index({"vim", "help"}, vim.bo.filetype) >= 0 then
-                --         vim.api.nvim_command("h " .. cw)
-                --     elseif vim.api.nvim_eval("coc#rpc#ready()") then
-                --         vim.fn.CocActionAsync("doHover")
-                --     else
-                --         vim.api.nvim_command("!" .. vim.o.keywordprg .. " " .. cw)
-                --     end
-                -- end):with_silent():with_buffer(bufnr):with_desc("显示光标所在处的文档")
-            }
-
-            bind.nvim_load_mapping(keymaps)
-        end
-
-        local lsp_flags = {
-            -- This is the default in Nvim 0.7+
-            debounce_text_changes = 150
-        }
-
-        local lsp_defaults = lspconfig.util.default_config
-        lsp_defaults.capabilities = vim.tbl_deep_extend("force", lsp_defaults.capabilities, capabilities)
-
-        local servers = {"cmake", "clangd", -- C/C++
-        -- "pyright", -- python "pyright", 
-        "ruff", -- python "pyright", 
-        "rust_analyzer", -- rust
-        "gopls", -- golang
-        "sqlls", -- sql
-        "lua_ls", -- lua
-        "dockerls", -- docker
-        "jsonls" -- json
-        }
-
-        for _, lsp in pairs(servers) do
-            if lsp == "lua_ls" then
-                lspconfig[lsp].setup({
-                    settings = {
-                        Lua = {
-                            diagnostics = {
-                                globals = {"vim"}
-                            }
-                        }
-                    },
-                    on_attach = on_attach,
-                    flags = lsp_flags
-                })
-            elseif lsp == "rust_analyzer" then
-                lspconfig[lsp].setup({
-                    settings = {
-                        ["rust-analyzer"] = {
-                            checkOnSave = true,
-                            check = {
-                                command = "clippy",
-                                features = "all"
-                            },
-                            assist = {
-                                importGranularity = "module",
-                                importPrefix = "self"
-                            },
-                            diagnostics = {
-                                enable = true,
-                                enableExperimental = true
-                            },
-                            cargo = {
-                                loadOutDirsFromCheck = true,
-                                features = "all" -- avoid error: file not included in crate hierarchy
-                            },
-                            procMacro = {
-                                enable = true
-                            },
-                            inlayHints = {
-                                chainingHints = true,
-                                parameterHints = true,
-                                typeHints = true
-                            }
-                        }
-                    },
-                    on_attach = on_attach,
-                    flags = lsp_flags
-                })
-            elseif lsp == "ruff" then
-                lspconfig[lsp].setup({
-                    init_options = {
-                        settings = {
-                            -- Modification to any of these settings has no effect.
-                            enable = true,
-                            ignoreStandardLibrary = true,
-                            organizeImports = true,
-                            fixAll = true,
-                            lint = {
-                                enable = true,
-                                run = 'onType'
-                            }
-                        }
-                    }
-                })
-            else
-                lspconfig[lsp].setup({
-                    on_attach = on_attach,
-                    flags = lsp_flags
-                })
-            end
-        end
-    end,
-    -- dependencies = {{"ray-x/lsp_signature.nvim"}, {"rachartier/tiny-code-action.nvim"},
-    --                 {"williamboman/mason-lspconfig.nvim"}}
-    dependencies = {{"rachartier/tiny-code-action.nvim"}, {"williamboman/mason-lspconfig.nvim"}}
+				-- 		},
+				--         on_attach = on_attach,
+				--         flags = lsp_flags
+				-- 	})
+			elseif lsp == "lua_ls" then
+				lspconfig[lsp].setup({
+					settings = {
+						Lua = {
+							diagnostics = {
+								globals = { "vim" },
+							},
+						},
+					},
+					on_attach = on_attach,
+					flags = lsp_flags,
+				})
+			elseif lsp == "rust_analyzer" then
+				lspconfig[lsp].setup({
+					settings = {
+						["rust-analyzer"] = {
+							checkOnSave = true,
+							check = {
+								command = "clippy",
+								features = "all",
+							},
+							assist = {
+								importGranularity = "module",
+								importPrefix = "self",
+							},
+							diagnostics = {
+								enable = true,
+								enableExperimental = true,
+							},
+							cargo = {
+								loadOutDirsFromCheck = true,
+								features = "all", -- avoid error: file not included in crate hierarchy
+							},
+							procMacro = {
+								enable = true,
+							},
+							inlayHints = {
+								chainingHints = true,
+								parameterHints = true,
+								typeHints = true,
+							},
+						},
+					},
+					on_attach = on_attach,
+					flags = lsp_flags,
+				})
+			elseif lsp == "gopls" then
+				lspconfig[lsp].setup({
+					settings = {
+						gopls = {
+							analyses = {
+								fieldalignment = true, -- 字段对齐分析
+								nilness = true, -- nil 值分析
+								unusedparams = true, -- 未使用的参数分析
+								unusedwrite = true, -- 未使用的写操作分析
+								useany = true, -- 使用 any 类型分析
+							},
+							codelenses = {
+								gc_details = false, -- 垃圾回收详情
+								generate = true, -- 生成代码
+								regenerate_cgo = true, -- 重新生成 cgo
+								run_govulncheck = true, -- 运行 govulncheck
+								test = true, -- 测试代码
+								tidy = true, -- 整理代码
+								upgrade_dependency = true, -- 升级依赖
+								vendor = true, -- 管理 vendor 目录
+							},
+							completeUnimported = true, -- 自动补全未导入的包
+							directoryFilters = { "-.git", "-.vscode", "-.idea", "-.vscode-test", "-node_modules" }, -- 目录过滤
+							gofumpt = true, -- 使用 gofumpt 格式化代码
+							hints = {
+								assignVariableTypes = true, -- 提示变量类型
+								compositeLiteralFields = true, -- 提示复合字面量字段
+								compositeLiteralTypes = true, -- 提示复合字面量类型
+								constantValues = true, -- 提示常量值
+								functionTypeParameters = true, -- 提示函数类型参数
+								parameterNames = true, -- 提示参数名称
+								rangeVariableTypes = true, -- 提示 range 变量类型
+							},
+							staticcheck = true, -- 启用 staticcheck
+							semanticTokens = true, -- 启用语义标记
+							usePlaceholders = true, -- 使用占位符
+						},
+					},
+					on_attach = on_attach,
+					flags = lsp_flags,
+				})
+			elseif lsp == "ruff" then
+				lspconfig[lsp].setup({
+					settings = {
+						ruff = {
+							-- Modification to any of these settings has no effect.
+							enable = true,
+							ignoreStandardLibrary = true,
+							organizeImports = true,
+							fixAll = true,
+							lint = {
+								enable = true,
+								run = "onType",
+							},
+						},
+					},
+					on_attach = on_attach,
+					flags = lsp_flags,
+				})
+			else
+				lspconfig[lsp].setup({
+					on_attach = on_attach,
+					flags = lsp_flags,
+				})
+			end
+		end
+	end,
+	-- dependencies = {{"ray-x/lsp_signature.nvim"}, {"rachartier/tiny-code-action.nvim"},
+	--                 {"williamboman/mason-lspconfig.nvim"}}
+	dependencies = { { "rachartier/tiny-code-action.nvim" }, { "williamboman/mason-lspconfig.nvim" } },
 }

@@ -6,7 +6,7 @@ return {
 	cmd = "Copilot",
 	event = "InsertEnter",
 	config = function()
-        vim.g.copilot_proxy = "http://127.0.0.1:7890"
+		vim.g.copilot_proxy = "http://127.0.0.1:7890"
 		require("copilot").setup({})
 	end,
 }

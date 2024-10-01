@@ -4,14 +4,14 @@ local bind = require("utils.bind")
 local map_callback = bind.map_callback
 
 local keymaps = {
-	["n|<leader>cc"] = map_callback(function()
+	["n|<leader>pc"] = map_callback(function()
 			require("persistence").load()
 		end)
 		:with_noremap()
 		:with_silent()
 		:with_desc("恢复当前目录下的session连接"),
 
-	["n|<leader>cl"] = map_callback(function()
+	["n|<leader>pl"] = map_callback(function()
 			require("persistence").load({
 				last = true,
 			})
@@ -20,7 +20,7 @@ local keymaps = {
 		:with_silent()
 		:with_desc("恢复上一次session连接"),
 
-	["n|<leader>cd"] = map_callback(function()
+	["n|<leader>px"] = map_callback(function()
 			require("persistence").stop()
 		end)
 		:with_noremap()

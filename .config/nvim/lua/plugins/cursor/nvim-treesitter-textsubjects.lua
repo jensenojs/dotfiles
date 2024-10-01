@@ -13,7 +13,7 @@
 return {
 	"RRethy/nvim-treesitter-textsubjects",
 	event = { "User FileOpened" },
-
+	
 	dependencies = { "nvim-treesitter/nvim-treesitter" },
 	config = function()
 		require("nvim-treesitter.configs").setup({

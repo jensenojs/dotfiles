@@ -36,6 +36,7 @@ function M.check()
 		"jq", -- json
 		-- 
 		"im-select",
+        "delve", -- go
 	}) do
 		local name = type(cmd) == "string" and cmd or vim.inspect(cmd)
 		local commands = type(cmd) == "string" and { cmd } or cmd

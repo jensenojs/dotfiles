@@ -80,9 +80,11 @@ return {
         dap.listeners.after.event_initialized["dapui_config"] = function()
             _G._debugging = true
             M.load_extras()
-            local NvimTree = require "nvim-tree.api"
-            NvimTree.tree.close()
-            require("aerial").close()
+
+            -- local NvimTree = require "nvim-tree.api"
+            -- NvimTree.tree.close()
+            -- require("aerial").close()
+
             dapui.open({
                 reset = true
             })
@@ -92,23 +94,28 @@ return {
             if _debugging then
                 _G._debugging = false
                 dapui.close()
-                local NvimTree = require "nvim-tree.api"
-                NvimTree.tree.open()
-                require('aerial').toggle({
-                    focus = false
-                })
+
+                -- local NvimTree = require "nvim-tree.api"
+                -- NvimTree.tree.open()
+                -- require('aerial').toggle({
+                --     focus = false
+                -- })
+
             end
         end
+
         -- 关闭调试界面的时候, 代码窗口打开大纲和目录树
         dap.listeners.before.event_exited["dapui_config"] = function()
             if _debugging then
                 _G._debugging = false
                 dapui.close()
-                local NvimTree = require "nvim-tree.api"
-                NvimTree.tree.open()
-                require('aerial').toggle({
-                    focus = false
-                })
+
+                -- local NvimTree = require "nvim-tree.api"
+                -- NvimTree.tree.open()
+                -- require('aerial').toggle({
+                --     focus = false
+                -- })
+
             end
         end
 

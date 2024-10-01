@@ -14,6 +14,36 @@ vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
 	command = "checktime",
 })
 
+
+-- Check and switch input method to English when entering Normal mode
+-- should not use InsertLeave here, refer : https://vi.stackexchange.com/questions/27194/why-doesnt-autocmd-insertleave-setlocal-relativenumber-get-executed-when-i
+vim.api.nvim_create_autocmd({ "ModeChanged" }, {
+    pattern = "i:n,i:v",
+	group = augroup("im-select"),
+	callback = function()
+		-- vim.notify("开始检查输入法", vim.log.levels.INFO, {
+		-- 	title = "im-select",
+		-- })
+		-- 使用 Neovim 的函数来执行系统命令
+		local result = vim.fn.system("im-select")
+		-- vim.notify("当前输入法: " .. result, vim.log.levels.INFO, {
+		-- 	title = "im-select",
+		-- })
+		-- 检查结果中是否包含英文输入法的标识
+		if not string.find(result, "com.apple.keylayout.ABC") then
+			-- 如果不是，切换到英文输入法
+			vim.fn.system("im-select com.apple.keylayout.ABC")
+			-- vim.notify("切换到英文输入法", vim.log.levels.INFO, {
+			-- 	title = "im-select",
+			-- })
+		else
+			-- vim.notify("已经是英文输入法", vim.log.levels.INFO, {
+			-- 	title = "im-select",
+			-- })
+		end
+	end,
+})
+
 -- 当文本被yank（复制）后，高亮该文本
 vim.api.nvim_create_autocmd("TextYankPost", {
 	group = augroup("highlight_yank"),

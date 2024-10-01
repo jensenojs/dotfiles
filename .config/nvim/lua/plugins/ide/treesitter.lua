@@ -22,6 +22,7 @@ return {
 				"gowork",
 				"java",
 				"rust",
+				"ron",
 				"lua",
 				"scheme",
 				"python",
@@ -31,9 +32,9 @@ return {
 				"sql",
 				"scala",
 				"toml",
-                "html",
-                "markdown",
-                "markdown_inline",
+				"html",
+				"markdown",
+				"markdown_inline",
 			},
 
 			-- Install parsers synchronously (only applied to `ensure_installed`)

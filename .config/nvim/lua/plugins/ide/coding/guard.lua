@@ -1,23 +1,24 @@
 -- https://github.com/nvimdev/guard.nvim
 -- 自动格式化, 比formatter好用一些
 -- 其他的可能 :https://github.com/stevearc/conform.nvim
-local bind = require("utils.bind")
-local map_callback = bind.map_callback
-local map_cr = bind.map_cr
+-- 不知道为什么, 这个插件不能用下面的方式绑定快捷键, 还是得是原始的方式
+-- local bind = require("utils.bind")
+-- local map_cr = bind.map_cr
 
-local keymaps = {
-    -- more telescope-relative shortcut, plz refer to lsp-config.lua
-    ["n|<leader>f"] = map_cr("<leader>f"):with_noremap():with_silent():with_desc("格式化当前文件")
+-- local keymaps = {
+--     -- more telescope-relative shortcut, plz refer to lsp-config.lua
+--     ["n|<leader>f"] = map_cr("<leader>f"):with_noremap():with_silent():with_desc("格式化当前文件")
 
-}
+-- }
 
-bind.nvim_load_mapping(keymaps)
+-- bind.nvim_load_mapping(keymaps)
 
 return {
     "nvimdev/guard.nvim",
     -- Builtin configuration, optional
     dependencies = {"nvimdev/guard-collection"},
 
+    -- lazy=false,
     event = "VeryLazy",
     config = function()
         local status, guard = pcall(require, "guard")
@@ -73,5 +74,7 @@ return {
             -- Use lsp if no formatter was defined for this filetype
             lsp_as_default_formatter = false
         })
-    end
+    end,
+
+    vim.keymap.set("n", "<leader>f", ":GuardFmt<CR>"),
 }

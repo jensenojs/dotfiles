@@ -28,37 +28,37 @@ local keymaps = {
 
     ["n|<F12>"] = map_callback(function()
         require('dap').step_out()
-    end):with_noremap():with_silent():with_desc("调试: 跳出"),
-
-    ["n|<leader>lp"] = map_callback(function()
-        require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: '))
-    end):with_noremap():with_silent():with_desc("调试: 跳出"),
-
-    ["n|<leader>dr"] = map_callback(function()
-        require('dap').repl.open()
-    end):with_noremap():with_silent():with_desc("调试: 跳出"),
-
-    ["n|<leader>dl"] = map_callback(function()
-        require('dap').run_last()
-    end):with_noremap():with_silent():with_desc("调试: 跳出"),
-
-    ["nv|<leader>lp"] = map_callback(function()
-        require('dap.ui.widgets').hover()
-    end):with_noremap():with_silent():with_desc("调试: 跳出"),
-
-    ["nv|<leader>dp"] = map_callback(function()
-        require('dap.ui.widgets').preview()
-    end):with_noremap():with_silent():with_desc("调试: 跳出"),
-
-    ["nv|<leader>df"] = map_callback(function()
-        local widgets = require('dap.ui.widgets')
-        widgets.centered_float(widgets.frames)
-    end):with_noremap():with_silent():with_desc("调试: 跳出"),
-
-    ["nv|<leader>ds"] = map_callback(function()
-        local widgets = require('dap.ui.widgets')
-        widgets.centered_float(widgets.scopes)
     end):with_noremap():with_silent():with_desc("调试: 跳出")
+
+    -- ["n|<leader>lp"] = map_callback(function()
+    --     require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: '))
+    -- end):with_noremap():with_silent():with_desc("调试: 跳出"),
+
+    -- ["n|<leader>dr"] = map_callback(function()
+    --     require('dap').repl.open()
+    -- end):with_noremap():with_silent():with_desc("调试: 跳出"),
+
+    -- ["n|<leader>dl"] = map_callback(function()
+    --     require('dap').run_last()
+    -- end):with_noremap():with_silent():with_desc("调试: 跳出"),
+
+    -- ["nv|<leader>lp"] = map_callback(function()
+    --     require('dap.ui.widgets').hover()
+    -- end):with_noremap():with_silent():with_desc("调试: 跳出"),
+
+    -- ["nv|<leader>dp"] = map_callback(function()
+    --     require('dap.ui.widgets').preview()
+    -- end):with_noremap():with_silent():with_desc("调试: 跳出"),
+
+    -- ["nv|<leader>df"] = map_callback(function()
+    --     local widgets = require('dap.ui.widgets')
+    --     widgets.centered_float(widgets.frames)
+    -- end):with_noremap():with_silent():with_desc("调试: 跳出"),
+
+    -- ["nv|<leader>ds"] = map_callback(function()
+    --     local widgets = require('dap.ui.widgets')
+    --     widgets.centered_float(widgets.scopes)
+    -- end):with_noremap():with_silent():with_desc("调试: 跳出")
 }
 
 bind.nvim_load_mapping(keymaps)
@@ -67,14 +67,19 @@ bind.nvim_load_mapping(keymaps)
 return {
     'mfussenegger/nvim-dap',
     dependencies = {'theHamsta/nvim-dap-virtual-text', "rcarriga/nvim-dap-ui", "LiadOz/nvim-dap-repl-highlights",
-                    "williamboman/mason.nvim"},
+                    "williamboman/mason.nvim", "jay-babu/mason-nvim-dap.nvim"},
 
     config = function()
         local icons = {
             dap = require("utils.icons").get("dap")
         }
+        require('dap').set_log_level('TRACE')
 
-        -- 设置icon
+
+
+
+
+        -- 设置iconƒ
         vim.fn.sign_define("DapBreakpoint", {
             text = icons.dap.Breakpoint,
             texthl = "DapBreakpoint",
@@ -141,7 +146,7 @@ return {
         -- require("utils").load_plugin("mason-nvim-dap", {
         mason_dap.setup({
             -- ensure_installed = require("utils.mason-list").get("dap", true),
-            ensure_installed = {"codelldb", "python"},
+            ensure_installed = {"codelldb", "python", "delve"},
             automatic_installation = true,
             handlers = {mason_dap_handler}
         })
