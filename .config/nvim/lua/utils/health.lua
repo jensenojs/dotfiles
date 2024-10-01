@@ -26,13 +26,16 @@ function M.check()
 		{ "fd", "fdfind" },
 		"lazygit",
 		"nvr",
-		"glow",
+		-- "glow",
 		"sox",
         -- format
 		"stylua",
 		"selene",
 		"shfmt",
 		"black",
+		"jq", -- json
+		-- 
+		"im-select",
 	}) do
 		local name = type(cmd) == "string" and cmd or vim.inspect(cmd)
 		local commands = type(cmd) == "string" and { cmd } or cmd

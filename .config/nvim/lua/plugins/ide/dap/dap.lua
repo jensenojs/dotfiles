@@ -2,10 +2,8 @@
 --
 -- 调试器的协议
 -- https://github.com/mfussenegger/nvim-dap/issues/20
-
 -- https://github.com/nvim-lua/kickstart.nvim/blob/master/lua/kickstart/plugins/debug.lua
 -- 配置项应该从这个开始抄起
-
 local bind = require("utils.bind")
 local map_callback = bind.map_callback
 local map_cmd = bind.map_cmd
@@ -68,7 +66,8 @@ bind.nvim_load_mapping(keymaps)
 -- https://github.com/go-delve/delve/blob/master/Documentation/usage/dlv_dap.md
 return {
     'mfussenegger/nvim-dap',
-    dependencies = {'theHamsta/nvim-dap-virtual-text', "rcarriga/nvim-dap-ui", "LiadOz/nvim-dap-repl-highlights", "williamboman/mason.nvim" },
+    dependencies = {'theHamsta/nvim-dap-virtual-text', "rcarriga/nvim-dap-ui", "LiadOz/nvim-dap-repl-highlights",
+                    "williamboman/mason.nvim"},
 
     config = function()
         local icons = {
@@ -111,7 +110,7 @@ return {
         ---@param config table
         local function mason_dap_handler(config)
             local dap_name = config.name
-            ok, custom_handler = pcall(require, "plugins.dap.clients." .. dap_name)
+            ok, custom_handler = pcall(require, "plugins.ide.dap.clients." .. dap_name)
             -- vim.notify(string.format("dap_name is %s ", dap_name), vim.log.levels.INFO, { title = "nvim-dap" })
             if not ok then
                 -- Default to use factory config for clients(s) that doesn't include a spec

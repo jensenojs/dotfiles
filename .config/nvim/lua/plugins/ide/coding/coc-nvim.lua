@@ -93,11 +93,6 @@ local keymaps = {
 		:with_expr()
 		:with_desc("聪明的<s-tab>"),
 
-	["i|<c-n>"] = map_cmd("<Plug>(coc-snippets-expand-jump)")
-		:with_noremap()
-		:with_silent()
-		:with_desc("触发代码片段补齐"),
-
 	-----------------
 	--    normal   --
 	-----------------
@@ -127,7 +122,7 @@ local keymaps = {
 		:with_desc("显示光标所在处的文档"),
 }
 
-bind.nvim_load_mapping(keymaps)
+-- bind.nvim_load_mapping(keymaps)
 
 -- 设置支持的语言
 vim.g.coc_global_extensions = {
@@ -158,24 +153,24 @@ vim.g.coc_global_extensions = {
 }
 
 return {
-	"neoclide/coc.nvim",
-	branch = "release",
+	-- "neoclide/coc.nvim",
+	-- branch = "release",
 
-	config = function()
-		-- Highlight the symbol and its references on a CursorHold event(cursor is idle)
-		vim.api.nvim_create_augroup("CocGroup", {})
-		vim.api.nvim_create_autocmd("CursorHold", {
-			group = "CocGroup",
-			command = "silent call CocActionAsync('highlight')",
-			desc = "Highlight symbol under cursor on CursorHold",
-		})
+	-- config = function()
+	-- 	-- Highlight the symbol and its references on a CursorHold event(cursor is idle)
+	-- 	vim.api.nvim_create_augroup("CocGroup", {})
+	-- 	vim.api.nvim_create_autocmd("CursorHold", {
+	-- 		group = "CocGroup",
+	-- 		command = "silent call CocActionAsync('highlight')",
+	-- 		desc = "Highlight symbol under cursor on CursorHold",
+	-- 	})
 
-		-- Update signature help on jump placeholder
-		vim.api.nvim_create_autocmd("User", {
-			group = "CocGroup",
-			pattern = "CocJumpPlaceholder",
-			command = "call CocActionAsync('showSignatureHelp')",
-			desc = "Update signature help on jump placeholder",
-		})
-	end,
+	-- 	-- Update signature help on jump placeholder
+	-- 	vim.api.nvim_create_autocmd("User", {
+	-- 		group = "CocGroup",
+	-- 		pattern = "CocJumpPlaceholder",
+	-- 		command = "call CocActionAsync('showSignatureHelp')",
+	-- 		desc = "Update signature help on jump placeholder",
+	-- 	})
+	-- end,
 }
