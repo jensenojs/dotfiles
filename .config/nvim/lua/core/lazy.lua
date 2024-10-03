@@ -38,7 +38,8 @@ require("lazy").setup({
         import = "plugins.ide.coding"
     }, {
         -- 让neo-vim有调试能力
-        import = "plugins.ide.dap"
+        -- import = "plugins.ide.dap"
+        import = "plugins.ide.debug"
     }, {
         -- yazi, oil, grup-far, bigfile
         import = "plugins.ide.file-related"

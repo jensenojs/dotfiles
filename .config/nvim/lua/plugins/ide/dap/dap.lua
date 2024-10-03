@@ -73,11 +73,6 @@ return {
         local icons = {
             dap = require("utils.icons").get("dap")
         }
-        require('dap').set_log_level('TRACE')
-
-
-
-
 
         -- 设置iconƒ
         vim.fn.sign_define("DapBreakpoint", {
