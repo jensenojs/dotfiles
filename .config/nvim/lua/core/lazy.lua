@@ -34,12 +34,14 @@ require("lazy").setup({
         -- Setup servers via lspconfig
         import = "plugins.ide.mason"
     }, {
+        -- import = "plugins.ide.lang"
+    }, {
         -- comment, guard, copilot, copilotChat, cmp, lspconfig
         import = "plugins.ide.coding"
     }, {
         -- 让neo-vim有调试能力
-        -- import = "plugins.ide.dap"
-        import = "plugins.ide.debug"
+        import = "plugins.ide.dap"
+        -- import = "plugins.ide.debug"
     }, {
         -- yazi, oil, grup-far, bigfile
         import = "plugins.ide.file-related"

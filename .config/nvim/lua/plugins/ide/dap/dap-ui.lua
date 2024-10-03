@@ -25,7 +25,8 @@ end
 
 return {
     "rcarriga/nvim-dap-ui",
-    "nvim-neotest/nvim-nio",
+    dependencies = {"nvim-neotest/nvim-nio"},
+
     config = function()
         local dap = require('dap')
         local dapui = require("dapui")
@@ -64,7 +65,6 @@ return {
             floating = {
                 max_height = nil, -- These can be integers or a float between 0 and 1.
                 max_width = nil, -- Floats will be treated as percentage of your screen.
-                border = "single", -- Border style. Can be "single", "double" or "rounded"
                 mappings = {
                     close = {"q", "<Esc>"}
                 }
@@ -80,11 +80,9 @@ return {
         dap.listeners.after.event_initialized["dapui_config"] = function()
             _G._debugging = true
             M.load_extras()
-
-            -- local NvimTree = require "nvim-tree.api"
-            -- NvimTree.tree.close()
-            -- require("aerial").close()
-
+            require("focus").setup({
+                enable = false
+            })
             dapui.open({
                 reset = true
             })
@@ -94,13 +92,7 @@ return {
             if _debugging then
                 _G._debugging = false
                 dapui.close()
-
-                -- local NvimTree = require "nvim-tree.api"
-                -- NvimTree.tree.open()
-                -- require('aerial').toggle({
-                --     focus = false
-                -- })
-
+                require("focus").setup({enable = true})
             end
         end
 
@@ -109,15 +101,8 @@ return {
             if _debugging then
                 _G._debugging = false
                 dapui.close()
-
-                -- local NvimTree = require "nvim-tree.api"
-                -- NvimTree.tree.open()
-                -- require('aerial').toggle({
-                --     focus = false
-                -- })
-
+                require("focus").setup({enable = true})
             end
         end
-
     end
 }
