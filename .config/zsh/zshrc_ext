@@ -1,4 +1,7 @@
 
+export NEMU_HOME="$HOME/Projects/Lab/ics2024/nemu/"
+export AM_HOME="$HOME/Projects/Lab/ics2024/abstract-machine/"
+
 # golang
 # if [ -d "$XDG_DATA_HOME/go" ]; then
 #     export GOROOT="$XDG_DATA_HOME/go"

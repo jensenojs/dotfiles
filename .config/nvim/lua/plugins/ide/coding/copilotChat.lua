@@ -267,13 +267,13 @@ return {{
             },
             QuickChatWithFiletype = {},
             Explain = {
-                prompt = "/COPILOT_EXPLAIN 解释这段代码如何运行。"
+                prompt = "/COPILOT_EXPLAIN 解释这段代码如何运行(结合具体代码片段进行说明, 代码片段要用markdown语法标注), 每个代码片段的解释用markdown的无序列表列出(代码片段本身不用无序列表), 注意反映逻辑的递进关系(自动判断选中逻辑哪里是关键, 重点分析, 比如说对于函数内部调用本项目编写的其他模块的函数, 要尝试跟踪和总结), 回答中不需要包含行数"
             },
             FixError = {
-                prompt = "/COPILOT_FIX 请解释以上代码中的错误并提供解决方案。"
+                prompt = "/COPILOT_FIX 请解释以上代码中的错误并提供解决方案, 回答中不需要包含行数"
             },
             Suggestion = {
-                prompt = "/COPILOT_REFACTOR 请查看以上代码并提供改进建议的sample code。"
+                prompt = "/COPILOT_REFACTOR 请查看以上代码并提供改进建议的sample code, 回答中不需要包含行数"
             },
             Annotations = {
                 prompt = "/COPILOT_REFACTOR 为所选程序编写文档。 回复应该是一个包含原始程序的程序块，并将文档作为注释新增。 为所使用的编程语言使用最合适的文档样式（例如 JavaScript的JSDoc, Python的docstrings等)"
