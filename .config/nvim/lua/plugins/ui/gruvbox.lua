@@ -1,16 +1,14 @@
 -- https://github.com/ellisonleao/gruvbox.nvim
+-- 主题不应懒加载以避免启动时闪烁
 return {
     "ellisonleao/gruvbox.nvim",
-    -- event = "VimEnter", -- 皮肤要先加载, 不过用even还是有点Bug, 不知道为什么
-    -- priority = 1000,
     lazy = false,
-
-    config = function()
-        -- setup must be called before loading the colorscheme
-        require("gruvbox").setup({
-            transparent_mode = false -- 启用透明模式
-            -- transparent_mode = true -- 启用透明模式
-        })
-        vim.cmd([[colorscheme gruvbox]])
+    priority = 1000,
+    opts = {
+        transparent_mode = false
+    },
+    config = function(_, opts)
+        require("gruvbox").setup(opts)
+        vim.cmd.colorscheme("gruvbox")
     end
 }

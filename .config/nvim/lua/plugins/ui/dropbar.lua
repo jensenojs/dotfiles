@@ -1,7 +1,12 @@
 -- https://github.com/Bekaboo/dropbar.nvim
--- IDE-like breadcrumbs, out of the box
+-- IDE 风格的 winbar 面包屑导航
 return {
     "Bekaboo/dropbar.nvim",
-    dependencies = {'nvim-telescope/telescope-fzf-native.nvim'},
-    config = true
+    event = "VeryLazy",
+    dependencies = {{
+        "nvim-telescope/telescope-fzf-native.nvim",
+        build = "make"
+    }},
+    main = "dropbar",
+    opts = {}
 }

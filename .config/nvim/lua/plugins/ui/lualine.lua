@@ -1,43 +1,28 @@
 -- https://github.com/nvim-lualine/lualine.nvim
--- 只是一个美化的插件
+-- 快速且可配置的状态栏
 return {
     "nvim-lualine/lualine.nvim",
+    event = "VeryLazy",
+    dependencies = {"nvim-tree/nvim-web-devicons", 'milanglacier/minuet-ai.nvim'},
     config = function()
-        require("lualine").setup({
-            opt = {
-                theme = "gruvbox_light"
-            },
-            -- sections = {
-            --     lualine_x = {"aerial"}
-            -- }
+        require('lualine').setup {
             sections = {
-                lualine_a = {'mode'},
-                lualine_b = {'branch', 'diff', {
-                    'diagnostics',
-                    sources = {"nvim_diagnostic"},
-                    symbols = {
-                        error = ' ',
-                        warn = ' ',
-                        info = ' ',
-                        hint = ' '
-                    }
-                }},
-                lualine_c = {'filename'},
-                lualine_x = {'copilot', 'encoding', 'fileformat', 'filetype'}, -- I added copilot here
-                lualine_y = {'progress'},
-                lualine_z = {'location'}
+                lualine_x = {
+                    {
+                        require 'minuet.lualine',
+                        -- the follwing is the default configuration
+                        -- the name displayed in the lualine. Set to "provider", "model" or "both"
+                        -- display_name = 'both',
+                        -- separator between provider and model name for option "both"
+                        -- provider_model_separator = ':',
+                        -- whether show display_name when no completion requests are active
+                        -- display_on_idle = false,
+                    },
+                    'encoding',
+                    'fileformat',
+                    'filetype',
+                },
             },
-            inactive_sections = {
-                lualine_a = {},
-                lualine_b = {},
-                lualine_c = {'filename'},
-                lualine_x = {'location'},
-                lualine_y = {},
-                lualine_z = {}
-            },
-            tabline = {},
-            extensions = {}
-        })
+        }
     end,
-    dependencies = {{'AndreM222/copilot-lualine'}}
 }

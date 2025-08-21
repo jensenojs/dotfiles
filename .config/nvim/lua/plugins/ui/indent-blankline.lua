@@ -1,11 +1,15 @@
 -- https://github.com/lukas-reineke/indent-blankline.nvim
--- 默认的颜色有点糟糕，换一下
-vim.opt.termguicolors = true
-vim.cmd [[highlight IndentBlanklineIndent guifg=#565552 gui=nocombine]]
-
+-- 缩进指引线插件, 新模块名为 "ibl"
 return {
     "lukas-reineke/indent-blankline.nvim",
-    config = function()
-        require("ibl").setup({})
-    end
+    event = "VeryLazy",
+    main = "ibl",
+    init = function()
+        vim.opt.termguicolors = true
+        vim.api.nvim_set_hl(0, "IndentBlanklineIndent", {
+            fg = "#565552",
+            nocombine = true
+        })
+    end,
+    opts = {}
 }

@@ -1,19 +1,19 @@
 -- https://github.com/abecodes/tabout.nvim
--- 在Insert模式下，按<Tab>可以跳出括号
+-- 在Insert模式下, 按<Tab>可以跳出括号
 -- Lua
-return {{
+return {
     'abecodes/tabout.nvim',
     lazy = false,
     config = function()
         require('tabout').setup {
-            tabkey = '<Tab>', -- key to trigger tabout, set to an empty string to disable
-            backwards_tabkey = '<S-Tab>', -- key to trigger backwards tabout, set to an empty string to disable
+            tabkey = '', -- we drive <Plug>(Tabout) from blink.cmp; don't map <Tab> directly here
+            backwards_tabkey = '', -- same for <S-Tab>
             act_as_tab = true, -- shift content if tab out is not possible
             act_as_shift_tab = false, -- reverse shift content if tab out is not possible (if your keyboard/terminal supports <S-Tab>)
             default_tab = '<C-t>', -- shift default action (only at the beginning of a line, otherwise <TAB> is used)
             default_shift_tab = '<C-d>', -- reverse shift default action,
             enable_backwards = true, -- well ...
-            completion = false, -- if the tabkey is used in a completion pum
+            completion = true, -- integrate with completion menu
             tabouts = {{
                 open = "'",
                 close = "'"
@@ -38,14 +38,8 @@ return {{
         }
     end,
     dependencies = { -- These are optional
-    "nvim-treesitter/nvim-treesitter", "L3MON4D3/LuaSnip", "hrsh7th/nvim-cmp"},
+    "nvim-treesitter/nvim-treesitter"},
     opt = true, -- Set this to true if the plugin is optional
     event = 'InsertCharPre', -- Set the event to 'InsertCharPre' for better compatibility
     priority = 1000
-}, {
-    "L3MON4D3/LuaSnip",
-    keys = function()
-        -- Disable default tab keybinding in LuaSnip
-        return {}
-    end
-}}
+}

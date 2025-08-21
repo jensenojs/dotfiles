@@ -1,7 +1,6 @@
 -- https://github.com/HiPhish/rainbow-delimiters.nvim
--- 基于nvim-treesitter, 将匹配的括号进行彩色的标注, 方便确认
--- This module contains a number of default definitions
-
+-- 彩色匹配分隔符/括号高亮
 return {
-	"HiPhish/rainbow-delimiters.nvim",
+    "HiPhish/rainbow-delimiters.nvim",
+    event = "VeryLazy"
 }
