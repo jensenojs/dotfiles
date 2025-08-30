@@ -7,7 +7,7 @@ return {
     event = "VeryLazy",
     -- 按键触发将自动懒加载插件
     keys = {{
-        "<space>T",
+        "<space>B",
         function()
             local ok, mod = pcall(require, "toggleterm.terminal")
             if not ok then

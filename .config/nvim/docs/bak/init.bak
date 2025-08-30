@@ -13,9 +13,16 @@ if vim.g.__tmp_config_bootstrapped then
 end
 vim.g.__tmp_config_bootstrapped = true
 
-require("config.environment")
+require("config.global")
+pcall(function()
+	require("config.clipboard").setup()
+end)
+pcall(function()
+	require("config.shell").setup()
+end)
 require("config.keymaps")
 require("config.options")
 require("config.autocmds")
 require("config.lsp.bootstrap")
 require("config.lazy")
+

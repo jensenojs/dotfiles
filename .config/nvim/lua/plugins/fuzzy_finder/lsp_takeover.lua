@@ -7,18 +7,7 @@ local map_callback = bind.map_callback
 local api = vim.api
 
 -- 内部: 判断 bufnr 是否有效且已附加 LSP
-local function is_lsp_attached(bufnr)
-    if not bufnr or type(bufnr) ~= "number" then
-        return false
-    end
-    if not api.nvim_buf_is_valid(bufnr) then
-        return false
-    end
-    local clients = vim.lsp.get_clients({
-        bufnr = bufnr
-    })
-    return clients and #clients > 0
-end
+local is_lsp_attached = require("utils.lsp").is_lsp_attached
 
 -- 在 LSP buffer 上用 Telescope 覆盖部分键位
 -- 只演示两键: <leader>o (document symbols), <leader>O (workspace symbols)
@@ -26,8 +15,8 @@ end
 -- 参考文档：https://github.com/nvim-telescope/telescope.nvim/blob/master/doc/telescope.txt
 -- 这样可以保证行为统一到 Telescope 的 UI, 不与原生 vim.lsp.buf.* 重复实现。
 function M.takeover_lsp_buf(bufnr, client)
-    local function if_support(method)
-        return client and client:supports_method(method, bufnr)
+    local if_support = function(method)
+        return require("utils.lsp").if_support(method, bufnr)
     end
 
     if not is_lsp_attached(bufnr) then
@@ -85,18 +74,14 @@ function M.takeover_lsp_buf(bufnr, client)
         ["n|<leader>o"] = map_callback(function()
             if if_support(vim.lsp.protocol.Methods.textDocument_documentSymbol) then
                 tb.lsp_document_symbols({
-                    ignore_symbols = {
-                        "field",
-                        "variable",
-                    },
+                    ignore_symbols = {"field", "variable"}
                 })
             end
         end):with_buffer(bufnr):with_noremap():with_silent():with_desc("LSP: (查找)当前文件符号"),
 
         ["n|<leader>O"] = map_callback(function()
             if if_support(vim.lsp.protocol.Methods.workspace_symbol) then
-                tb.lsp_dynamic_workspace_symbols({
-                })
+                tb.lsp_dynamic_workspace_symbols({})
             end
         end):with_buffer(bufnr):with_noremap():with_silent():with_desc("LSP: (查找)工作区符号"),
 
@@ -108,7 +93,8 @@ function M.takeover_lsp_buf(bufnr, client)
                     show_line = true
                 })
             end
-        end):with_buffer(bufnr):with_noremap():with_silent():with_desc("LSP: 在工作区查找当前光标下的符号"),
+        end):with_buffer(bufnr):with_noremap():with_silent()
+            :with_desc("LSP: 在工作区查找当前光标下的符号"),
 
         ["n|<leader>ld"] = map_callback(function()
             tb.diagnostics({

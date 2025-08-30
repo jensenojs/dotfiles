@@ -27,9 +27,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
         -- 统一能力检测: 返回当前 LSP 客户端是否支持某个请求方法
         -- 说明: 为按键映射提供静默能力检查, 不支持时不执行、不提示
-        local function if_support(method)
-            return client:supports_method(method, bufnr)
-        end
+        local if_support = function(method) return require("utils.lsp").if_support(method, bufnr) end
 
         local lsp_keymaps = {
 

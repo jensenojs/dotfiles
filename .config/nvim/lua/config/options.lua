@@ -5,10 +5,6 @@
 -- 修复markdown缩进设置
 vim.g.markdown_recommended_style = 0
 
--- 来自nvim-tree的要求
--- disable netrw at the very start of your init.lua
-vim.g.loaded_netrw = 1
-
 vim.g.loaded_netrwPlugin = 1
 
 local opt = vim.opt

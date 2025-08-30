@@ -108,9 +108,9 @@ local keymaps = {
     --     "重新选择上一次选择的区域, 并向右移动一次缩进"),
 
     -- 触发 quick_substitute 的执行
-    ["v|<leader>ss"] = map_callback(function()
-        require("utils.quick_substitute").run()
-    end):with_noremap():with_silent():with_desc("在指定行间进行文本替换"),
+    -- ["v|<leader>ss"] = map_callback(function()
+    --     require("utils.quick_substitute").run()
+    -- end):with_noremap():with_silent():with_desc("在指定行间进行文本替换"),
 
     -----------------
     --    其他      --
@@ -121,6 +121,7 @@ local keymaps = {
 }
 
 bind.nvim_load_mapping(keymaps)
+require("config.quick_substitute").setup({})
 
 -----------------
 --  LSP 相关    --

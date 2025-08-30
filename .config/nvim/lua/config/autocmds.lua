@@ -7,7 +7,7 @@
 
  注意:
    - 本模块零导出; 在 require 时注册 autocmd, 尽量保持幂等。
-   - 依赖: 可选 config.env (存在则使用 env.has.im_select)。
+   - 依赖: 可选 config.env (存在则使用 env.has.im_select)
  ]]
 
 local function augroup(name)
@@ -22,7 +22,7 @@ vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
 
 -- 输入法: 从插入模式切回普通/可视时切换到英文
 -- 说明: 仅在系统存在 im-select 时注册, 避免无意义系统调用
-local ok_env, env = pcall(require, "config.env")
+local ok_env, env = pcall(require, "config.environment")
 if ok_env and env.has.im_select then
   vim.api.nvim_create_autocmd({ "ModeChanged" }, {
     pattern = "i:n,i:v",

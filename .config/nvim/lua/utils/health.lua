@@ -122,6 +122,14 @@ local function check_clipboard()
     else
         warn("未检测到常见的 Linux 剪贴板工具(xclip/xsel 或 wl-copy/wl-paste), 可手动设置 g:clipboard")
     end
+
+    -- 检查OSC-52支持
+    local osc52_supported = vim.fn.has('clipboard_working') and vim.g.clipboard and vim.g.clipboard.name == 'osc52'
+    if osc52_supported then
+        ok("OSC-52 clipboard supported (远程复制/粘贴)")
+    elseif vim.env.SSH_CLIENT or vim.env.SSH_TTY then
+        warn("远程会话中建议启用OSC-52: set g:clipboard to osc52 provider")
+    end
 end
 
 -- blink.cmp/Rust 健康检查
