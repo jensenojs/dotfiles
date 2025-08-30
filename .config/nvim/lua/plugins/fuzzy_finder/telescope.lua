@@ -111,7 +111,7 @@ return {
 		require("telescope").setup({
 			defaults = {
 				-- 可爱捏
-				prompt_prefix = "🔍 ",
+				prompt_prefix = "Search: ",
 
 				vimgrep_arguments = {
 					"rg",

@@ -1,6 +1,5 @@
 -- https://github.com/akinsho/bufferline.nvim
 -- 缓冲区/标签栏。使用 tabs 模式模拟原生 tabline
-
 -- https://github.com/roobert/bufferline-cycle-windowless.nvim
 -- 需要么? 还是算了
 return {
@@ -35,7 +34,7 @@ return {
                     enabled = true,
                     delay = 200,
                     reveal = {"close"}
-                },
+                }
 
             }
         }

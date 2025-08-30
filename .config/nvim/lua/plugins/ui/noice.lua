@@ -63,19 +63,19 @@ return {
 			format = {
 				cmdline = {
 					pattern = "^:",
-					icon = " ",
+					icon = require("utils.icons").get("ui").Cmdline,
 					lang = "vim",
 				},
 				search_down = {
 					kind = "search",
 					pattern = "^/",
-					icon = " ",
+					icon = require("utils.icons").get("ui").SearchDown,
 					lang = "regex",
 				},
 				search_up = {
 					kind = "search",
 					pattern = "^%?",
-					icon = " ",
+					icon = require("utils.icons").get("ui").SearchUp,
 					lang = "regex",
 				},
 			},

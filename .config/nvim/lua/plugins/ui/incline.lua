@@ -16,9 +16,9 @@ return {
 
             local function get_git_diff()
                 local icons = {
-                    removed = '',
-                    changed = '',
-                    added = ''
+                    removed = require("utils.icons").get("git").Remove,
+                    changed = require("utils.icons").get("git").Mod_alt,
+                    added = require("utils.icons").get("git").Add
                 }
                 local signs = vim.b[props.buf].gitsigns_status_dict
                 local labels = {}
@@ -34,17 +34,17 @@ return {
                     end
                 end
                 if #labels > 0 then
-                    table.insert(labels, {'┊ '})
+                    table.insert(labels, {require("utils.icons").get("ui").Separator .. ' '})
                 end
                 return labels
             end
 
             local function get_diagnostic_label()
                 local icons = {
-                    error = '',
-                    warn = '',
-                    info = '',
-                    hint = ''
+                    error = require("utils.icons").get("diagnostics").Error_alt2,
+                    warn = require("utils.icons").get("diagnostics").Warning,
+                    info = require("utils.icons").get("diagnostics").Information,
+                    hint = require("utils.icons").get("diagnostics").Hint_alt2
                 }
                 local label = {}
 
@@ -60,11 +60,12 @@ return {
                     end
                 end
                 if #label > 0 then
-                    table.insert(label, {'┊ '})
+                    table.insert(label, {require("utils.icons").get("ui").Separator .. ' '})
                 end
                 return label
             end
 
+            local ui_icons = require("utils.icons").get("ui")
             return {{get_diagnostic_label()}, {get_git_diff()}, {
                 (ft_icon or '') .. ' ',
                 guifg = ft_color,
@@ -73,7 +74,7 @@ return {
                 filename .. ' ',
                 gui = vim.bo[props.buf].modified and 'bold,italic' or 'bold'
             }, {
-                '┊  ' .. vim.api.nvim_win_get_number(props.win),
+                ui_icons.Separator .. ' ' .. ui_icons.Window .. ' ' .. vim.api.nvim_win_get_number(props.win),
                 group = 'DevIconWindows'
             }}
         end

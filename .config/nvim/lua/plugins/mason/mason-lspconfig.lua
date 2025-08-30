@@ -11,7 +11,9 @@ return {
       end)
       return {
         ensure_installed = ensure,
-        automatic_installation = true,
+        automatic_installation = function()
+          return not require("config.environment").offline
+        end,
       }
     end,
   },

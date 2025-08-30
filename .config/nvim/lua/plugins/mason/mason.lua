@@ -12,19 +12,15 @@ return {
     cmd = {"Mason", "MasonInstall", "MasonUninstall", "MasonUpdate"},
     event = {'BufReadPost', 'BufNewFile', 'VimEnter'},
     opts = {
-      pip = {
-        upgrade_pip = false,
-        install_args = pip_args
-      },
-    },
-    config = function(_, opts)
         pip = {
             upgrade_pip = false,
             install_args = pip_args
         }
-        local ok_mason, mason = pcall(require, "mason")
-        if ok_mason then
-            mason.setup(opts)
+    },
+    init = function()
+        local env = require("config.environment")
+        if env.offline then
+            return
         end
 
         -- 自动安装工具(非 LSP server)
@@ -53,6 +49,13 @@ return {
             registry.refresh(ensure)
         else
             ensure()
+        end
+    end,
+    config = function(_, opts)
+        pip = opts.pip
+        local ok_mason, mason = pcall(require, "mason")
+        if ok_mason then
+            mason.setup(opts)
         end
     end
 }

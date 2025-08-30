@@ -73,18 +73,22 @@ return {
         -- Set icons to characters that are more likely to work in every terminal.
         --    Feel free to remove or use ones that you like more! :)
         --    Don't feel like these are good choices.
-        icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
+        icons = {
+            expanded = require("utils.icons").get("dap").expanded,
+            collapsed = require("utils.icons").get("dap").collapsed,
+            current_frame = require("utils.icons").get("dap").current_frame
+        },
         controls = {
           icons = {
-            pause = '⏸',
-            play = '▶',
-            step_into = '⏎',
-            step_over = '⏭',
-            step_out = '⏮',
-            step_back = 'b',
-            run_last = '▶▶',
-            terminate = '⏹',
-            disconnect = '⏏',
+            pause = require("utils.icons").get("dap").pause,
+            play = require("utils.icons").get("dap").play,
+            step_into = require("utils.icons").get("dap").step_into,
+            step_over = require("utils.icons").get("dap").step_over,
+            step_out = require("utils.icons").get("dap").step_out,
+            step_back = require("utils.icons").get("dap").step_back,
+            run_last = require("utils.icons").get("dap").run_last,
+            terminate = require("utils.icons").get("dap").terminate,
+            disconnect = require("utils.icons").get("dap").disconnect,
           },
         },
       }

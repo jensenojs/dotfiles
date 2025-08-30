@@ -1,15 +1,9 @@
 --[[
-模块: config.environment
-合并 config.env 和 config.global 为单一环境模块
-
-意图:
   提供统一的环境感知能力，包括平台检测、可执行文件检查、路径聚合等。
-  无副作用，仅暴露探测结果与派生策略。
 ]]
 
 local M = {}
 
--- 平台特征
 local sys = vim.loop.os_uname().sysname
 M.is_mac = sys == "Darwin"
 M.is_linux = sys == "Linux"
@@ -30,8 +24,10 @@ M.has = {
 }
 
 -- 离线/最小模式
-M.offline = tostring(vim.env.NVIM_OFFLINE or "") == "0"
+M.offline = tostring(vim.env.NVIM_OFFLINE or "") == "1"
+
 M.minimal_mode = M.offline or not M.has.git
+
 
 function M.summary()
   return string.format(
@@ -68,6 +64,7 @@ setmetatable(M, {
 })
 
 -- Clipboard setup
+-- https://tao.zz.ac/vim/vim-copy-over-ssh.html
 if M.is_mac then
     vim.g.clipboard = {
         name = "macOS-clipboard",
@@ -98,6 +95,8 @@ if M.is_wsl then
     }
 end
 
+-- https://www.reddit.com/r/neovim/comments/17oy2cv/why_can_i_successfully_transfer_clipboard/
+-- https://github.com/tmux/tmux/wiki/Clipboard
 if vim.env.TMUX then
     vim.g.clipboard = {
         name = "tmux-clipboard",
