@@ -1,0 +1,12 @@
+# List of files (relative to $HOME) to include in encrypted archive
+# See: https://yadm.io/docs/encryption
+
+# Unified secrets entrypoint (custom convention, not official XDG)
+.config/secrets/llm
+
+# Add more secrets below as needed, e.g.:
+# .aws/credentials
+# .config/gcloud/application_default_credentials.json
+# .npmrc
+# .docker/config.json
+# .pypirc

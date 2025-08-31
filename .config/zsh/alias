@@ -13,9 +13,6 @@ alias _=sudo
 # lazygit
 alias lg='lazygit'
 
-# matrixorigin
-alias kmo='kill -9 $(pgrep -d',' -f mo-service)'
-
 # thefuck
 alias fk="thefuck"
 
@@ -24,12 +21,72 @@ alias pip='pip3'
 alias python='python3'
 
 # better tools
+alias connect="expect $HOME/Projects/scripts/connect.sh"
+alias fedora="ssh -p 2202 jensen@192.168.0.112"
 
-# color
-alias \
-    cat='bat'
-    diff="diff --color=auto" \
-    make="colormake" \
-    ping="gping" \
-    ip="ip -color=auto" \
-    grep="grep --color=auto" \
+# safety
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+
+# ls improvements (BSD vs GNU)
+if [[ "$OSTYPE" == darwin* ]]; then
+  alias ls='ls -G'
+  alias ll='ls -alF'
+  alias la='ls -A'
+  alias l='ls -CF'
+else
+  alias ls='ls --color=auto'
+  alias ll='ls -alF --color=auto'
+  alias la='ls -A --color=auto'
+  alias l='ls -CF --color=auto'
+fi
+
+# grep colors
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
+# common shortcuts
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias h='history'
+alias j='jobs -l'
+alias path='print -l $path'
+alias now='date +"%T"'
+alias nowtime=now
+alias nowdate='date +"%d-%m-%Y"'
+
+# system info
+if command -v free >/dev/null 2>&1; then
+  alias meminfo='free -m -l -t'
+elif command -v vm_stat >/dev/null 2>&1; then
+  alias meminfo='vm_stat'
+fi
+if command -v lscpu >/dev/null 2>&1; then
+  alias cpuinfo='lscpu'
+elif [[ "$OSTYPE" == darwin* ]] && command -v sysctl >/dev/null 2>&1; then
+  alias cpuinfo='sysctl -a | grep machdep.cpu'
+fi
+alias diskusage='df -h'
+if du --max-depth=1 . >/dev/null 2>&1; then
+  alias folderusage='du -h --max-depth=1'
+else
+  alias folderusage='du -hd 1'
+fi
+alias psg='ps aux | grep -v grep | grep -i -e VSZ -e'
+
+# colorized tools if available
+if command -v bat >/dev/null 2>&1; then
+  alias cat='bat'
+fi
+if command -v colormake >/dev/null 2>&1; then
+  alias make='colormake'
+fi
+if command -v gping >/dev/null 2>&1; then
+  alias ping='gping'
+fi
+if command -v ip >/dev/null 2>&1; then
+  alias ip='ip -color=auto'
+fi

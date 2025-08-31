@@ -2,10 +2,10 @@
 -- 一个轻量的markdown预览器
 -- For `plugins/markview.lua` users.
 return {
-    "OXY2DEV/markview.nvim",
-    lazy = true,
+	"OXY2DEV/markview.nvim",
+	lazy = false,
 
-    -- For blink.cmp's completion
-    -- source
-    -- dependencies = {"saghen/blink.cmp", "nvim-treesitter/nvim-treesitter"}
-};
+	-- For blink.cmp's completion
+	-- source
+	-- dependencies = {"saghen/blink.cmp", "nvim-treesitter/nvim-treesitter"}
+}

@@ -1,5 +1,4 @@
 # vim: ft=bash
-
 CASE_SENSITIVE="false"
 
 # _ and - are interchangeable
@@ -9,15 +8,13 @@ HYPHEN_INSENSITIVE="true"
 DISABLE_UPDATE_PROMPT="true"
 
 # How often to auto update (in days)
-export UPDATE_ZSH_DAY=7
+export UPDATE_ZSH_DAYS=7
 
 # place where we install oh-my-zsh
-export ZSH="${XDG_DATA_HOME}/omz"
+export ZSH="${XDG_DATA_HOME:-$HOME/.local/share}/omz"
 
 # Enable command correction
 ENABLE_CORRECTION="false"
-
-autoload -U compinit; compinit
 
 # Load plugins
 plugins=(
@@ -36,8 +33,6 @@ plugins=(
     zsh-syntax-highlighting
 )
 
-
-
 # Source Oh My ZSH
 source $ZSH/oh-my-zsh.sh
 
@@ -49,7 +44,7 @@ export YSU_MESSAGE_FORMAT="Hey! I found this %alias_type for %command: %alias"
 # ===============================================================================
 # setting for autosuggestions
 
-bindkey ',' autosuggest-accept
+bindkey '^Y' autosuggest-accept # use Ctrl-Y to accept autosuggestion
 
 # ===============================================================================
 # setting for fzf-tab
@@ -86,7 +81,7 @@ zstyle ':fzf-tab:*' switch-group '<' '>'
 # }
 
 # ===============================================================================
-# 
+#
 
 # ===============================================================================
-# 
+#
