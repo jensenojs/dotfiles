@@ -15,7 +15,7 @@ local keymaps = {
 		:with_noremap()
 		:with_silent()
 		:with_desc("模糊搜索当前文件"),
-	
+
 	["n|<leader>/"] = map_callback(function()
 			require("telescope.builtin").live_grep()
 		end)
@@ -50,7 +50,6 @@ local keymaps = {
 		:with_noremap()
 		:with_silent()
 		:with_desc("打开寄存器列表"),
-
 }
 
 bind.nvim_load_mapping(keymaps)
@@ -105,7 +104,8 @@ return {
 		"nvim-tree/nvim-web-devicons", -- "nvim-telescope/telescope-aerial.nvim"
 	},
 
-	config = function()
+	event = "VeryLazy",
+	opts = function()
 		local actions = require("telescope.actions")
 
 		require("telescope").setup({
@@ -156,7 +156,7 @@ return {
 						-- e.g. git_{create, delete, ...}_branch for the git_branches picker
 						["<c-u>"] = false, --  clear prompt
 						["<c-h>"] = "which_key", -- 显示快捷指令的作用
-						["<f1>"]  = "which_key", -- 显示快捷指令的作用
+						["<f1>"] = "which_key", -- 显示快捷指令的作用
 					},
 				},
 			},
@@ -242,10 +242,10 @@ return {
 
 		-- 注册自动命令: 在 LSP 附加时覆盖该 buffer 的按键
 		-- 说明：
-		-- - 我们不在 attach.lua 修改原生映射, 而是在插件侧监听同一事件, 
+		-- - 我们不在 attach.lua 修改原生映射, 而是在插件侧监听同一事件,
 		--   使用 telescope.builtin.lsp_* 将相同语义的键位(如 <leader>o / <leader>O)
 		--   重定向到 Telescope UI。
-		-- - Neovim 的自动命令按“定义顺序”执行；该回调在 attach.lua 之后定义, 
+		-- - Neovim 的自动命令按“定义顺序”执行；该回调在 attach.lua 之后定义,
 		--   因此会在同一 LspAttach 事件中更晚执行, 从而以 buffer-local 覆盖前者。
 		--   参考 :h autocmd
 		local TELE_ATTACH = api.nvim_create_augroup("telescope.override_lsp", { clear = true })
@@ -255,16 +255,16 @@ return {
 				-- ev.buf: 附加的 buffer；takeover 内部只用 telescope.builtin.lsp_*
 				-- 并且带幂等标记, 重复进入不会反复设置。
 				local client = vim.lsp.get_client_by_id(ev.data.client_id)
-        		if not client then
-            		return
-        		end
+				if not client then
+					return
+				end
 				takeover.takeover_lsp_buf(ev.buf, client)
 			end,
 		})
 
 		-- 兜底: 对当前已存在且已附加 LSP 的 buffer 进行一次覆盖
 		-- 说明：
-		-- - LspAttach 只在“新发生的附加事件”时触发；当插件被 lazy.nvim 晚加载时, 
+		-- - LspAttach 只在“新发生的附加事件”时触发；当插件被 lazy.nvim 晚加载时,
 		--   进程里可能已经有若干 buffer 早就附加了 LSP(因此不会再触发 LspAttach)。
 		-- - 这里主动遍历现有 buffer 并调用 takeover, 以保证它们也切换到 Telescope 的 UI。
 		-- - takeover() 内部会判断该 bufnr 是否已附加 LSP、是否已经处理过, 因而是幂等的。

@@ -4,7 +4,9 @@
 return {
 	"andymass/vim-matchup",
 
-	config = function()
+	event = "VeryLazy",
+	-- config = function()
+	opts = function()
 		vim.g.matchup_matchparen_offscreen = {
 			method = "popup",
 		}

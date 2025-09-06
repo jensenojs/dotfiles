@@ -1,13 +1,15 @@
 -- https://github.com/milanglacier/minuet-ai.nvim
 local env = require("config.environment")
 if env.offline then
-    return {}
+	return {}
 end
 
 return {
 	"milanglacier/minuet-ai.nvim",
 	dependencies = { "nvim-lua/plenary.nvim", "saghen/blink.cmp" },
-	config = function()
+	-- config = function()
+	event = "InsertEnter",
+	opts = function()
 		require("minuet").setup({
 			virtualtext = {
 				auto_trigger_ft = { "go", "c", "cpp", "python", "rust", "sql" },

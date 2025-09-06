@@ -19,6 +19,6 @@ bind.nvim_load_mapping(keymaps)
 
 return {
 	"rainbowhxch/accelerated-jk.nvim",
-	event = "VimEnter",
+	event = "VeryLazy",
 	opts = {},
 }
