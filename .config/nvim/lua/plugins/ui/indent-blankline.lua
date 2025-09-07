@@ -2,7 +2,7 @@
 -- 缩进指引线插件, 新模块名为 "ibl"
 return {
     "lukas-reineke/indent-blankline.nvim",
-    event = "UIEnter",
+    event = "VeryLazy",
     main = "ibl",
     init = function()
         vim.opt.termguicolors = true
@@ -11,5 +11,9 @@ return {
             nocombine = true
         })
     end,
-    opts = {}
+    opts = {
+        exclude = {
+            filetypes = {"dashboard"}
+        }
+    }
 }

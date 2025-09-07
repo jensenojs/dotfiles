@@ -35,7 +35,7 @@ M.groups = {
 		tools = { "cmake", "clang-format" },
 	},
 	rust = {
-		servers = {}, -- 如需: { "rust_analyzer" }
+		servers = {}, -- 如需: { "rust_analyzer" }, 由 mrcjkb/rustaceanvim 接管
 		tools = { "codelldb", "rustfmt" },
 	},
 	shell = {

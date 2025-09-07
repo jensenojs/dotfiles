@@ -221,23 +221,12 @@ return {
 					override_file_sorter = true, -- override the file sorter
 					case_mode = "smart_case", -- or "ignore_case" or "respect_case"
 				},
-				["ui-select"] = { require("telescope.themes").get_dropdown({}) },
-				-- aerial = {
-				-- 	-- Display symbols as <root>.<parent>.<symbol>
-				-- 	show_nesting = {
-				-- 		["_"] = false, -- This key will be the default
-				-- 		json = false, -- You can set the option for specific filetypes
-				-- 		yaml = false,
-				-- 	},
-				-- },
 			},
 		})
 		--
 		require("telescope").load_extension("fzf")
-		require("telescope").load_extension("ui-select")
 		-- require("telescope").load_extension("vim_bookmarks")
 		require("telescope").load_extension("lazygit")
-		-- require("telescope").load_extension("aerial")
 		-- require("telescope").load_extension("dap")
 
 		-- 注册自动命令: 在 LSP 附加时覆盖该 buffer 的按键
@@ -248,7 +237,9 @@ return {
 		-- - Neovim 的自动命令按“定义顺序”执行；该回调在 attach.lua 之后定义,
 		--   因此会在同一 LspAttach 事件中更晚执行, 从而以 buffer-local 覆盖前者。
 		--   参考 :h autocmd
-		local TELE_ATTACH = api.nvim_create_augroup("telescope.override_lsp", { clear = true })
+		local TELE_ATTACH = api.nvim_create_augroup("telescope.override_lsp", {
+			clear = true,
+		})
 		api.nvim_create_autocmd("LspAttach", {
 			group = TELE_ATTACH,
 			callback = function(ev)
@@ -269,7 +260,9 @@ return {
 		-- - 这里主动遍历现有 buffer 并调用 takeover, 以保证它们也切换到 Telescope 的 UI。
 		-- - takeover() 内部会判断该 bufnr 是否已附加 LSP、是否已经处理过, 因而是幂等的。
 		for _, bufnr in ipairs(api.nvim_list_bufs()) do
-			local clients = vim.lsp.get_clients({ bufnr = bufnr })
+			local clients = vim.lsp.get_clients({
+				bufnr = bufnr,
+			})
 			local client = (clients and clients[1]) or nil
 			takeover.takeover_lsp_buf(bufnr, client)
 		end

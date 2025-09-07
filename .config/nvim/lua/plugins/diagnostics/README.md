@@ -1,6 +1,6 @@
 # diagnostics
 
-意图: 问题列表与诊断面板, 未来还需要包括测试, 调试, 以及静态代码检测
+意图: 问题列表与诊断面板, 未来还需要包括调试, 以及静态代码检测
 
 - /Users/jensen/.config/nvim/lua/plugins/ui/trouble.lua
 
@@ -23,7 +23,3 @@ more : nvim-lint
 - /Users/jensen/.config/nvim/lua/plugins/ide/dap/dap-ui.lua
 - /Users/jensen/.config/nvim/lua/plugins/ide/dap/dap-virtual-text.lua
 - /Users/jensen/.config/nvim/lua/plugins/ide/dap/dap-repl-highlights.lua
-- /Users/jensen/.config/nvim/lua/plugins/ide/dap/clients/python.lua
-- /Users/jensen/.config/nvim/lua/plugins/ide/dap/clients/delve.lua
-- /Users/jensen/.config/nvim/lua/plugins/ide/dap/clients/codelldb.lua
-- /Users/jensen/.config/nvim/lua/plugins/ide/debug/debug.lua

@@ -6,5 +6,7 @@
 return {
 	"ibhagwan/smartyank.nvim",
 	event = { "BufRead", "BufNewFile" },
-	config = true,
+	opts = function()
+		require("smartyank").setup({})
+	end,
 }

@@ -5,38 +5,27 @@
   为 nvim-dap 提供输入参数、可执行路径、目标文件与环境变量收集等小工具函数, 用于调试会话配置。
 
 使用:
-  直接 `require("utils.dap").input_args()` 等按需取用。
-  导出为带 __index 的元表以适配延迟调用场景(多层函数返回)。
+  推荐：使用一层闭包 API（延迟求值），可直接写入 nvim-dap 配置：
+    program = require('utils.dap').fn.input_exec_path()
+    args    = require('utils.dap').fn.input_args()
 
-三层调用说明:
-  由于 nvim-dap 的配置机制和延迟执行需求，本模块采用三层函数返回设计：
-  
-  第一层: require("utils.dap").input_file_path
-    - 返回一个函数（闭包），不执行实际逻辑
-    - 用于配置文件加载时的延迟绑定
-  
-  第二层: require("utils.dap").input_file_path()  
-    - 调用第一层返回的函数
-    - 返回另一个函数（更内层的闭包）
-    - 仍然不执行实际逻辑
-  
-  第三层: require("utils.dap").input_file_path()()
-    - 调用第二层返回的函数
-    - 这时才真正执行 M.input_file_path() 的逻辑
-    - 显示输入框并等待用户输入
-  
-  在 nvim-dap 配置中使用时，应该包装成函数形式：
-  program = function()
-      return require("utils.dap").input_file_path()()()
-  end
-  
-  这样可以确保：
-  1. 配置文件加载时不会立即执行（避免Neovim启动时弹出输入框）
-  2. 调试会话启动时才请求用户输入
-  3. 符合 nvim-dap 对配置值为函数的期望
+  同时也提供“直接函数”形式（立即求值），便于在脚本中独立调用：
+    local args_array = require('utils.dap').input_args()
 ]]
 -- 这里定义实际的函数实现集合
 local M = {}
+
+-- 安全输入: 捕捉 <C-c>/中断并静默返回
+local function safe_input(prompt, default, completion)
+	local ok, result = pcall(vim.fn.input, prompt, default, completion)
+	if not ok then
+		return nil
+	end
+	if type(result) ~= "string" then
+		return nil
+	end
+	return result
+end
 
 --[[
 函数: input_args()
@@ -49,7 +38,7 @@ local M = {}
   - `vim.fn.split(str, " ", true)` 使用 Lua 模式为字面空格分割; 第三个参数 `true` 表示忽略空字段。
 ]]
 function M.input_args()
-	local argument_string = vim.fn.input("Program arg(s) (enter nothing to leave it null): ")
+	local argument_string = safe_input("Program arg(s) (enter nothing to leave it null): ") or ""
 	return vim.fn.split(argument_string, " ", true)
 end
 
@@ -64,7 +53,9 @@ end
   - `vim.fn.expand("%:p:h")` 取当前缓冲区文件的目录; 拼接默认的 a.out。
 ]]
 function M.input_exec_path()
-	return vim.fn.input('Path to executable (default to "a.out"): ', vim.fn.expand("%:p:h") .. "/a.out", "file")
+	local default_path = vim.fn.expand("%:p:h") .. "/a.out"
+	local path = safe_input('Path to executable (default to "a.out"): ', default_path, "file")
+	return (path and #path > 0) and path or nil
 end
 
 --[[
@@ -75,7 +66,9 @@ end
   string 文件绝对路径。
 ]]
 function M.input_file_path()
-	return vim.fn.input("Path to debuggee (default to the current file): ", vim.fn.expand("%:p"), "file")
+	local default_file = vim.fn.expand("%:p")
+	local path = safe_input("Path to debuggee (default to the current file): ", default_file, "file")
+	return (path and #path > 0) and path or nil
 end
 
 --[[
@@ -83,35 +76,46 @@ end
 作用:
   将当前 Neovim 进程的环境变量表(vim.fn.environ())转为 { "K=V", ... } 数组形式, 便于传给调试器。
 返回:
-  string[] 形如 "K=V" 的字符串数组。
-说明:
-  - `vim.fn.environ()` 返回一个字典表; 逐项转换后插入数组。
+  string[] 形如 "K=V" 的字符串数组.
 ]]
 function M.get_env()
-	local variables = {}
-	for k, v in pairs(vim.fn.environ()) do
-		table.insert(variables, string.format("%s=%s", k, v))
-	end
-	return variables
+  local variables = {}
+  for k, v in pairs(vim.fn.environ()) do
+    table.insert(variables, string.format("%s=%s", k, v))
+  end
+  return variables
 end
 
 --[[
-导出形式:
-  返回一个带 __index 元方法的表; 外层再调用一次可返回闭包, 适配 nvim-dap 的 lazy 调用场景。
-  例如: `require("utils.dap").input_args()()()` 最终调用 `M.input_args()`。
-  
-  使用示例：
-  在 nvim-dap 配置中：
-  program = function()
-      return require("utils.dap").input_file_path()()()
-  end
+一层闭包 API：`require('utils.dap').fn.<name>()`
+返回一个可直接赋给 nvim-dap 配置字段的函数，便于延迟求值.
 ]]
-return setmetatable({}, {
-	__index = function(_, key)
-		return function()
-			return function()
-				return M[key]()
-			end
-		end
-	end,
-})
+local FN = {}
+
+function FN.input_args()
+	return function()
+		return M.input_args()
+	end
+end
+
+function FN.input_exec_path()
+	return function()
+		return M.input_exec_path()
+	end
+end
+
+function FN.input_file_path()
+	return function()
+		return M.input_file_path()
+	end
+end
+
+function FN.get_env()
+  return function()
+    return M.get_env()
+  end
+end
+
+-- 导出：直观函数 + 闭包接口
+M.fn = FN
+return M

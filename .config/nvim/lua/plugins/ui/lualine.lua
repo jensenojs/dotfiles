@@ -3,8 +3,10 @@
 return {
 	"nvim-lualine/lualine.nvim",
 	event = "UIEnter",
-	dependencies = { "nvim-tree/nvim-web-devicons", "milanglacier/minuet-ai.nvim" },
-	config = function()
+	dependencies = { "nvim-tree/nvim-web-devicons", 
+	"milanglacier/minuet-ai.nvim" 
+},
+	opts = function()
 		require("lualine").setup({
 			sections = {
 				lualine_x = {

@@ -7,4 +7,6 @@ return {
 	opts = function()
 		require("nvim-dap-repl-highlights").setup()
 	end,
+	-- lazy = true,
+	-- opts = true,
 }

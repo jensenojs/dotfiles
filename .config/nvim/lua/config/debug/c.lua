@@ -1,7 +1,7 @@
--- C/C++/Rust语言调试配置
--- 包含Adapter配置和Configuration配置
+-- C 语言调试配置（基于 CodeLLDB）
+-- adapter 与 configurations 的 `type` 使用 "codelldb"，与 nvim-dap 的匹配规则一致
 return {
-	-- Adapter配置：定义如何启动CodeLLDB调试器
+	-- Adapter 配置：启动 CodeLLDB 调试服务器，使用动态端口
 	adapter = {
 		type = "server",
 		port = "${port}",
@@ -11,7 +11,7 @@ return {
 		},
 	},
 
-	-- Configuration配置：定义C/C++/Rust语言的调试场景
+	-- C 的调试场景
 	configurations = {
 		{
 			type = "codelldb",

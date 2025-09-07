@@ -4,7 +4,9 @@
 return {
 	"abecodes/tabout.nvim",
 	lazy = false,
+	-- events = { "BufReadPost", "BufNewFile" },
 	config = function()
+		-- opts = function()
 		require("tabout").setup({
 			tabkey = "", -- we drive <Plug>(Tabout) from blink.cmp; don't map <Tab> directly here
 			backwards_tabkey = "", -- same for <S-Tab>
@@ -44,9 +46,9 @@ return {
 			exclude = {}, -- tabout will ignore these filetypes
 		})
 	end,
-	dependencies = { -- These are optional
-		"nvim-treesitter/nvim-treesitter",
-	},
+	-- dependencies = { -- These are optional
+	-- 	"nvim-treesitter/nvim-treesitter",
+	-- },
 	opt = true, -- Set this to true if the plugin is optional
 	event = "InsertCharPre", -- Set the event to 'InsertCharPre' for better compatibility
 	priority = 1000,

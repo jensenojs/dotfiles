@@ -19,13 +19,6 @@ local keymaps = {
 		:with_silent()
 		:with_desc("neotest : run nearest"),
 
-	["n|<space>tl"] = map_callback(function()
-			require("neotest").run.run_last()
-		end)
-		:with_noremap()
-		:with_silent()
-		:with_desc("neotest : run lastest"),
-
 	["n|<space>td"] = map_callback(function()
 			require("neotest").run.run({ strategy = "dap" })
 		end)
@@ -88,42 +81,46 @@ local keymaps = {
 		:with_noremap()
 		:with_silent()
 		:with_desc("neotest : Stop"),
-
-	-- ["n|<space>tt"] = map_callback(function() end):with_noremap():with_silent():with_desc("neotest : run "),
-	-- ["n|<space>tt"] = map_callback(function() end):with_noremap():with_silent():with_desc("neotest : run "),
 }
 
 bind.nvim_load_mapping(keymaps)
 
 return {
 	"nvim-neotest/neotest",
+	lazy = true,
+	ft = { "go", "rust", "c", "cpp", "python" },
+	-- 通过 require("neotest") 等自动懒加载
+	module = { "neotest", "neotest-golang", "neotest-gtest", "neotest-python" },
 	dependencies = {
 		"nvim-neotest/nvim-nio",
 		"nvim-lua/plenary.nvim",
 		"antoinemadec/FixCursorHold.nvim",
 		"nvim-treesitter/nvim-treesitter",
-		-- { "fredrikaverpil/neotest-golang", version = "*" },
-		-- 'leoluz/nvim-dap-go',
+		{ "fredrikaverpil/neotest-golang", version = "*" },
+		"alfaix/neotest-gtest",
+		"nvim-neotest/neotest-python",
 	},
 	opts = {
 		adapters = {
-			-- refer to plugins.ide.lang.go
-			-- ["neotest-golang"] = {
-			-- 	-- Here we can set options for neotest-golang, e.g.
-			-- 	go_test_args = { "-v", "-race", "-count=1", "-timeout=60s" },
-			-- 	dap_go_enabled = true, -- requires leoluz/nvim-dap-go
-			-- },
+			-- Go
+			["neotest-golang"] = {
+				go_test_args = { "-v", "-race", "-count=1", "-timeout=60s" },
+				dap_go_enabled = true,
+			},
+			-- C/C++ (GoogleTest)
+			["neotest-gtest"] = {},
+			-- Python (pytest)
+			["neotest-python"] = {
+				runner = "pytest",
+			},
+			-- Rust
 			["rustaceanvim.neotest"] = {},
 		},
 		status = { virtual_text = true },
 		output = { open_on_run = true },
 		quickfix = {
 			open = function()
-				if LazyVim.has("trouble.nvim") then
-					require("trouble").open({ mode = "quickfix", focus = false })
-				else
 					vim.cmd("copen")
-				end
 			end,
 		},
 	},
@@ -154,8 +151,8 @@ return {
 					end
 				end
 				vim.schedule(function()
-					local trouble = require("trouble")
-					if trouble.is_open() then
+					local ok_trouble, trouble = pcall(require, "trouble")
+					if ok_trouble and trouble.is_open() then
 						trouble.refresh()
 						if failed == 0 then
 							trouble.close()
@@ -175,7 +172,11 @@ return {
 					end
 					adapters[#adapters + 1] = config
 				elseif config ~= false then
-					local adapter = require(name)
+					local ok_adapter, adapter = pcall(require, name)
+					if not ok_adapter then
+						-- 对于未安装的适配器，直接跳过
+						goto continue
+					end
 					if type(config) == "table" and not vim.tbl_isempty(config) then
 						local meta = getmetatable(adapter)
 						if adapter.setup then
@@ -191,6 +192,7 @@ return {
 					end
 					adapters[#adapters + 1] = adapter
 				end
+				::continue::
 			end
 			opts.adapters = adapters
 		end

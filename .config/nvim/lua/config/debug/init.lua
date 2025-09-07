@@ -8,18 +8,24 @@ function M.setup()
 
 	-- 定义支持的语言及其配置文件
 	local language_configs = {
-		go = {
-			module = "config.debug.go",
-			debugger = "delve",
-		},
-		python = {
-			module = "config.debug.python",
-			debugger = "debugpy",
+		c = {
+			module = "config.debug.c",
+			debugger = "codelldb",
 		},
 		cpp = {
 			module = "config.debug.cpp",
 			debugger = "codelldb",
 		},
+		rust = {
+			module = "config.debug.rust",
+			debugger = "codelldb",
+		},
+		-- python = {
+		-- 	module = "config.debug.python",
+		-- 	debugger = "debugpy",
+		-- },
+		-- python 由 nvim-dap-python 提供
+		-- go 由 nvim-dap-go 提供
 	}
 
 	-- 表驱动方式注册所有语言的配置
@@ -29,20 +35,23 @@ function M.setup()
 			-- 加载语言配置
 			local ok, lang_config = pcall(require, config_info.module)
 			if ok and lang_config then
-				-- 注册Adapter配置
+				-- 注册Adapter配置（确保 adapters 的 key 与 configurations[*].type 一致）
 				if lang_config.adapter then
-					dap.adapters[lang] = lang_config.adapter
+					local adapter_key = lang
+					if type(lang_config.configurations) == "table" then
+						for _, cfg in ipairs(lang_config.configurations) do
+							if type(cfg) == "table" and type(cfg.type) == "string" and #cfg.type > 0 then
+								adapter_key = cfg.type
+								break
+							end
+						end
+					end
+					dap.adapters[adapter_key] = lang_config.adapter
 				end
 
 				-- 注册Configuration配置
 				if lang_config.configurations then
 					dap.configurations[lang] = lang_config.configurations
-
-					-- 为相关语言也注册相同的配置（如C++配置也用于C和Rust）
-					if lang == "cpp" then
-						dap.configurations.c = lang_config.configurations
-						dap.configurations.rust = lang_config.configurations
-					end
 				end
 			else
 				vim.notify("Failed to load debug configuration for " .. lang, vim.log.levels.WARN, {
@@ -62,31 +71,6 @@ function M.setup()
 				}
 			)
 		end
-	end
-
-	-- 设置UI生命周期管理
-	M.setup_ui_lifecycle(dap) -- 传递dap实例
-end
-
-function M.setup_ui_lifecycle(dap) -- 接收dap参数
-	local dapui_status, dapui = pcall(require, "dapui")
-	if not dapui_status then
-		return
-	end
-
-	-- 调试会话开始时打开UI
-	dap.listeners.after.event_initialized["dapui"] = function()
-		dapui.open()
-	end
-
-	-- 调试会话结束时关闭UI
-	dap.listeners.before.event_terminated["dapui"] = function()
-		dapui.close()
-	end
-
-	-- 调试会话退出时关闭UI
-	dap.listeners.before.event_exited["dapui"] = function()
-		dapui.close()
 	end
 end
 

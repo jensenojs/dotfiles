@@ -1,14 +1,18 @@
 # Neovim调试配置指南
 
+<https://codeberg.org/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation>
+
 ## 目录结构
 
 ```
 lua/config/debug/
-├── init.lua              # 表驱动配置注册和初始化
-├── go.lua               # Go语言：adapter + configurations
-├── python.lua           # Python语言：adapter + configurations
-├── cpp.lua              # C/C++/Rust：adapter + configurations
-└── README.md            # 本文档
+├── init.lua              # 表驱动配置注册和初始化（仅负责注册，不含 UI）
+├── c.lua                 # C：adapter + configurations（codelldb）
+├── cpp.lua               # C++：adapter + configurations（codelldb）
+├── rust.lua              # Rust：adapter + configurations（codelldb）
+├── python.lua            # Python：adapter + configurations（debugpy）
+├── go.lua                # Go：手动配置示例（当前交由 nvim-dap-go 管理，文件内容已注释）
+└── README.md             # 本文档
 ```
 
 ## 概述
@@ -46,30 +50,39 @@ return {
 
 ### 表驱动配置注册
 
-在`init.lua`中使用表驱动方式统一注册所有语言配置：
+在`init.lua`中使用表驱动方式统一注册所有语言配置（本模块只做“注册”，不含 UI）：
 
 ```lua
 local language_configs = {
-  go = {
-    module = "config.debug.go",
-    debugger = "delve"
-  },
-  python = {
-    module = "config.debug.python",
-    debugger = "debugpy"
-  },
-  cpp = {
-    module = "config.debug.cpp",
-    debugger = "codelldb"
-  }
+  c = { module = "config.debug.c", debugger = "codelldb" },
+  cpp = { module = "config.debug.cpp", debugger = "codelldb" },
+  rust = { module = "config.debug.rust", debugger = "codelldb" },
+  python = { module = "config.debug.python", debugger = "debugpy" },
 }
 
--- 批量注册
 for lang, config_info in pairs(language_configs) do
   if registry.is_installed(config_info.debugger) then
-    local lang_config = require(config_info.module)
-    dap.adapters[lang] = lang_config.adapter
-    dap.configurations[lang] = lang_config.configurations
+    local ok, lang_config = pcall(require, config_info.module)
+    if ok and lang_config then
+      -- 适配器注册：确保 adapters 的 key 与 configurations[*].type 完全一致
+      if lang_config.adapter then
+        local adapter_key = lang
+        if type(lang_config.configurations) == "table" then
+          for _, cfg in ipairs(lang_config.configurations) do
+            if type(cfg) == "table" and type(cfg.type) == "string" and #cfg.type > 0 then
+              adapter_key = cfg.type
+              break
+            end
+          end
+        end
+        dap.adapters[adapter_key] = lang_config.adapter
+      end
+
+      -- 语言配置注册：按 &filetype 索引
+      if lang_config.configurations then
+        dap.configurations[lang] = lang_config.configurations
+      end
+    end
   end
 end
 ```
@@ -136,12 +149,14 @@ end
 
 #### 3. 模块化组织
 
-每种语言的配置集中在一个文件中：
+每种语言的配置集中在一个文件中（C/C++/Rust 已拆分）：
 
 ```
-go.lua        # Go: adapter + configurations
-python.lua    # Python: adapter + configurations
-cpp.lua       # C/C++/Rust: adapter + configurations
+c.lua         # C: adapter + configurations（codelldb）
+cpp.lua       # C++: adapter + configurations（codelldb）
+rust.lua      # Rust: adapter + configurations（codelldb）
+python.lua    # Python: adapter + configurations（debugpy）
+go.lua        # Go: 手动示例；实际由 nvim-dap-go 提供
 ```
 
 #### 4. 表驱动的优势
@@ -153,31 +168,43 @@ cpp.lua       # C/C++/Rust: adapter + configurations
 
 ## 工具函数使用
 
-### utils.dap模块
+### utils.dap 模块
 
-提供调试会话中常用的工具函数：
+提供调试会话中常用的工具函数，并提供一层闭包 API 以便延迟求值：
 
-1. **input_args()** - 获取用户输入的程序参数
-2. **input_exec_path()** - 获取可执行文件路径
-3. **input_file_path()** - 获取被调试文件路径
-4. **get_env()** - 获取环境变量
+1. 直接函数（立即求值）：
+   - `input_args()` 获取程序参数数组
+   - `input_exec_path()` 获取可执行文件路径
+   - `input_file_path()` 获取被调试文件路径
+   - `get_env()` 获取环境变量数组
 
-### 使用模式
+2. 闭包函数（延迟求值，用于 nvim-dap 配置）：
+   - `fn.input_args()`
+   - `fn.input_exec_path()`
+   - `fn.input_file_path()`
+   - `fn.get_env()`
 
-工具函数采用三层调用模式以适配nvim-dap的延迟调用场景：
+示例（新的推荐写法）：
 
 ```lua
--- 三层调用：require("utils.dap").function()()()
-dap.configurations.go = {
+dap.configurations.python = {
   {
-    type = "go",
+    type = "python",
     name = "Launch with args",
     request = "launch",
-    program = "${file}",
-    args = require("utils.dap").input_args()(),  -- 用户输入参数
+    program = require("utils.dap").fn.input_file_path(),
+    args    = require("utils.dap").fn.input_args(),
+    cwd     = "${workspaceFolder}",
   }
 }
 ```
+
+注意：旧的“三层调用”风格（例如 `require("utils.dap").input_file_path()()()`）已被移除，以简化心智负担。
+
+### 统一的工作目录（cwd）
+
+为保证一致的运行语义，当前各语言的配置默认设置 `cwd = "${workspaceFolder}"`（包含 attach 场景）。
+如需在某个配置中使用 `./${relativeFileDirname}` 等相对路径，可在对应语言文件中局部覆盖。
 
 ## 添加新语言支持流程
 

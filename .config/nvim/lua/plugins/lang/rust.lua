@@ -1,5 +1,6 @@
--- https://github.com/mrcjkb/rustaceanvim.nvim
--- https://github.com/mrcjkb/rustaceanvim#books-usage--features
+-- https://github.com/mrcjkb/rustaceanvim
+-- https://github.com/mrcjkb/rustaceanvim/blob/master/doc/rustaceanvim.txt
+-- https://github.com/mrcjkb/rustaceanvim/blob/master/lua/rustaceanvim/config/internal.lua
 return {
 	"mrcjkb/rustaceanvim",
 	version = "^6", -- Recommended

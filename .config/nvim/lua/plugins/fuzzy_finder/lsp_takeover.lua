@@ -123,7 +123,7 @@ function M.takeover_lsp_buf(bufnr, client)
 			:with_silent()
 			:with_desc("LSP: 在工作区查找当前光标下的符号"),
 
-		["n|<leader>ld"] = map_callback(function()
+		["n|<leader>dl"] = map_callback(function()
 				tb.diagnostics({
 					bufnr = 0,
 				})
@@ -133,7 +133,7 @@ function M.takeover_lsp_buf(bufnr, client)
 			:with_silent()
 			:with_desc("LSP: (打开)当前文件的诊断列表"),
 
-		["n|<leader>lD"] = map_callback(function()
+		["n|<leader>dL"] = map_callback(function()
 				tb.diagnostics({
 					bufnr = nil,
 				})

@@ -219,7 +219,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 				:with_silent()
 				:with_desc("LSP: (打开)诊断信息"),
 
-			["n|<leader>ld"] = map_callback(function()
+			["n|<leader>dl"] = map_callback(function()
 					vim.diagnostic.setloclist({
 						bufnr = 0,
 						open = true,
@@ -230,7 +230,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 				:with_silent()
 				:with_desc("LSP: (打开)当前文件的诊断列表"),
 
-			["n|<leader>lD"] = map_callback(function()
+			["n|<leader>dL"] = map_callback(function()
 					vim.diagnostic.setqflist({
 						open = true,
 					})

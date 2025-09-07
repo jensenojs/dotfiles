@@ -98,11 +98,11 @@ lazy.setup({
 		{
 			import = "plugins.buffer",
 		}, -- 缓冲区管理(标签页,持久化)
-		-- { import = "plugins.tasks" },        -- 任务管理
+		{ import = "plugins.tasks" },        -- 任务管理
 		{
 			import = "plugins.terminal",
 		}, -- 终端
-		-- { import = "plugins.testing" },      -- 测试
+		{ import = "plugins.test" },      -- 测试
 		{
 			import = "plugins.treesitter",
 		}, -- 语法高亮相关
