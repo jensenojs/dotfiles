@@ -27,7 +27,7 @@ return {
     "rcarriga/nvim-dap-ui",
     dependencies = {"nvim-neotest/nvim-nio"},
 
-    config = function()
+    opts = function()
         local dap = require('dap')
         local dapui = require("dapui")
 
@@ -76,7 +76,6 @@ return {
         })
 
         local dap, dapui = require("dap"), require("dapui")
-        -- 打开调试界面的时候, 代码窗口关闭目录树和大纲
         dap.listeners.after.event_initialized["dapui_config"] = function()
             _G._debugging = true
             M.load_extras()
@@ -87,21 +86,23 @@ return {
                 reset = true
             })
         end
-        -- 关闭调试界面的时候, 代码窗口打开大纲和目录树
         dap.listeners.before.event_terminated["dapui_config"] = function()
             if _debugging then
                 _G._debugging = false
                 dapui.close()
-                require("focus").setup({enable = true})
+                require("focus").setup({
+                    enable = true
+                })
             end
         end
 
-        -- 关闭调试界面的时候, 代码窗口打开大纲和目录树
         dap.listeners.before.event_exited["dapui_config"] = function()
             if _debugging then
                 _G._debugging = false
                 dapui.close()
-                require("focus").setup({enable = true})
+                require("focus").setup({
+                    enable = true
+                })
             end
         end
     end

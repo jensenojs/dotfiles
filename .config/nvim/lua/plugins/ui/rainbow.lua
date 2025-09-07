@@ -2,6 +2,5 @@
 -- 彩色匹配分隔符/括号高亮
 return {
 	"HiPhish/rainbow-delimiters.nvim",
-	-- event = "VeryLazy"
 	event = "UIEnter",
 }

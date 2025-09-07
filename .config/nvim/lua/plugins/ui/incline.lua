@@ -3,7 +3,7 @@
 return {
     "b0o/incline.nvim",
     dependencies = {'nvim-web-devicons'},
-    event = "VeryLazy",
+    event = "UIEnter",
     main = "incline",
     opts = {
         render = function(props)

@@ -1,61 +1,41 @@
--- 目标: 仅初始化 mason.nvim, 提供统一安装入口
-local pip_args
-local proxy = os.getenv("PIP_PROXY")
-if proxy then
-	pip_args = { "--proxy", proxy }
-else
-	pip_args = {}
-end
-
+-- 最终版本
 return {
 	"williamboman/mason.nvim",
 	cmd = { "Mason", "MasonInstall", "MasonUninstall", "MasonUpdate" },
-	event = { "BufReadPost", "BufNewFile" },
-	opts = {
-		pip = {
-			upgrade_pip = false,
-			install_args = pip_args,
-		},
-	},
+	opts = function()
+		local pip_args = os.getenv("PIP_PROXY") and { "--proxy", os.getenv("PIP_PROXY") } or {}
+		return {
+			pip = {
+				upgrade_pip = false,
+				install_args = pip_args,
+			},
+		}
+	end,
 	init = function()
+		-- 自动安装逻辑
 		local env = require("config.environment")
 		if env.offline then
 			return
 		end
 
-		-- 自动安装工具(非 LSP server)
-		local ok_utils, mason_utils = pcall(require, "utils.mason")
-		if not ok_utils then
-			return
-		end
-		local tools = mason_utils.tools()
-		if #tools == 0 then
-			return
-		end
+		vim.defer_fn(function()
+			local ok, utils = pcall(require, "utils.mason_list")
+			if not ok then
+				return
+			end
 
-		local ok_reg, registry = pcall(require, "mason-registry")
-		if not ok_reg then
-			return
-		end
-		local function ensure()
+			local tools = utils.tools()
+			local ok_reg, registry = pcall(require, "mason-registry")
+			if not ok_reg then
+				return
+			end
+
 			for _, name in ipairs(tools) do
 				local ok_pkg, pkg = pcall(registry.get_package, name)
 				if ok_pkg and not pkg:is_installed() then
 					pkg:install()
 				end
 			end
-		end
-		if registry.refresh then
-			registry.refresh(ensure)
-		else
-			ensure()
-		end
-	end,
-	config = function(_, opts)
-		pip = opts.pip
-		local ok_mason, mason = pcall(require, "mason")
-		if ok_mason then
-			mason.setup(opts)
-		end
+		end, 100)
 	end,
 }

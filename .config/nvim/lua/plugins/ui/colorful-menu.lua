@@ -1,7 +1,7 @@
 -- https://github.com/xzbdmw/colorful-menu.nvim
 return {
 	"xzbdmw/colorful-menu.nvim",
-	-- config = function()
+	event = "UIEnter",
 	opts = function()
 		-- You don't need to set these options.
 		require("colorful-menu").setup({

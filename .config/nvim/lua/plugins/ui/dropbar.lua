@@ -2,7 +2,7 @@
 -- IDE 风格的 winbar 面包屑导航
 return {
     "Bekaboo/dropbar.nvim",
-    event = "VeryLazy",
+    event = "UIEnter",
     dependencies = {{
         "nvim-telescope/telescope-fzf-native.nvim",
         build = "make"

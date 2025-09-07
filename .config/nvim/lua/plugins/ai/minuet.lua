@@ -7,7 +7,6 @@ end
 return {
 	"milanglacier/minuet-ai.nvim",
 	dependencies = { "nvim-lua/plenary.nvim", "saghen/blink.cmp" },
-	-- config = function()
 	event = "InsertEnter",
 	opts = function()
 		require("minuet").setup({

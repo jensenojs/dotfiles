@@ -3,9 +3,7 @@
 -- 基于treesitter在光标位置将if..else if..else等语言内的对应标签高亮, 扩展%键能力。
 return {
 	"andymass/vim-matchup",
-
 	event = "VeryLazy",
-	-- config = function()
 	opts = function()
 		vim.g.matchup_matchparen_offscreen = {
 			method = "popup",

@@ -68,14 +68,14 @@ opt.report = 99999
 
 -- shortmess: 精简消息且不覆盖上游默认, 仅追加需要的标志
 opt.shortmess:append({
-  a = true,  -- 使用更短的消息格式
-  s = true,  -- 搜索到达文件头尾不提示
-  t = true,  -- 截断长消息
-  W = true,  -- 写文件后不显示 "written" 等信息
-  A = true,  -- 遇到交换文件不显示 ATTENTION
-  I = true,  -- 启动不显示介绍
-  c = true,  -- 不显示插入模式补全消息
-  C = true,  -- 不显示补全时的匹配计数等冗余信息
+	a = true, -- 使用更短的消息格式
+	s = true, -- 搜索到达文件头尾不提示
+	t = true, -- 截断长消息
+	W = true, -- 写文件后不显示 "written" 等信息
+	A = true, -- 遇到交换文件不显示 ATTENTION
+	I = true, -- 启动不显示介绍
+	c = true, -- 不显示插入模式补全消息
+	C = true, -- 不显示补全时的匹配计数等冗余信息
 })
 
 -- 关闭错误提示声音

@@ -2,7 +2,7 @@
 -- 目的: 基于 lazy.nvim 的懒加载方式, 现代化命令行/消息/LSP UI
 return {
 	"folke/noice.nvim",
-	event = "VeryLazy",
+	event = "UIEnter",
 	main = "noice",
 	-- 在插件加载前定义按键, 自动探测是否处于 Noice LSP 文档环境
 	init = function()
