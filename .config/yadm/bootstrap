@@ -1,51 +1,59 @@
 #!/bin/bash
 
-# Save this file as ~/.config/yadm/bootstrap and make it executable. It will
-# execute all executable files (excluding templates and editor backups) in the
-# ~/.config/yadm/bootstrap.d directory when run.
+# YADM Bootstrap 脚本
+# 此脚本是 yadm bootstrap 过程的主入口点。
+# 它会执行 ~/.config/yadm/bootstrap.d 目录中的所有可执行文件。
+# 
+# 用法:
+#   ~/.config/yadm/bootstrap        # 正常执行
+#   ~/.config/yadm/bootstrap --dryrun  # 干运行模式 (打印命令但不执行)
 
-# -e：当脚本中的任何命令返回非零状态时，脚本将立即退出。
-# -u：当脚本尝试使用未初始化的变量时，脚本将立即退出。
-# set -o pipefail：使管道中任何一个命令失败（返回非零状态）时，整个管道的执行结果就是失败状态，而不是只考虑最后一个命令的状态
+# 设置 bash 的严格模式:
+# -e: 如果命令以非零状态退出，则立即退出
+# -u: 在替换时将未设置的变量视为错误
+# -o pipefail: 管道的返回状态是最后一个以非零状态退出的命令的状态
 set -euo pipefail
 
+# 引入工具函数和常量
 source ${HOME}/.config/yadm/utils.sh
+source ${HOME}/.config/yadm/constants.sh
 
+# 在 bootstrap 过程中询问密码以保持 sudo 会话活跃
 ask_password
 
+# 检查 --dryrun 标志
 if [[ $# == 1 && $1 == '--dryrun' ]]; then
 	dryrun=1
+	log "INFO" "以干运行模式运行"
 else
 	dryrun=0
 fi
 
 # ================================================================================================
 
-
-# Directory to look for bootstrap executables in
+# 包含 bootstrap 脚本的目录
 BOOTSTRAP_D="${BASH_SOURCE[0]}.d"
 if [[ ! -d "$BOOTSTRAP_D" ]]; then
-	echo "Error: bootstrap directory '$BOOTSTRAP_D' not found" >&2
+	echo "错误: 找不到 bootstrap 目录 '$BOOTSTRAP_D'" >&2
 	exit 1
 fi
 
-# find命令用于在目录树中搜索文件。
-# -L选项告诉find命令在遇到符号链接时，自动跟随链接到其指向的文件或目录
-# "$BOOTSTRAP_D"是环境变量或之前定义的变量，指向需要搜索的目录
-# -type f选项限制搜索结果只包括文件(不包括目录等)
+# 查找并按排序顺序执行所有有效的 bootstrap 脚本
+# -L: 跟随符号链接
+# -type f: 仅匹配文件
 find -L "$BOOTSTRAP_D" -type f |
-	# 管道| 将find命令的输出传递给sort命令，后者将文件名按字典顺序排序
+	# 按字母顺序排序文件
 	sort |
-	# while IFS= read -r bootstrap; do
-	# 循环遍历排序后的文件名列表。这里IFS=是为了防止文件名中包含空格、制表符等导致的问题，-r选项防止对反斜杠进行转义
+	# 遍历每个文件
+	# IFS= 和 -r 防止文件名中空格和反斜杠的问题
 	while IFS= read -r bootstrap; do
-		# -x $bootstrap""检查文件是否具有执行权限
-		# ! "$bootstrap" =~ "##"和! "$bootstrap" =~ "~$"是两个额外的条件，用于过滤文件名
+		# 检查文件是否可执行且不是模板或备份
+		# 模板文件名中包含 ##，备份文件名以 ~ 结尾
 		if [[ -x "$bootstrap" && ! "$bootstrap" =~ "##" && ! "$bootstrap" =~ "~$" ]]; then
-			# explicitly set stdin as the controlling terminal
-			# (accessing stdin otherwise would terminate the loop)
+			# 显式将 stdin 设置为 /dev/tty 以防止 stdin 重定向的问题
+			# 这种问题可能会终止循环
 			if ! "$bootstrap" </dev/tty; then
-				echo "Error: bootstrap '$bootstrap' failed" >&2
+				echo "错误: bootstrap '$bootstrap' 失败" >&2
 				exit 1
 			fi
 		fi

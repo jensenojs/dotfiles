@@ -75,11 +75,11 @@ fi
 [ -s "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
 
 # Lab
-if [ -d "$HOME/Projects/Lab/ics2024/nemu/" ]; then
-    export NEMU_HOME="$HOME/Projects/Lab/ics2024/nemu/"
+if [ -d "$HOME/Projects/Lab/ics2025/nemu/" ]; then
+    export NEMU_HOME="$HOME/Projects/Lab/ics2025/nemu/"
 fi
-if [ -d "$HOME/Projects/Lab/ics2024/abstract-machine/" ]; then
-    export AM_HOME="$HOME/Projects/Lab/ics2024/abstract-machine/"
+if [ -d "$HOME/Projects/Lab/ics2025/abstract-machine/" ]; then
+    export AM_HOME="$HOME/Projects/Lab/ics2025/abstract-machine/"
 fi
 
 function ya() {

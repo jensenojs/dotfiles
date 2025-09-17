@@ -4,9 +4,9 @@
 
 ## 插件目录与触发
 
-为每个 UI 插件提供: 用途、懒加载触发与仓库链接，便于维护与排错。
+为每个 UI 插件提供: 用途、懒加载触发与仓库链接, 便于维护与排错。
 
-- gruvbox: 主题与高亮，避免懒加载以杜绝闪烁。
+- gruvbox: 主题与高亮, 避免懒加载以杜绝闪烁。
     - 触发: `lazy = false`, `priority = 1000`
     - 仓库: <https://github.com/ellisonleao/gruvbox.nvim>
     - 配置: `lua/plugins/ui/gruvbox.lua`
@@ -16,9 +16,9 @@
     - 仓库: <https://github.com/lewis6991/satellite.nvim>
     - 配置: `lua/plugins/ui/satellite.lua`
 
-- lualine: 状态栏，主题与分段可配置。
+- lualine: 状态栏, 主题与分段可配置。
     - 触发: `event = "VeryLazy"`
-    - 备注: 主题 `gruvbox_light`，集成 `copilot-lualine`
+    - 备注: 主题 `gruvbox_light`, 集成 `copilot-lualine`
     - 仓库: <https://github.com/nvim-lualine/lualine.nvim>
     - 配置: `lua/plugins/ui/lualine.lua`
 
@@ -28,9 +28,9 @@
     - 仓库: <https://github.com/lukas-reineke/indent-blankline.nvim>
     - 配置: `lua/plugins/ui/indent-blankline.lua`
 
-- dropbar: Winbar 面包屑导航，IDE 风格。
+- dropbar: Winbar 面包屑导航, IDE 风格。
     - 触发: `event = "VeryLazy"`
-    - 依赖: `telescope-fzf-native`(可选，`build = "make"`)
+    - 依赖: `telescope-fzf-native`(可选, `build = "make"`)
     - 仓库: <https://github.com/Bekaboo/dropbar.nvim>
     - 配置: `lua/plugins/ui/dropbar.lua`
 

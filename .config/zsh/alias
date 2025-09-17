@@ -21,7 +21,7 @@ alias pip='pip3'
 alias python='python3'
 
 # better tools
-alias connect="expect $HOME/Projects/scripts/connect.sh"
+alias connect="expect $HOME/Projects/scripts/connect-to-cloud.sh"
 alias fedora="ssh -p 2202 jensen@192.168.0.112"
 
 # safety

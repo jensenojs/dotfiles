@@ -19,11 +19,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		end
 		local bufnr = event.buf
 
-		-- Idempotent guard: avoid re-doing mappings/autocmds when multiple clients attach
-		if vim.b[bufnr].__lsp_attach_inited then
-			return
+		-- 将“只需一次”的初始化与“按客户端能力”的初始化拆分
+		local first_time_init = not vim.b[bufnr].__lsp_attach_inited
+		if first_time_init then
+			vim.b[bufnr].__lsp_attach_inited = true
 		end
-		vim.b[bufnr].__lsp_attach_inited = true
 
 		-- 统一能力检测: 返回当前 LSP 客户端是否支持某个请求方法
 		-- 说明: 为按键映射提供静默能力检查, 不支持时不执行、不提示
@@ -287,7 +287,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
 				:with_desc("LSP: (自动补全)选择确认 / 正常回车"),
 		}
 
-		bind.nvim_load_mapping(lsp_keymaps)
+		if first_time_init then
+			bind.nvim_load_mapping(lsp_keymaps)
+		end
 
 		-- 自动补全：打开 + 改键
 		if client:supports_method("textDocument/completion") then
@@ -296,10 +298,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
 			})
 		end
 
-		-- 光标处文档高亮
+		-- 光标处文档高亮(当任一支持的客户端附加时设置一次)
 		if
 			if_support(vim.lsp.protocol.Methods.textDocument_documentHighlight)
 			and vim.bo[bufnr].filetype ~= "bigfile"
+			and not vim.b[bufnr].__lsp_doc_highlight_set
 		then
 			local hl_group = vim.api.nvim_create_augroup("lsp.highlight." .. bufnr, {
 				clear = true,
@@ -321,43 +324,51 @@ vim.api.nvim_create_autocmd("LspAttach", {
 				callback = function(ev)
 					if ev.buf == bufnr then
 						vim.lsp.buf.clear_references()
-						pcall(vim.api.nvim_del_augroup_by_name, "lsp.highlight." .. bufnr)
+						-- 仅当没有任何剩余客户端支持 documentHighlight 时, 才移除高亮组
+						local still_has = require("utils.lsp").if_support(vim.lsp.protocol.Methods.textDocument_documentHighlight, bufnr)
+						if not still_has then
+							pcall(vim.api.nvim_del_augroup_by_name, "lsp.highlight." .. bufnr)
+						end
+					end
+				end,
+			})
+			vim.b[bufnr].__lsp_doc_highlight_set = true
+		end
+
+		-- 内联提示(当任一支持的客户端附加时开启一次)
+		if if_support(vim.lsp.protocol.Methods.textDocument_inlayHint) and not vim.b[bufnr].__lsp_inlay_hint_enabled then
+			-- Default enable inlay hints for this buffer
+			pcall(vim.lsp.inlay_hint.enable, true, {
+				bufnr = bufnr,
+			})
+			vim.b[bufnr].__lsp_inlay_hint_enabled = true
+		end
+
+		-- lsp支持折叠(仅需一次)
+		if first_time_init then
+			local function enable_folding_for_win(win)
+				vim.wo[win].foldmethod = "expr"
+				vim.wo[win].foldexpr = "v:lua.vim.lsp.foldexpr()"
+			end
+			for _, win in ipairs(vim.api.nvim_list_wins()) do
+				if vim.api.nvim_win_get_buf(win) == bufnr then
+					enable_folding_for_win(win)
+				end
+			end
+			-- Ensure future windows entering this buffer also get folding enabled
+			local fold_group = vim.api.nvim_create_augroup("lsp.fold." .. bufnr, {
+				clear = true,
+			})
+			vim.api.nvim_create_autocmd("BufWinEnter", {
+				buffer = bufnr,
+				group = fold_group,
+				callback = function()
+					local win = vim.api.nvim_get_current_win()
+					if vim.api.nvim_win_get_buf(win) == bufnr then
+						enable_folding_for_win(win)
 					end
 				end,
 			})
 		end
-
-		-- 内联提示
-		-- if if_support(vim.lsp.protocol.Methods.textDocument_inlayHint) then
-		--     -- Default enable inlay hints for this buffer
-		--     pcall(vim.lsp.inlay_hint.enable, true, {
-		--         bufnr = bufnr
-		--     })
-		-- end
-
-		-- lsp支持折叠
-		local function enable_folding_for_win(win)
-			vim.wo[win].foldmethod = "expr"
-			vim.wo[win].foldexpr = "v:lua.vim.lsp.foldexpr()"
-		end
-		for _, win in ipairs(vim.api.nvim_list_wins()) do
-			if vim.api.nvim_win_get_buf(win) == bufnr then
-				enable_folding_for_win(win)
-			end
-		end
-		-- Ensure future windows entering this buffer also get folding enabled
-		local fold_group = vim.api.nvim_create_augroup("lsp.fold." .. bufnr, {
-			clear = true,
-		})
-		vim.api.nvim_create_autocmd("BufWinEnter", {
-			buffer = bufnr,
-			group = fold_group,
-			callback = function()
-				local win = vim.api.nvim_get_current_win()
-				if vim.api.nvim_win_get_buf(win) == bufnr then
-					enable_folding_for_win(win)
-				end
-			end,
-		})
 	end,
 })

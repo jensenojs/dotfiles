@@ -110,7 +110,7 @@ return {
 		},
 	},
 	config = function(_, opts)
-		-- 保护 vim.ui.select，避免 <C-c> 产生报错堆栈
+		-- 保护 vim.ui.select, 避免 <C-c> 产生报错堆栈
 		do
 			local orig_select = vim.ui.select
 			vim.ui.select = function(items, select_opts, on_choice)

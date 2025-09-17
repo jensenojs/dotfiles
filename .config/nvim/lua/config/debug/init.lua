@@ -35,7 +35,7 @@ function M.setup()
 			-- 加载语言配置
 			local ok, lang_config = pcall(require, config_info.module)
 			if ok and lang_config then
-				-- 注册Adapter配置（确保 adapters 的 key 与 configurations[*].type 一致）
+				-- 注册Adapter配置(确保 adapters 的 key 与 configurations[*].type 一致)
 				if lang_config.adapter then
 					local adapter_key = lang
 					if type(lang_config.configurations) == "table" then

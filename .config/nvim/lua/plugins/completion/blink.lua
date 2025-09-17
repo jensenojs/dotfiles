@@ -111,18 +111,18 @@ return {
 			},
 
 			keymap = {
-				-- Keymap preset: "enter"（回车确认）；Tab 链自定义，整体手感近似 VSCode 的 super-tab
+				-- Keymap preset: "enter"(回车确认)；Tab 链自定义, 整体手感近似 VSCode 的 super-tab
 				preset = "enter",
                 -- stylua: ignore start
                 -- 说明：
-                -- - 由 blink.cmp 统一接管 Insert 模式下的 <Tab> 行为；`minuet.lua` 不再绑定插入态 <Tab>（仅保留 Normal 模式的接受映射）。
-                -- - 与 minuet 集成：Minuet 虚拟文本“始终优先”，先于 snippet/补全/Tabout，不依赖 PUM 是否可见。
-                -- - 与 tabout 集成的方案（A）：
+                -- - 由 blink.cmp 统一接管 Insert 模式下的 <Tab> 行为；`minuet.lua` 不再绑定插入态 <Tab>(仅保留 Normal 模式的接受映射)。
+                -- - 与 minuet 集成：Minuet 虚拟文本“始终优先”, 先于 snippet/补全/Tabout, 不依赖 PUM 是否可见。
+                -- - 与 tabout 集成的方案(A)：
                 --   1) PUM 可见时：若处于 snippet 跳位环境则优先 snippet_forward/snippet_backward；否则 select_next/select_prev。
                 --   2) PUM 不可见时：若处于 snippet 跳位环境则 snippet 跳位；否则 <Plug>(Tabout)/(TaboutBack) 跳出配对符号。
                 --   3) 若无法跳出：tabout 的 act_as_tab=true 会自行执行“缩进”作为最终兜底。
                 -- - 不再追加额外 fallback：避免在执行 Tabout 后又插入真实 <Tab> 造成“双动作”。
-                ["<Tab>"] = { -- 0) 若 Minuet 有虚拟文本建议，优先接受并终止链
+                ["<Tab>"] = { -- 0) 若 Minuet 有虚拟文本建议, 优先接受并终止链
                 function(_)
                     if not offline then
                         local ok_vt, vt = pcall(require, 'minuet.virtualtext')
@@ -211,7 +211,7 @@ return {
 											if llm_icons[n] then
 												return llm_icons[n]
 											end
-											-- 归一化后匹配（去标点/转小写）
+											-- 归一化后匹配(去标点/转小写)
 											local k = n:lower():gsub("%p", ""):gsub("%s", "")
 											-- 构造一次性的小写映射
 											local lc = {
@@ -232,7 +232,7 @@ return {
 										return icon .. (ctx.icon_gap or " ")
 									end
 
-									-- 2) Path 源：尽量用 devicons（若可用）
+									-- 2) Path 源：尽量用 devicons(若可用)
 									if ctx.source_name == "Path" or ctx.source_name == "path" then
 										local ok, devicons = pcall(require, "nvim-web-devicons")
 										if ok then
@@ -254,7 +254,7 @@ return {
 									return (ctx.kind_icon or "") .. (ctx.icon_gap or " ")
 								end,
 								highlight = function(ctx)
-									-- 让 minuet 的图标使用插件设置的高亮（BlinkCmpItemKindMinuet）
+									-- 让 minuet 的图标使用插件设置的高亮(BlinkCmpItemKindMinuet)
 									if ctx.source_name == "minuet" and ctx.kind_hl then
 										return ctx.kind_hl
 									end

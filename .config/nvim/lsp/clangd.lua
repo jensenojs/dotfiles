@@ -1,3 +1,4 @@
+--- https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig/configs/clangd.lua
 ---@brief
 ---
 --- https://clangd.llvm.org/installation.html

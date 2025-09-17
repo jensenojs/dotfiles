@@ -23,6 +23,14 @@ diagnostic.config({
 		header = "💡 诊断",
 		source = "if_many",
 	}),
+	virtual_text = {
+		prefix = '●',
+		spacing = 4,
+		source = "if_many",
+	},
+	signs = true,
+	underline = true,
+	update_in_insert = false,
 })
 
 api.nvim_create_user_command("LspInfo", ":checkhealth vim.lsp", {
@@ -36,7 +44,7 @@ end, {
 })
 
 local function complete_server(arg)
-	local ok, servers = pcall(require, "config.lsp.enable_list")
+	local ok, servers = pcall(require, "config.lsp.enable-list")
 	if not ok or type(servers) ~= "table" then
 		return {}
 	end
@@ -50,7 +58,7 @@ local function complete_server(arg)
 end
 
 api.nvim_create_user_command("LspRestart", function(info)
-	local ok_list, servers = pcall(require, "config.lsp.enable_list")
+	local ok_list, servers = pcall(require, "config.lsp.enable-list")
 	servers = ok_list and servers or {}
 	local whitelist = {}
 	for _, s in ipairs(servers) do
@@ -93,7 +101,7 @@ api.nvim_create_autocmd("FileType", {
 	group = LSP_BOOTSTRAP,
 	desc = "Enable configured LSP clients",
 	callback = function()
-		local servers = require("config.lsp.enable_list")
+		local servers = require("config.lsp.enable-list")
 		for _, server_name in ipairs(servers) do
 			vim.lsp.enable(server_name)
 		end

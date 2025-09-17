@@ -1,93 +1,16 @@
 #!/bin/zsh
 
+# 项目目录创建脚本
+# 此脚本在 ~/Projects 下创建常见的项目目录。
+
 source ${HOME}/.config/yadm/utils.sh
 
+# 切换到 Projects 目录
 run cd ~/Projects
 
-run mkdir -p scripts
-
-# ================================================================================================
-# matrixorigin
-
-run mkdir -p matrixorigin
-
-run cd matrixorigin
-
-if ! directory_exists matrixone; then
-    run git clone git@github.com:jensenojs/matrixone.git
-fi
-
-if ! directory_exists docs; then
-    run git clone git@github.com:jensenojs/modocs.git
-fi
-
-if ! directory_exists mo-tester; then
-    run git clone git@github.com:matrixorigin/mo-tester.git
-fi
-
-if ! directory_exists mo-sysbench; then
-    run git clone git@github.com:matrixorigin/mo-sysbench.git
-fi
-
-if ! directory_exists mo-load; then
-    run git clone git@github.com:matrixorigin/mo-load.git
-fi
-
-# ================================================================================================
-# database
-
-run cd ~/Projects
-
-run mkdir -p Databases
-
-run cd Databases
-
-if ! directory_exists velox; then
-    run git clone git@github.com:jensenojs/velox.git
-fi
-
-if ! directory_exists duckdb; then
-    run git clone git@github.com:jensenojs/duckdb.git
-fi
-
-if ! directory_exists rocksdb; then
-    run git clone git@github.com:jensenojs/rocksdb.git
-fi
-
-if ! directory_exists ClickHouse; then
-    run git clone git@github.com:jensenojs/ClickHouse.git
-fi
-
-if ! directory_exists leveldb-with-annotation; then
-    run git clone git@github.com:jensenojs/leveldb-with-annotation.git
-fi
-
-if ! directory_exists redis; then
-    run git clone git@github.com:jensenojs/redis.git
-fi
-
-
-# ================================================================================================
-# quant
-
-run cd ~/Projects
-
-run mkdir -p quant
-
-run cd quant
-
-if ! directory_exists evaluate-factor; then
-    run git clone git@github.com:jensenojs/evaluate-factor.git
-fi
-
-if ! directory_exists qlib; then
-    run git clone git@github.com:jensenojs/qlib.git
-fi
-
-
-# ================================================================================================
-# paper
-
-cd ~/Projects
-
-mkdir -p Paper
+# 创建常见的项目目录
+run mkdir -p Databases  # 用于数据库相关项目
+run mkdir -p Paper      # 用于研究论文和文档
+run mkdir -p Labs       # 用于实验项目和代码片段
+run mkdir -p scripts    # 用于工具脚本
+run mkdir -p quant      # 用于量化分析项目

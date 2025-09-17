@@ -7,12 +7,13 @@
 return {
 	-- "bashls",
 	"clangd",
-	"golangci_lint_ls",
 	"gopls",
+	"golangci_lint_ls", -- 并行启动, 与 attach.lua 修复后的幂等逻辑兼容
 	-- "jsonls",
 	"lua_ls",
-	-- "markdown_oxide",
+	"markdown_oxide",
 	"ruff",
+	"pyright",
 	-- "rust_analyzer",  -- 由rustaceanvim插件管理
 	-- "sqls",
 	-- "vimls",
