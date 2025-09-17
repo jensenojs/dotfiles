@@ -6,9 +6,9 @@
 
 ## 组合概览
 
-这套 treesitter 组合已经配置好，可以直接用:
+这套 treesitter 组合已经配置好, 可以直接用:
 
-- nvim-treesitter: 解析语法树，提供高亮/折叠/增量选择等核心能力。
+- nvim-treesitter: 解析语法树, 提供高亮/折叠/增量选择等核心能力。
     - 配置: `lua/plugins/treesitter/treesitter.lua` 中 `opts.highlight`、自动折叠初始化见(33-60), 应用配置见(61-63)
     - 仓库: <https://github.com/nvim-treesitter/nvim-treesitter>
 - nvim-treesitter-textobjects: 基于查询的选择/跳转/交换/LSP 互操作。
@@ -17,7 +17,7 @@
 - nvim-treesitter-textsubjects: 基于光标位置的“智能/容器内外”选择, 降低记忆成本。
     - 配置: `lua/plugins/treesitter/treesitter-textsubjects.lua` 的 `opts`(7-17)
     - 仓库: <https://github.com/RRethy/nvim-treesitter-textsubjects>
-- nvim-treesitter-context: 窗口顶部显示当前语法上下文，聚焦所在函数/类头部。
+- nvim-treesitter-context: 窗口顶部显示当前语法上下文, 聚焦所在函数/类头部。
     - 说明: 本仓库保持默认行为; 如需自定义, 取消注释 `treesitter-context.lua` 的 `setup()`(15-17)
     - 仓库: <https://github.com/nvim-treesitter/nvim-treesitter-context>
 
@@ -82,8 +82,8 @@ treesitter-context.lua ──▶ 默认生效; 如需 opts, 调用 setup(opts)  
 ```
 
 - 折叠自动化
-    - 首次读入 buffer 时，当解析器可用且文件不大时启用 expr 折叠并设置 `foldlevel=10`。
-    - 触发逻辑: `treesitter.lua` 的 `init()` 自动命令组，见(33-60)
+    - 首次读入 buffer 时, 当解析器可用且文件不大时启用 expr 折叠并设置 `foldlevel=10`。
+    - 触发逻辑: `treesitter.lua` 的 `init()` 自动命令组, 见(33-60)
 
 ## 常见操作流
 
@@ -94,12 +94,12 @@ treesitter-context.lua ──▶ 默认生效; 如需 opts, 调用 setup(opts)  
     - 先用 ]m/[[/]] 等跳转 → `;`/`,` 重复上次方向
 
 - 参数重排(需手动启用 swap)
-    - 开启 `swap.enable=true` 后，用 `<leader>a`/`<leader>A` 在参数间调序
+    - 开启 `swap.enable=true` 后, 用 `<leader>a`/`<leader>A` 在参数间调序
 
 ## 设计取舍与注意
 
 - 键位冲突的平衡
-    - 我们将 textsubjects 默认的 `;`/`i;` 改为 `g;`/`gi;`，把 `;`/`,` 让给 repeatable_move，实现“所有语义跳转都可重复”。
+    - 我们将 textsubjects 默认的 `;`/`i;` 改为 `g;`/`gi;`, 把 `;`/`,` 让给 repeatable_move, 实现“所有语义跳转都可重复”。
     - `,` 在 textobjects.repeat 与 textsubjects.prev_selection 都有用途。当前两者并存, 若出现冲突可在 `treesitter-textsubjects.lua` 改 `prev_selection`(9) 或将其置空禁用。
 
 - 状态与能力边界

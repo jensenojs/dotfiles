@@ -5,12 +5,9 @@
   为 nvim-dap 提供输入参数、可执行路径、目标文件与环境变量收集等小工具函数, 用于调试会话配置。
 
 使用:
-  推荐：使用一层闭包 API（延迟求值），可直接写入 nvim-dap 配置：
-    program = require('utils.dap').fn.input_exec_path()
-    args    = require('utils.dap').fn.input_args()
-
-  同时也提供“直接函数”形式（立即求值），便于在脚本中独立调用：
-    local args_array = require('utils.dap').input_args()
+  直接函数(立即求值), 建议在 nvim-dap 配置处按需包一层匿名函数以实现“延迟求值”：
+    program = function() return require('utils.dap').input_exec_path() end
+    args    = function() return require('utils.dap').input_args() end
 ]]
 -- 这里定义实际的函数实现集合
 local M = {}
@@ -86,36 +83,4 @@ function M.get_env()
   return variables
 end
 
---[[
-一层闭包 API：`require('utils.dap').fn.<name>()`
-返回一个可直接赋给 nvim-dap 配置字段的函数，便于延迟求值.
-]]
-local FN = {}
-
-function FN.input_args()
-	return function()
-		return M.input_args()
-	end
-end
-
-function FN.input_exec_path()
-	return function()
-		return M.input_exec_path()
-	end
-end
-
-function FN.input_file_path()
-	return function()
-		return M.input_file_path()
-	end
-end
-
-function FN.get_env()
-  return function()
-    return M.get_env()
-  end
-end
-
--- 导出：直观函数 + 闭包接口
-M.fn = FN
 return M

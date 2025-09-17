@@ -31,8 +31,114 @@ local function close_or_quit()
 	end
 end
 
+local function copy_relative_path()
+	local name = vim.api.nvim_buf_get_name(0)
+	if name == "" then
+		return
+	end -- 不是具体文件，静默返回
+	local rel = vim.fn.fnamemodify(name, ":~:.")
+	vim.fn.setreg("+", rel) -- 写入系统剪贴板
+end
+
+-- 复制绝对路径到系统剪贴板
+local function copy_absolute_path()
+	local name = vim.api.nvim_buf_get_name(0)
+	if name == "" then
+		return
+	end
+	local abs = vim.fn.fnamemodify(name, ":p") -- 取完整绝对路径
+	vim.fn.setreg("+", abs)
+end
+
+-- :ShowKey  ——  调试任意按键的原始/修饰符
+local function show_key()
+	-- 清掉多余的 hit-enter 提示
+	vim.cmd('echo ""')
+	-- 让用户按一次键(不映射、不超时)
+	local ok, key = pcall(vim.fn.getcharstr)
+	if not ok then
+		return
+	end -- 用户 <Esc>/Ctrl-C 取消
+	local mod = vim.fn.getcharmod() -- 修饰符位掩码
+	local byte = vim.fn.char2nr(key) -- Unicode 码位
+
+	-- 位掩码解释
+	local mods = {}
+	if mod == 0 then
+		mods[#mods + 1] = "none"
+	else
+		if bit.band(mod, 1) ~= 0 then
+			mods[#mods + 1] = "Shift"
+		end
+		if bit.band(mod, 2) ~= 0 then
+			mods[#mods + 1] = "Alt"
+		end
+		if bit.band(mod, 4) ~= 0 then
+			mods[#mods + 1] = "Ctrl"
+		end
+		if bit.band(mod, 8) ~= 0 then
+			mods[#mods + 1] = "Super"
+		end
+	end
+
+	-- 拼成人类可读
+	local desc = table.concat(mods, "+")
+	if #mods > 0 and key ~= "" then
+		desc = desc .. "+"
+	end
+	desc = desc .. (key == " " and "Space" or key)
+
+	-- 如果支持 CSI-u，也给出对应序列
+	local csiu = ""
+	if byte > 0 then
+		csiu = string.format("  CSI-u: \\x1b[%d;%du", byte, mod == 0 and 1 or mod + 1)
+	end
+
+	-- 一次性打印
+	vim.api.nvim_echo({
+		{ "Raw key: ", "Question" },
+		{ string.format("%q", key), "String" },
+		{ "  |  code=", "Comment" },
+		{ tostring(byte), "Number" },
+		{ "  mod=", "Comment" },
+		{ tostring(mod), "Number" },
+		{ "  |  ", "Comment" },
+		{ desc, "Identifier" },
+		{ csiu, "Comment" },
+	}, false, {})
+end
+
+-- 注册成 Ex 命令
+vim.api.nvim_create_user_command("ShowKey", show_key, { desc = "Show raw key/modifier info" })
+
 -- 利用bind的辅助函数封装了vim.keymap.系列的函数
 local keymaps = {
+
+	-----------------
+	--  增强搜索   --
+	-----------------
+	["n|n"] = map_callback(function()
+			local cw = vim.fn.expand("<cword>") -- 光标下的单词
+			if cw == "" then
+				return
+			end -- 空行啥也不干
+			vim.fn.setreg("/", "\\<" .. cw .. "\\>") -- 整词匹配，去掉 \\< \\> 可部
+			vim.cmd("normal! n") -- 沿用系统搜索逻辑
+		end)
+		:with_noremap()
+		:with_silent()
+		:with_desc("向下找当前光标所在单词"),
+	["n|N"] = map_callback(function()
+			local cw = vim.fn.expand("<cword>")
+			if cw == "" then
+				return
+			end
+			vim.fn.setreg("/", "\\<" .. cw .. "\\>")
+			vim.cmd("normal! N")
+		end)
+		:with_noremap()
+		:with_silent()
+		:with_desc("向上找当前光标所在单词"),
 
 	-----------------
 	--  缓冲区管理   --
@@ -43,6 +149,7 @@ local keymaps = {
 	["n|<s-h>"] = map_cr("bprevious"):with_noremap():with_silent():with_desc("切换到上一个buffer"),
 
 	-- ["n|<c-s-t>"] = map_cmd("<C-w>j"):with_noremap():with_silent():with_desc("打开上一个关闭的文件"),
+	-- 用插件来做这个功能
 
 	-----------------
 	--  窗口管理   --
@@ -53,7 +160,48 @@ local keymaps = {
 	["n|<c-s-j>"] = map_cmd("<C-w>j"):with_noremap():with_silent():with_desc("窗口:光标向下移动"),
 
 	-----------------
-	--  标签页管理(不要用tab)   --
+	--   保存与退出  --
+	-----------------
+	["n|<leader>q"] = map_callback(close_or_quit)
+		:with_noremap()
+		:with_silent()
+		:with_desc("删除当前buffer/若为最后一个则退出"),
+	["n|<leader>w"] = map_cr("w"):with_noremap():with_silent():with_desc("保存当前buffer"),
+	["n|<leader>W"] = map_cr("wa"):with_noremap():with_silent():with_desc("保存所有的buffer"),
+	["n|<leader>Q"] = map_cr("qa"):with_noremap():with_silent():with_desc("强制退出neovim"),
+
+	-----------------
+	--    可视模式  --
+	-----------------
+	["v|J"] = map_cmd(":m '>+1<CR>gv=gv"):with_desc("可视:Move this line down"),
+	["v|K"] = map_cmd(":m '<-2<CR>gv=gv"):with_desc("可视:Move this line up"),
+	["v|<"] = map_cmd("<gv"):with_noremap():with_silent():with_desc("重新选择上一次选择的区域"),
+	["v|>"] = map_cmd(">gv")
+		:with_noremap()
+		:with_silent()
+		:with_desc("重新选择上一次选择的区域, 并向右移动一次缩进"),
+
+	-- 触发 quick_substitute 的执行
+	-- ["v|<leader>ss"] = map_callback(function()
+	--     require("utils.quick_substitute").run()
+	-- end):with_noremap():with_silent():with_desc("在指定行间进行文本替换"),
+
+	-----------------
+	--    其他      --
+	-----------------
+	["in|<Home>"] = map_callback(home):with_desc("光标:先按相当于^, 再按到行首"),
+	["n|0"] = map_callback(home):with_desc("光标:先按相当于^, 再按到行首"),
+	["n|<c-y>"] = map_callback(copy_relative_path)
+		:with_noremap()
+		:with_desc()
+		:with_desc("拷贝当前文件的相对路径"),
+	["n|<c-s-y>"] = map_callback(copy_absolute_path)
+		:with_noremap()
+		:with_desc()
+		:with_desc("拷贝当前文件的绝对路径"),
+
+	-----------------
+	--  标签页管理(不要用tab, 最好也不要用这个功能)   --
 	-----------------
 	-- ["n|<a-t>"] = map_cr("tabe"):with_noremap():with_silent():with_desc("标签:新建一个tab"),
 	-- ["n|<a-c>"] = map_cmd(":tabc<CR>"):with_noremap():with_silent():with_desc("标签:关闭当前tab"),
@@ -88,40 +236,10 @@ local keymaps = {
 	--         vim.cmd("tablast")
 	--     end
 	-- end):with_noremap():with_silent():with_desc("标签:移动到左tab"),
-
-	-----------------
-	--   保存与退出  --
-	-----------------
-	["n|<leader>q"] = map_callback(close_or_quit)
-		:with_noremap()
-		:with_silent()
-		:with_desc("删除当前buffer/若为最后一个则退出"),
-	["n|<leader>w"] = map_cr("w"):with_noremap():with_silent():with_desc("保存当前buffer"),
-	["n|<leader>W"] = map_cr("wa"):with_noremap():with_silent():with_desc("保存所有的buffer"),
-	["n|<leader>Q"] = map_cr("qa!"):with_noremap():with_silent():with_desc("强制退出neovim"),
-
-	-----------------
-	--    可视模式  --
-	-----------------
-	["v|J"] = map_cmd(":m '>+1<CR>gv=gv"):with_desc("可视:Move this line down"),
-	["v|K"] = map_cmd(":m '<-2<CR>gv=gv"):with_desc("可视:Move this line up"),
-	-- ["v|<"] = map_cmd("<gv"):with_noremap():with_silent():with_desc("重新选择上一次选择的区域"),
-	-- ["v|>"] = map_cmd(">gv"):with_noremap():with_silent():with_desc(
-	--     "重新选择上一次选择的区域, 并向右移动一次缩进"),
-
-	-- 触发 quick_substitute 的执行
-	-- ["v|<leader>ss"] = map_callback(function()
-	--     require("utils.quick_substitute").run()
-	-- end):with_noremap():with_silent():with_desc("在指定行间进行文本替换"),
-
-	-----------------
-	--    其他      --
-	-----------------
-	["in|<Home>"] = map_callback(home):with_desc("光标:先按相当于^, 再按到行首"),
-	["n|0"] = map_callback(home):with_desc("光标:先按相当于^, 再按到行首"),
 }
 
 bind.nvim_load_mapping(keymaps)
+
 require("config.quick_substitute").setup({})
 
 -----------------

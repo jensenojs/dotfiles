@@ -1,3 +1,4 @@
+--- https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig/configs/bashls.lua
 ---@brief
 ---
 --- https://github.com/bash-lsp/bash-language-server

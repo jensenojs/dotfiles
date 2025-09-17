@@ -3,6 +3,4 @@
 return {
 	"lewis6991/satellite.nvim",
 	event = "UIEnter",
-	main = "satellite",
-	opts = {},
 }

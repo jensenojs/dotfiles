@@ -2,3 +2,23 @@
 # macOS
 .DS_Store
 **/.DS_Store
+
+# Zsh configuration
+.config/zsh/*secrets*
+.config/zsh/env.d/99-secrets.zsh
+.config/zsh/zshrc.d/99-local.zsh
+.config/zsh/.zcompdump*
+.config/zsh/.zsh_sessions/
+.config/zsh/backup/
+.config/zsh/*.zwc
+.config/zsh/*.tmp
+.config/zsh/*.log
+
+# WezTerm configuration
+.config/wezterm/*.tmp
+.config/wezterm/*.log
+
+# Neovim
+.config/nvim/lazy-lock.json
+.config/nvim/lsp/markdown_oxide.lua
+.config/nvim/lua/utils/mason-list.lua

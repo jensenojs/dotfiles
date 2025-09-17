@@ -1,5 +1,5 @@
 -- https://github.com/mfussenegger/nvim-dap-python
--- 由 nvim-dap-python 接管 Python 的调试适配器与配置
+-- Not use : 由 nvim-dap-python 接管 Python 的调试适配器与配置
 return {
 	"mfussenegger/nvim-dap-python",
 	ft = { "python" },
@@ -59,7 +59,7 @@ return {
 		end
 
 		local function resolve_project_python()
-			-- 1) 优先项目本地 venv (.venv/venv/env/.env)，涵盖 rye/uv 常见布局
+			-- 1) 优先项目本地 venv (.venv/venv/env/.env), 涵盖 rye/uv 常见布局
 			local root = find_project_root()
 			for _, dirname in ipairs({ ".venv", "venv", "env", ".env" }) do
 				local p = python_from_venv_dir(join_path(root, dirname))
@@ -77,7 +77,7 @@ return {
 				end
 			end
 
-			-- 3) 若安装了 uv，则交给 uv 处理（支持 per-project venv 管理）
+			-- 3) 若安装了 uv, 则交给 uv 处理(支持 per-project venv 管理)
 			if vim.fn.executable("uv") == 1 then
 				return "uv"
 			end
@@ -90,10 +90,44 @@ return {
 		end
 
 		local dap_python = require("dap-python")
-		-- 同步暴露自定义解析，以便后续需要动态决策
+		-- 同步暴露自定义解析, 以便后续需要动态决策
 		dap_python.resolve_python = resolve_project_python
 		dap_python.setup(resolve_project_python())
 	end,
 }
 
 
+
+-- return {
+-- 	-- type = "executable", -- 不需要指定 type, 默认就是 executable
+-- 	command = (function()
+-- 		-- 1) 优先使用环境模块进行可执行文件检查
+-- 		local env = require("config.environment")
+
+-- 		-- 2) 其后才使用环境变量中的 venv
+-- 		for _, envkey in ipairs({ "VIRTUAL_ENV", "CONDA_PREFIX" }) do
+-- 			local envdir = env[envkey] -- 通过环境模块访问环境变量
+-- 			if envdir and envdir ~= "" then
+-- 				local p = envdir .. "/bin/python"
+-- 				-- 检查可执行文件是否存在 (直接使用 vim.fn.executable)
+-- 				if vim.fn.executable(p) == 1 then
+-- 					return p
+-- 				end
+-- 			end
+-- 		end
+
+-- 		-- 3) 若安装了 uv, 则交给 uv 处理(支持 per-project venv 管理)
+-- 		if env.has.uv then
+-- 			return "uv"
+-- 		end
+
+-- 		-- 4) 常规回退
+-- 		if env.has.python3 then
+-- 			return "python3"
+-- 		end
+
+-- 		-- 5) 最终兜底
+-- 		return "python"
+-- 	end)(),
+-- 	args = { "-m", "debugpy.adapter" },
+-- }

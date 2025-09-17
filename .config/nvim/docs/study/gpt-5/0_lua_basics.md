@@ -2,8 +2,8 @@
 
 - 读者与目标
     - 受众: 正在重构 Neovim 配置、需要以最小知识面掌握 Lua 的工程师
-    - 目标: 用最少概念覆盖最大实践面，强调状态边界、懒加载与幂等，避免隐式副作用
-    - 前置: 对 Neovim 的基础概念有直觉，Lua 语法略知一二
+    - 目标: 用最少概念覆盖最大实践面, 强调状态边界、懒加载与幂等, 避免隐式副作用
+    - 前置: 对 Neovim 的基础概念有直觉, Lua 语法略知一二
 
 - 大纲
     - 核心理念: 状态管理的艺术与权衡
@@ -27,9 +27,9 @@
 
 ## 模块与 require 缓存
 
-- 机制: `require()` 首次会执行模块顶层代码并缓存返回值；后续同名 `require()` 直接取缓存，不再执行顶层。
-- 反模式: 在模块顶层立即做副作用(设置键位、注册 autocmd、写全局变量)。这会让执行时机不可控且只执行一次，难以调试与回滚。
-- 建议: 导出表或函数，把副作用放进导出函数，在懒加载触发点再调用。
+- 机制: `require()` 首次会执行模块顶层代码并缓存返回值；后续同名 `require()` 直接取缓存, 不再执行顶层。
+- 反模式: 在模块顶层立即做副作用(设置键位、注册 autocmd、写全局变量)。这会让执行时机不可控且只执行一次, 难以调试与回滚。
+- 建议: 导出表或函数, 把副作用放进导出函数, 在懒加载触发点再调用。
 
 ```lua
 -- good: no side-effects at module top-level
@@ -44,7 +44,7 @@ return M
 
 ## 作用域与命名空间
 
-- 始终优先使用 `local`，避免隐式全局。
+- 始终优先使用 `local`, 避免隐式全局。
 
 ```lua
 -- bad
@@ -63,7 +63,7 @@ local foo = 1
 
 ## 幂等 setup(opts) 模式
 
-- 思路: 用 `opts` 描述配置数据，函数内部合并默认项；所有注册行为前都先检查是否已存在。
+- 思路: 用 `opts` 描述配置数据, 函数内部合并默认项；所有注册行为前都先检查是否已存在。
 
 ```lua
 local M = {}
@@ -96,12 +96,12 @@ return M
     - Treesitter: `BufReadPost`
     - Telescope: `cmd = { "Telescope" }` + 常用 `keys`
     - UI 组件: `VeryLazy` 或具体 `keys`
-- 不在模块顶层 `require` 重型依赖，把“重依赖 require”也推迟到 `setup()` 内。
+- 不在模块顶层 `require` 重型依赖, 把“重依赖 require”也推迟到 `setup()` 内。
 
 ## 错误隔离与版本兼容
 
-- 可选依赖用 `pcall` 包裹，失败则无声降级。
-- API 变更做特性检测，避免硬编码版本分支。
+- 可选依赖用 `pcall` 包裹, 失败则无声降级。
+- API 变更做特性检测, 避免硬编码版本分支。
 
 ```lua
 -- example: inlay hints compatibility
@@ -117,9 +117,9 @@ end
 
 ## 数据-能力-协作分层
 
-- 数据: 纯配置，如 server 列表、ensure_installed、默认选项。
-- 能力: 可被复用的逻辑，如 `on_attach`、`capabilities`、`handlers`、格式化策略。
-- 协作: 具体框架 glue，如 mason-lspconfig 自动注册、treesitter 的 ensure_installed、cmp/blink 源组合。
+- 数据: 纯配置, 如 server 列表、ensure_installed、默认选项。
+- 能力: 可被复用的逻辑, 如 `on_attach`、`capabilities`、`handlers`、格式化策略。
+- 协作: 具体框架 glue, 如 mason-lspconfig 自动注册、treesitter 的 ensure_installed、cmp/blink 源组合。
 - 收益: 配置可测、逻辑可复用、演进可控。
 
 ## 三类副作用的幂等写法
@@ -172,11 +172,11 @@ flowchart TD
 
 ## 附录: 自查清单
 
-- 顶层无副作用，所有状态变更都在 `setup()` 或触发回调中
-- `local` 优先，禁止隐式全局
-- `setup(opts)` 幂等，重复调用无重复注册
+- 顶层无副作用, 所有状态变更都在 `setup()` 或触发回调中
+- `local` 优先, 禁止隐式全局
+- `setup(opts)` 幂等, 重复调用无重复注册
 - 重型 `require` 延迟到真正需要时
-- 可选依赖 `pcall` 包裹，API 做特性检测
+- 可选依赖 `pcall` 包裹, API 做特性检测
 - 数据与能力解耦；协作逻辑最小化
 - keymap/autocmd/user command 具名、可重复应用与撤销
 

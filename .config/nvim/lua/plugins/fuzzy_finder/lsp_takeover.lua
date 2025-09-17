@@ -154,7 +154,7 @@ function M.takeover_lsp_buf(bufnr, client)
 			:with_desc("LSP: Code Action"),
 
 		["n|<leader>lci"] = map_callback(function()
-				if client.server_capabilities and client.server_capabilities.callHierarchyProvider then
+				if client and client.server_capabilities and client.server_capabilities.callHierarchyProvider then
 					tb.lsp_incoming_calls()
 				end
 			end)
@@ -164,7 +164,7 @@ function M.takeover_lsp_buf(bufnr, client)
 			:with_desc("LSP: (查找)被谁调用"),
 
 		["n|<leader>lco"] = map_callback(function()
-				if client.server_capabilities and client.server_capabilities.callHierarchyProvider then
+				if client and client.server_capabilities and client.server_capabilities.callHierarchyProvider then
 					tb.lsp_outgoing_calls()
 				end
 			end)

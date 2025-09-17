@@ -1,3 +1,4 @@
+--- https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig/configs/golangci_lint_ls.lua
 ---@brief
 ---
 --- Combination of both lint server and client

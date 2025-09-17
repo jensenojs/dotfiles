@@ -174,7 +174,7 @@ return {
 				elseif config ~= false then
 					local ok_adapter, adapter = pcall(require, name)
 					if not ok_adapter then
-						-- 对于未安装的适配器，直接跳过
+						-- 对于未安装的适配器, 直接跳过
 						goto continue
 					end
 					if type(config) == "table" and not vim.tbl_isempty(config) then

@@ -1,0 +1,59 @@
+# 插件管理 - Plugin Management (Oh My Zsh)
+
+# ==============================================================================
+# Oh My Zsh 配置 - Oh My Zsh Configuration
+# ==============================================================================
+
+# 大小写敏感设置
+CASE_SENSITIVE="false"
+HYPHEN_INSENSITIVE="true"  # 下划线和连字符可互换
+
+# 更新设置
+DISABLE_UPDATE_PROMPT="true"
+export UPDATE_ZSH_DAYS=7
+
+# 安装位置(符合 XDG 规范)
+export ZSH="${XDG_DATA_HOME:-$HOME/.local/share}/omz"
+
+# 命令自动纠正
+ENABLE_CORRECTION="false"
+
+# ==============================================================================
+# Plugin List
+# ==============================================================================
+
+plugins=(
+    z                        # Jump to frequently used directories
+    fzf                      # Fuzzy finder integration
+    git                      # Git aliases and functions
+    sudo                     # Press ESC twice to prefix sudo
+    vscode                   # VS Code integration
+    fzf-tab                  # FZF-powered tab completion
+    copypath                 # Copy file paths to clipboard
+    copyfile                 # Copy file contents to clipboard
+    you-should-use           # Remind you of existing aliases
+    colored-man-pages        # Colorized man pages
+    zsh-autosuggestions      # Fish-like autosuggestions
+    zsh-syntax-highlighting  # Fish-like syntax highlighting
+)
+
+# Load Oh My Zsh
+if [ -f "$ZSH/oh-my-zsh.sh" ]; then
+  source "$ZSH/oh-my-zsh.sh"
+fi
+
+# ==============================================================================
+# Plugin-specific Settings
+# ==============================================================================
+
+# you-should-use
+export YSU_MESSAGE_FORMAT="Hey! I found this %alias_type for %command: %alias"
+
+# zsh-autosuggestions
+bindkey '^Y' autosuggest-accept  # Use Ctrl-Y to accept autosuggestion
+
+# fzf-tab
+zstyle ':completion:*:git-checkout:*' sort false
+zstyle ':completion:*:descriptions' format '[%d]'
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':fzf-tab:*' switch-group '<' '>'

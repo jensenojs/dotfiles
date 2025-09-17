@@ -1,16 +1,16 @@
 -- https://github.com/rcarriga/nvim-dap-ui
 -- 调试界面的配置
 -- 设计要点：
--- 1) 懒加载：本插件在 lazy.nvim 的 `VeryLazy` 事件时才加载，config() 也只在加载发生时执行；
+-- 1) 懒加载：本插件在 lazy.nvim 的 `VeryLazy` 事件时才加载, config() 也只在加载发生时执行；
 --    避免启动期执行重逻辑；配置中的 require("dap")/require("dapui") 也仅在此时求值。
--- 2) 会话期键位：只在 DAP 会话开始时加载(临时覆盖 K 键)，会话结束时恢复原 K 键，避免键位“污染”。
--- 3) 生命周期监听：使用 `dap.listeners.*["dapui_config"] = function() ... end` 命名空间，
---    确保多次设置时是覆盖而非叠加，不会产生重复回调。
+-- 2) 会话期键位：只在 DAP 会话开始时加载(临时覆盖 K 键), 会话结束时恢复原 K 键, 避免键位“污染”。
+-- 3) 生命周期监听：使用 `dap.listeners.*["dapui_config"] = function() ... end` 命名空间, 
+--    确保多次设置时是覆盖而非叠加, 不会产生重复回调。
 local M = {}
 
 -- 调试期间的键位映射管理
 local debug_keymaps_loaded = false
--- 记录会话开始前 K 键的原有映射(分别记录普通/可视模式)，用于会话结束时恢复
+-- 记录会话开始前 K 键的原有映射(分别记录普通/可视模式), 用于会话结束时恢复
 local prev_keymaps = {
     n = nil,
     v = nil
@@ -22,7 +22,7 @@ function M.load_debug_keymaps()
         return
     end
 
-    -- 捕获当前 K 键原映射，便于会话结束时恢复(避免“污染”用户原有配置)
+    -- 捕获当前 K 键原映射, 便于会话结束时恢复(避免“污染”用户原有配置)
     local function capture_existing(mode)
         -- 优先使用新 API: vim.keymap.get (Neovim 0.10+)
         local keymap_get = vim.keymap and vim.keymap.get
@@ -39,10 +39,10 @@ function M.load_debug_keymaps()
                 end
             end
         end
-        -- 先查缓冲区映射，再查全局映射
+        -- 先查缓冲区映射, 再查全局映射
         local buf_map = find_in(vim.api.nvim_buf_get_keymap(0, mode))
         if buf_map then
-            -- 标记为 buffer-local，便于恢复时按 buffer 维度设置
+            -- 标记为 buffer-local, 便于恢复时按 buffer 维度设置
             buf_map.buffer = 0
             return buf_map
         end

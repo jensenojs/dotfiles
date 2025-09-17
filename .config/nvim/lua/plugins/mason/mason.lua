@@ -3,7 +3,8 @@ return {
 	"williamboman/mason.nvim",
 	cmd = { "Mason", "MasonInstall", "MasonUninstall", "MasonUpdate" },
 	opts = function()
-		local pip_args = os.getenv("PIP_PROXY") and { "--proxy", os.getenv("PIP_PROXY") } or {}
+		local env = require("config.environment")
+		local pip_args = env.pip_proxy and { "--proxy", env.pip_proxy } or {}
 		return {
 			pip = {
 				upgrade_pip = false,
@@ -19,7 +20,7 @@ return {
 		end
 
 		vim.defer_fn(function()
-			local ok, utils = pcall(require, "utils.mason_list")
+			local ok, utils = pcall(require, "utils.mason-list")
 			if not ok then
 				return
 			end

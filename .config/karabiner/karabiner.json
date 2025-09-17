@@ -1,0 +1,91 @@
+{
+    "profiles": [
+        {
+            "complex_modifications": {
+                "rules": [
+                    {
+                        "description": "Left CMD ↔ left CTRL in Terminal (bidirectional, with exceptions)-",
+                        "manipulators": [
+                            {
+                                "conditions": [
+                                    {
+                                        "bundle_identifiers": [
+                                            "^org\\.tabby$",
+                                            "^com\\.mitchellh\\.ghostty$",
+                                            "^com\\.github\\.wez\\.wezterm$",
+                                            "^com\\.WebRelay\\.app"
+                                        ],
+                                        "type": "frontmost_application_if"
+                                    }
+                                ],
+                                "description": "Map left Cmd to left Ctrl in Terminal",
+                                "from": {
+                                    "key_code": "left_command",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "cmd-swapped-to-ctrl",
+                                            "value": 1
+                                        }
+                                    },
+                                    { "key_code": "left_control" }
+                                ],
+                                "to_after_key_up": {
+                                    "set_variable": {
+                                        "name": "cmd-swapped-to-ctrl",
+                                        "value": 0
+                                    }
+                                },
+                                "type": "basic"
+                            },
+                            {
+                                "conditions": [
+                                    {
+                                        "bundle_identifiers": [
+                                            "^org\\.tabby$",
+                                            "^com\\.mitchellh\\.ghostty$",
+                                            "^com\\.github\\.wez\\.wezterm$",
+                                            "^com\\.WebRelay\\.app"
+                                        ],
+                                        "type": "frontmost_application_if"
+                                    },
+                                    {
+                                        "name": "cmd-swapped-to-ctrl",
+                                        "type": "variable_unless",
+                                        "value": 1
+                                    }
+                                ],
+                                "description": "Map left Ctrl to left Cmd in Terminal",
+                                "from": {
+                                    "key_code": "left_control",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "ctrl-swapped-to-cmd",
+                                            "value": 1
+                                        }
+                                    },
+                                    { "key_code": "left_command" }
+                                ],
+                                "to_after_key_up": {
+                                    "set_variable": {
+                                        "name": "ctrl-swapped-to-cmd",
+                                        "value": 0
+                                    }
+                                },
+                                "type": "basic"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "name": "Default profile",
+            "selected": true,
+            "virtual_hid_keyboard": { "keyboard_type_v2": "ansi" }
+        }
+    ]
+}

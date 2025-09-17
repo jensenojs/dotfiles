@@ -1,0 +1,109 @@
+# Sheldon Plugin Configuration
+# 从 Oh My Zsh 迁移而来
+# https://github.com/rossmacarthur/sheldon/blob/trunk/README.md
+# 文档: https://sheldon.cli.rs/
+
+shell = "zsh"
+
+# ==============================================================================
+# 模板 - Templates
+# ==============================================================================
+
+[templates]
+# 延迟加载模板(使用 zsh-defer 加速启动)
+defer = "{{ hooks?.pre | nl }}{% for file in files %}zsh-defer source \"{{ file }}\"\n{% endfor %}{{ hooks?.post | nl }}"
+
+# ==============================================================================
+# 补全系统 - Completion System (必须最先初始化!)
+# ==============================================================================
+
+# 初始化补全系统(-C 跳过安全检查，加速启动)
+# 必须在所有使用 compdef 的插件之前运行
+[plugins.compinit]
+inline = 'autoload -Uz compinit && compinit -C'
+
+# ==============================================================================
+# 延迟加载工具 - Deferred Loading Support
+# ==============================================================================
+
+# 必须在所有使用 defer 的插件之前定义
+[plugins.zsh-defer]
+github = "romkatv/zsh-defer"
+
+# ==============================================================================
+# 核心插件 - Core Plugins
+# ==============================================================================
+
+# Fish-like 自动建议
+[plugins.zsh-autosuggestions]
+github = "zsh-users/zsh-autosuggestions"
+use = ["{{ name }}.zsh"]
+apply = ["defer"]
+
+# ⚠️ zsh-autocomplete 和 fzf-tab 不能同时使用！
+# 同时加载会导致补全系统崩溃，出现 compadd 错误
+# [plugins.zsh-autocomplete]
+# github = "marlonrichert/zsh-autocomplete"
+# apply = ["defer"]
+
+# 当前使用 fzf-tab（按 Tab 触发，模糊搜索）
+[plugins.fzf-tab]
+github = "Aloxaf/fzf-tab"
+apply = ["defer"]
+
+# 别名提醒(提示使用已定义的别名)
+[plugins.you-should-use]
+github = "MichaelAquilina/zsh-you-should-use"
+apply = ["defer"]
+
+# ==============================================================================
+# Oh My Zsh 插件 - Oh My Zsh Plugins
+# ==============================================================================
+# 只加载需要的特定插件，不加载整个框架
+
+# Git 别名和函数
+[plugins.omz-git]
+github = "ohmyzsh/ohmyzsh"
+dir = "plugins/git"
+apply = ["defer"]
+
+# Sudo 插件(按 ESC 两次添加 sudo)
+[plugins.omz-sudo]
+github = "ohmyzsh/ohmyzsh"
+dir = "plugins/sudo"
+apply = ["defer"]
+
+# Copypath - 复制路径
+[plugins.omz-copypath]
+github = "ohmyzsh/ohmyzsh"
+dir = "plugins/copypath"
+apply = ["defer"]
+
+# Copyfile - 复制文件内容
+[plugins.omz-copyfile]
+github = "ohmyzsh/ohmyzsh"
+dir = "plugins/copyfile"
+apply = ["defer"]
+
+# Colored man pages
+[plugins.omz-colored-man-pages]
+github = "ohmyzsh/ohmyzsh"
+dir = "plugins/colored-man-pages"
+apply = ["defer"]
+
+# ==============================================================================
+# 工具集成 - Tool Integration
+# ==============================================================================
+
+# zoxide - 智能目录跳转(替代 Oh My Zsh 的 z 插件)
+[plugins.zoxide]
+inline = 'eval "$(zoxide init zsh)"'
+
+# ==============================================================================
+# 语法高亮 - Syntax Highlighting (必须最后加载!)
+# ==============================================================================
+
+# Fish-like 语法高亮
+[plugins.zsh-syntax-highlighting]
+github = "zsh-users/zsh-syntax-highlighting"
+apply = ["defer"]

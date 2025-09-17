@@ -11,6 +11,7 @@ local keymaps = {
 	["n|/"] = map_callback(function()
 			-- You can pass additional configuration to telescope to change theme, layout, etc.
 			require("telescope.builtin").current_buffer_fuzzy_find()
+			-- require("telescope.builtin").live_grep()
 		end)
 		:with_noremap()
 		:with_silent()
@@ -23,12 +24,13 @@ local keymaps = {
 		:with_silent()
 		:with_desc("全局模糊搜索"),
 
-	["n|<leader>b"] = map_callback(function()
-			require("telescope.builtin").buffers()
-		end)
-		:with_noremap()
-		:with_silent()
-		:with_desc("打开缓冲区列表"),
+	-- 这个函数的耗时莫名其妙要很久, 不要用它了
+	-- ["n|<leader>b"] = map_callback(function()
+	-- 		require("telescope.builtin").buffers()
+	-- 	end)
+	-- 	:with_noremap()
+	-- 	:with_silent()
+	-- 	:with_desc("打开缓冲区列表"),
 
 	["n|<leader>g"] = map_callback(function()
 			require("telescope.builtin").git_status()
@@ -60,34 +62,45 @@ bind.nvim_load_mapping(keymaps)
 local preview_setting = function(filepath, bufnr, opts)
 	filepath = vim.fn.expand(filepath)
 	local previewers = require("telescope.previewers")
-	local Job = require("plenary.job")
 
-	-- 如果是二进制, 不预览
+	-- 同步检查文件大小/存在性
+	local stat = vim.loop.fs_stat(filepath)
+	if not stat then
+		vim.schedule(function()
+			vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, { "FILE NOT FOUND" })
+		end)
+		return
+	end
+	if stat and stat.size > 1000000 then
+		vim.schedule(function()
+			vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, { "FILE TOO LARGE" })
+		end)
+		return
+	end
+
+	-- 同步检查 MIME 类型
+	local Job = require("plenary.job")
+	local mime_type
 	Job:new({
 		command = "file",
 		args = { "--mime-type", "-b", filepath },
 		on_exit = function(j)
-			local mime_type = vim.split(j:result()[1], "/")[1]
-			if mime_type ~= "text" then
-				-- maybe we want to write something to the buffer here
-				vim.schedule(function()
-					vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, { "BINARY" })
-				end)
+			local first = j:result()[1]
+			if type(first) == "string" then
+				mime_type = vim.split(first, "/")[1]
 			end
 		end,
 	}):sync()
 
-	-- 如果文件太大, 也不预览
-	vim.loop.fs_stat(filepath, function(_, stat)
-		if not stat then
-			return
-		end
-		if stat.size > 1000000 then
-			return
-		else
-			previewers.buffer_previewer_maker(filepath, bufnr, opts)
-		end
-	end)
+	if mime_type and mime_type ~= "text" then
+		vim.schedule(function()
+			vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, { "BINARY" })
+		end)
+		return
+	end
+
+	-- 正常预览
+	previewers.buffer_previewer_maker(filepath, bufnr, opts)
 end
 
 return {
@@ -130,8 +143,9 @@ return {
 
 				initial_mode = "insert",
 
-				-- 这些文件不需要被搜索
-				file_ignore_patterns = { ".git/", ".cache", "build/", "%.class", "%.pdf", "%.mkv", "%.mp4", "%.zip" },
+				-- 这些路径下的文件不需要被搜索, 但注意下面的 current_buffer_fuzzy_find 也会失效...
+				-- https://github.com/nvim-telescope/telescope.nvim/issues/3318
+				file_ignore_patterns = { ".git/", "%.pdf", "%.mkv", "%.mp4", "%.zip" },
 
 				layout_config = {
 					horizontal = {
@@ -221,10 +235,17 @@ return {
 					override_file_sorter = true, -- override the file sorter
 					case_mode = "smart_case", -- or "ignore_case" or "respect_case"
 				},
+				["ui-select"] = {
+					-- require("telescope.themes").get_dropdown({
+					-- 	-- even more opts
+					-- 	winblend = 10,
+					-- }),
+				},
 			},
 		})
 		--
 		require("telescope").load_extension("fzf")
+		require("telescope").load_extension("ui-select")
 		-- require("telescope").load_extension("vim_bookmarks")
 		require("telescope").load_extension("lazygit")
 		-- require("telescope").load_extension("dap")
@@ -263,8 +284,10 @@ return {
 			local clients = vim.lsp.get_clients({
 				bufnr = bufnr,
 			})
-			local client = (clients and clients[1]) or nil
-			takeover.takeover_lsp_buf(bufnr, client)
+			if clients and #clients > 0 then
+				local client = clients[1]
+				takeover.takeover_lsp_buf(bufnr, client)
+			end
 		end
 	end,
 }

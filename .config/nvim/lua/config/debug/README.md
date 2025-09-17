@@ -6,24 +6,24 @@
 
 ```
 lua/config/debug/
-├── init.lua              # 表驱动配置注册和初始化（仅负责注册，不含 UI）
-├── c.lua                 # C：adapter + configurations（codelldb）
-├── cpp.lua               # C++：adapter + configurations（codelldb）
-├── rust.lua              # Rust：adapter + configurations（codelldb）
-├── python.lua            # Python：adapter + configurations（debugpy）
-├── go.lua                # Go：手动配置示例（当前交由 nvim-dap-go 管理，文件内容已注释）
+├── init.lua              # 表驱动配置注册和初始化(仅负责注册, 不含 UI)
+├── c.lua                 # C：adapter + configurations(codelldb)
+├── cpp.lua               # C++：adapter + configurations(codelldb)
+├── rust.lua              # Rust：adapter + configurations(codelldb)
+├── python.lua            # Python：adapter + configurations(debugpy)
+├── go.lua                # Go：手动配置示例(当前交由 nvim-dap-go 管理, 文件内容已注释)
 └── README.md             # 本文档
 ```
 
 ## 概述
 
-本文档详细说明了如何在Neovim中配置和使用调试功能。调试功能基于Debug Adapter Protocol (DAP)实现，通过nvim-dap插件提供支持。
+本文档详细说明了如何在Neovim中配置和使用调试功能。调试功能基于Debug Adapter Protocol (DAP)实现, 通过nvim-dap插件提供支持。
 
 ## 核心概念
 
 ### 语言配置文件结构
 
-每种语言的配置文件都采用统一的结构，包含Adapter和Configuration两部分：
+每种语言的配置文件都采用统一的结构, 包含Adapter和Configuration两部分：
 
 ```lua
 -- 示例：Go语言配置文件 (go.lua)
@@ -50,7 +50,7 @@ return {
 
 ### 表驱动配置注册
 
-在`init.lua`中使用表驱动方式统一注册所有语言配置（本模块只做“注册”，不含 UI）：
+在`init.lua`中使用表驱动方式统一注册所有语言配置(本模块只做“注册”, 不含 UI)：
 
 ```lua
 local language_configs = {
@@ -105,18 +105,18 @@ end
 
 3. **运行时匹配**：
    当用户选择一个调试配置时：
-   - 查找配置中的`type`字段（如"go"）
+   - 查找配置中的`type`字段(如"go")
    - 根据`type`找到对应的Adapter配置
    - 启动Adapter指定的调试器
    - 将Configuration参数传递给调试器
 
 ### 表驱动配置模式
 
-nvim-dap采用表驱动配置模式，这是一种声明式的配置管理方式，具有以下特点：
+nvim-dap采用表驱动配置模式, 这是一种声明式的配置管理方式, 具有以下特点：
 
 #### 1. 配置即数据
 
-所有的配置都通过Lua表来定义，而不是通过函数调用：
+所有的配置都通过Lua表来定义, 而不是通过函数调用：
 
 ```lua
 -- 语言配置映射表
@@ -149,20 +149,20 @@ end
 
 #### 3. 模块化组织
 
-每种语言的配置集中在一个文件中（C/C++/Rust 已拆分）：
+每种语言的配置集中在一个文件中(C/C++/Rust 已拆分)：
 
 ```
-c.lua         # C: adapter + configurations（codelldb）
-cpp.lua       # C++: adapter + configurations（codelldb）
-rust.lua      # Rust: adapter + configurations（codelldb）
-python.lua    # Python: adapter + configurations（debugpy）
+c.lua         # C: adapter + configurations(codelldb)
+cpp.lua       # C++: adapter + configurations(codelldb)
+rust.lua      # Rust: adapter + configurations(codelldb)
+python.lua    # Python: adapter + configurations(debugpy)
 go.lua        # Go: 手动示例；实际由 nvim-dap-go 提供
 ```
 
 #### 4. 表驱动的优势
 
-- **声明式**：配置是声明式的，易于理解和维护
-- **模块化**：每种语言配置独立，便于管理
+- **声明式**：配置是声明式的, 易于理解和维护
+- **模块化**：每种语言配置独立, 便于管理
 - **可扩展**：添加新语言支持只需添加新的配置文件
 - **可测试**：表结构易于进行单元测试
 
@@ -170,21 +170,21 @@ go.lua        # Go: 手动示例；实际由 nvim-dap-go 提供
 
 ### utils.dap 模块
 
-提供调试会话中常用的工具函数，并提供一层闭包 API 以便延迟求值：
+提供调试会话中常用的工具函数, 并提供一层闭包 API 以便延迟求值：
 
-1. 直接函数（立即求值）：
+1. 直接函数(立即求值)：
    - `input_args()` 获取程序参数数组
    - `input_exec_path()` 获取可执行文件路径
    - `input_file_path()` 获取被调试文件路径
    - `get_env()` 获取环境变量数组
 
-2. 闭包函数（延迟求值，用于 nvim-dap 配置）：
+2. 闭包函数(延迟求值, 用于 nvim-dap 配置)：
    - `fn.input_args()`
    - `fn.input_exec_path()`
    - `fn.input_file_path()`
    - `fn.get_env()`
 
-示例（新的推荐写法）：
+示例(新的推荐写法)：
 
 ```lua
 dap.configurations.python = {
@@ -199,12 +199,12 @@ dap.configurations.python = {
 }
 ```
 
-注意：旧的“三层调用”风格（例如 `require("utils.dap").input_file_path()()()`）已被移除，以简化心智负担。
+注意：旧的“三层调用”风格(例如 `require("utils.dap").input_file_path()()()`)已被移除, 以简化心智负担。
 
-### 统一的工作目录（cwd）
+### 统一的工作目录(cwd)
 
-为保证一致的运行语义，当前各语言的配置默认设置 `cwd = "${workspaceFolder}"`（包含 attach 场景）。
-如需在某个配置中使用 `./${relativeFileDirname}` 等相对路径，可在对应语言文件中局部覆盖。
+为保证一致的运行语义, 当前各语言的配置默认设置 `cwd = "${workspaceFolder}"`(包含 attach 场景)。
+如需在某个配置中使用 `./${relativeFileDirname}` 等相对路径, 可在对应语言文件中局部覆盖。
 
 ## 添加新语言支持流程
 
@@ -250,7 +250,7 @@ local language_configs = {
 通过mason安装对应的调试器：
 
 ```lua
--- 在lua/utils/mason_list.lua中添加
+-- 在lua/utils/mason-list.lua中添加
 example = {
   servers = { /* LSP servers */ },
   tools = { "example-debugger" },

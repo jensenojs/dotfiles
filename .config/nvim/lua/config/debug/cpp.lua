@@ -17,19 +17,40 @@ return {
 			type = "codelldb",
 			name = "Launch Executable",
 			request = "launch",
-			program = require("utils.dap").fn.input_exec_path(),
-			args = require("utils.dap").fn.input_args(),
+			program = function()
+				return require("utils.dap").input_exec_path()
+			end,
+			args = function()
+				return require("utils.dap").input_args()
+			end,
 			cwd = "${workspaceFolder}",
 			stopOnEntry = false,
 			runInTerminal = false,
 		},
 		{
 			type = "codelldb",
-			name = "Attach to Process",
+			name = "Attach to Process (PID)",
 			request = "attach",
-			program = require("utils.dap").fn.input_exec_path(),
 			cwd = "${workspaceFolder}",
-			processId = require("dap.utils").pick_process,
+			processId = function()
+				local filter = vim.fn.input("Filter process (lua pattern, empty for all): ")
+				local opts = {}
+				if type(filter) == "string" and #filter > 0 then
+					opts.filter = filter
+				end
+				return require("dap.utils").pick_process(opts)
+			end,
+		},
+		{
+			type = "codelldb",
+			name = "Attach: wait for program",
+			request = "attach",
+			program = function()
+				return require("utils.dap").input_exec_path()
+			end,
+			cwd = "${workspaceFolder}",
+			waitFor = true,
+			stopOnEntry = false,
 		},
 	},
 }
