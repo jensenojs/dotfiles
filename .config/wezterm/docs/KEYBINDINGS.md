@@ -10,10 +10,10 @@
 
 ### Leader 键系统
 
-**Leader 键**: `Ctrl+Space`
+**Leader 键**: `Ctrl+;`
 
 - 按下后进入 Leader 模式（状态栏显示 🌊 LEADER）
-- 1 秒内按下下一个键执行操作
+- 2 秒内按下下一个键执行操作
 - 超时或执行操作后自动退出 Leader 模式
 
 **优势**:
@@ -38,14 +38,29 @@
 
 ### 快速参考
 
-| 类别 | 前缀 | 示例 |
-|------|------|------|
-| 系统操作 | `MOD+` | `MOD+Q` 退出 |
-| Tab 操作 | `MOD+` | `MOD+T` 新建 Tab |
-| Pane 操作 | `Leader+` | `Leader+"` 水平分割 |
-| Workspace | `Leader+` | `Leader+W` 切换 Workspace |
-| 背景图片 | `Leader+B` | `Leader+B` 切换背景 |
-| 模态模式 | `Leader+` | `Leader+[` Copy Mode |
+| 类别 | 前缀 | 示例 | 功能说明 |
+|------|------|------|----------|
+| 系统操作 | `MOD+` | `MOD+R` 重载配置 | 基础系统功能 |
+| Tab 操作 | `MOD+` | `MOD+T` 新建 Tab | 标签页管理 |
+| Pane 操作 | `Leader+` | `Leader+h` 垂直分割 | 窗格分割 |
+| 窗格调整 | `Leader+Shift+` | `Leader+Shift+h` | 调整窗格大小 |
+| 窗格操作 | `Leader+` | `Leader+o` 切换窗格 | 窗格管理 |
+| 窗格操作 | `Leader+` | `Leader+x` 关闭窗格 | 窗格管理 |
+| 窗格操作 | `Leader+` | `Leader+z` 全屏窗格 | 窗格管理 |
+| 窗格操作 | `Leader+` | `Leader+s` 交换窗格 | 窗格管理 |
+| 命令面板 | `Leader+` | `Leader+p` 激活命令面板 | 命令面板 |
+| 系统功能 | `Leader+` | `Leader+l` 调试覆盖层 | 系统功能 |
+| 系统功能 | `Leader+` | `Leader+Space` 启动器 | 系统功能 |
+| 工作区 | `Leader+` | `Leader+w` 切换工作区 | 工作区管理 |
+| 工作区 | `Leader+` | `Leader+n` 下一工作区 | 工作区管理 |
+| 工作区 | `Leader+Shift+` | `Leader+Shift+P` 上一工作区 | 工作区管理 |
+| 工作区 | `Leader+` | `Leader+,` 重命名工作区 | 工作区管理 |
+| 工作区 | `Leader+` | `Leader+c` 创建工作区 | 工作区管理 |
+| 背景管理 | `Leader+` | `Leader+b` 下一张背景 | 背景管理 |
+| 背景管理 | `Leader+Shift+` | `Leader+Shift+B` 上一张背景 | 背景管理 |
+| 背景管理 | `Leader+Ctrl+` | `Leader+Ctrl+B` 随机背景 | 背景管理 |
+| 复制模式 | `Leader+` | `Leader+[` 进入复制模式 | 复制模式 |
+| 快速选择 | `Leader+` | `Leader+f` 快速选择 | 快速选择 |
 
 ---
 
@@ -55,22 +70,12 @@
 
 | 快捷键 | 功能 | 说明 |
 |--------|------|------|
-| `MOD+Q` | 退出 WezTerm | 关闭所有窗口 |
 | `MOD+N` | 新建窗口 | 新建独立窗口 |
+| `MOD+Enter` | 切换全屏 | 全屏/恢复 |
 | `MOD+R` | 重新加载配置 | 热重载配置文件 |
-| `Leader+P` | 命令面板 | 显示命令面板 |
-| `Ctrl+Shift+D` | 调试面板 | 显示调试信息 |
-
-### 命令面板 (Leader+P)
-
-**可用命令**:
-
-- 📁 Pick Workspace - 切换工作区
-- 🔄 Reload Configuration - 重载配置
-- 👁️ Toggle Tab Bar - 显示/隐藏标签栏
-- 🖼️ Toggle Opacity - 切换透明度
-- ⬆️ Maximize Window - 最大化窗口
-- 📋 Copy Mode - 进入复制模式
+| `MOD+Shift+P` | 激活命令面板 | 通过 MOD 键快速调用 |
+| `MOD+Shift+L` | 显示调试覆盖层 | 显示调试信息 |
+| `MOD+Shift+Space` | 显示启动器 | 显示启动菜单 |
 
 ---
 
@@ -91,15 +96,8 @@
 |--------|------|------|
 | `MOD+[` | 上一个 Tab | 向左切换 |
 | `MOD+]` | 下一个 Tab | 向右切换 |
-| `Ctrl+Tab` | 下一个 Tab | 替代方案 |
-| `Ctrl+Shift+Tab` | 上一个 Tab | 替代方案 |
-
-### Tab 移动
-
-| 快捷键 | 功能 | 说明 |
-|--------|------|------|
-| `MOD+Shift+[` | 向左移动 Tab | 调整顺序 |
-| `MOD+Shift+]` | 向右移动 Tab | 调整顺序 |
+| `MOD+Shift+Left/Right` | 切换 Tab | 方向键导航替代 |
+| `MOD+Shift+Ctrl+Left/Right` | 移动 Tab 位置 | 调整 Tab 顺序 |
 
 ---
 
@@ -109,37 +107,62 @@
 
 | 快捷键 | 功能 | 说明 |
 |--------|------|------|
-| `Leader+"` | 水平分割 | 上下分割 |
-| `Leader+%` | 垂直分割 | 左右分割 |
-| `Leader+X` | 关闭当前 Pane | 确认后关闭 |
+| `Leader+h` | 垂直分割 | 左右分割（产生左右窗格） |
+| `Leader+v` | 水平分割 | 上下分割（产生上下窗格） |
+| `Leader+x` | 关闭当前 Pane | 确认后关闭 |
 
-**记忆方法**: 模仿 Tmux 快捷键
-
-### Pane 导航
+### Pane 导航 (已注释，避免冲突)
 
 | 快捷键 | 功能 | 说明 |
 |--------|------|------|
-| `Leader+H` | 移动到左侧 Pane | Vim 风格 |
-| `Leader+J` | 移动到下方 Pane | Vim 风格 |
-| `Leader+K` | 移动到上方 Pane | Vim 风格 |
-| `Leader+L` | 移动到右侧 Pane | Vim 风格 |
-| `Leader+↑/↓/←/→` | 方向键导航 | 替代方案 |
+| `Leader+h` | (已禁用) 移动到左侧 Pane | 使用方向键导航 |
+| `Leader+j` | (已禁用) 移动到下方 Pane | 使用方向键导航 |
+| `Leader+k` | (已禁用) 移动到上方 Pane | 使用方向键导航 |
+| `Leader+l` | (已禁用) 移动到右侧 Pane | 使用方向键导航 |
+| `Leader+↑/↓/←/→` | 方向键导航 | 推荐的窗格导航方式 |
 
 ### Pane 调整大小
 
 | 快捷键 | 功能 | 说明 |
 |--------|------|------|
-| `Leader+Ctrl+H` | 向左扩展 | 调整宽度 |
-| `Leader+Ctrl+J` | 向下扩展 | 调整高度 |
-| `Leader+Ctrl+K` | 向上扩展 | 调整高度 |
-| `Leader+Ctrl+L` | 向右扩展 | 调整宽度 |
+| `Leader+Shift+h` | 向左扩展 | 调整宽度 |
+| `Leader+Shift+j` | 向下扩展 | 调整高度 |
+| `Leader+Shift+k` | 向上扩展 | 调整高度 |
+| `Leader+Shift+l` | 向右扩展 | 调整宽度 |
 
-### Pane 布局
+### Pane 操作
 
 | 快捷键 | 功能 | 说明 |
 |--------|------|------|
-| `Leader+Z` | 全屏/恢复当前 Pane | 切换 Zoom 状态 |
-| `Leader+R` | 旋转 Pane 布局 | 顺时针旋转 |
+| `Leader+z` | 全屏/恢复当前 Pane | 切换 Zoom 状态 |
+| `Leader+o` | 切换到下一个窗格 | 循环切换窗格 |
+| `Leader+s` | 交换窗格 | 与活动窗格交换 |
+
+---
+
+## 🎯 命令面板与系统功能
+
+### 系统功能
+
+| 快捷键 | 功能 | 说明 |
+|--------|------|------|
+| `Leader+p` | 激活命令面板 | 显示命令面板 |
+| `Leader+l` | 显示调试覆盖层 | 显示调试信息 |
+| `Leader+Space` | 显示启动器 | 显示启动菜单 |
+
+### 命令面板 (Leader+P) - 可用命令
+
+- 🔄 Reload Configuration - 重载配置
+- 👁️ Toggle Tab Bar - 显示/隐藏标签栏
+- 🖼️ Toggle Opacity - 切换透明度
+- ⬆️ Maximize Window - 最大化窗口
+- 📋 Copy Mode - 进入复制模式
+
+### 快速选择
+
+| 快捷键 | 功能 | 说明 |
+|--------|------|------|
+| `Leader+f` | 快速选择 | 快速选择并执行操作 |
 
 ---
 
@@ -149,9 +172,11 @@
 
 | 快捷键 | 功能 | 说明 |
 |--------|------|------|
-| `Leader+W` | 选择 Workspace | 模糊搜索切换 |
-| `Leader+C` | 创建 Workspace | 输入名称创建 |
-| `Leader+N` | 重命名 Workspace | 输入新名称 |
+| `Leader+w` | 选择 Workspace | 模糊搜索切换 |
+| `Leader+n` | 下一个工作区 | 切换到下一个工作区 |
+| `Leader+Shift+p` | 上一个工作区 | 切换到上一个工作区 |
+| `Leader+,` | 重命名 Workspace | 重命名当前工作区 |
+| `Leader+c` | 创建 Workspace | 创建新工作区 |
 
 **Workspace 说明**:
 
@@ -169,9 +194,9 @@
 
 | 快捷键 | 功能 | 说明 |
 |--------|------|------|
-| `Leader+B` | 下一张背景 | 顺序切换 |
-| `Leader+Shift+B` | 上一张背景 | 反向切换 |
-| `Leader+Ctrl+B` | 随机背景 | 随机选择 |
+| `Leader+b` | 下一张背景 | 顺序切换 |
+| `Leader+Shift+b` | 上一张背景 | 反向切换 |
+| `Leader+Ctrl+b` | 随机背景 | 随机选择 |
 
 **启用方法**:
 
@@ -180,7 +205,8 @@
 local backdrops = require("utils.backdrops"):new({
    enabled = true,  -- 改为 true
    images_dir = wezterm.config_dir .. "/backdrops/",
-   opacity = 0.96,
+   opacity = 0.90, -- 背景透明度 (0.0-1.0)
+   blur = 0, -- 模糊程度 (0-100)，0=不模糊
 })
 ```
 
@@ -195,7 +221,6 @@ local backdrops = require("utils.backdrops"):new({
 | 快捷键 | 功能 |
 |--------|------|
 | `Leader+[` | 进入 Copy Mode |
-| `Leader+Shift+[` | 进入 Copy Mode (替代) |
 | 命令面板 → 📋 Copy Mode | 通过命令面板进入 |
 
 ### Copy Mode 导航 (Vim 风格)
@@ -299,13 +324,17 @@ local backdrops = require("utils.backdrops"):new({
 
 | 类别 | 快捷键数量 |
 |------|-----------|
-| 系统操作 | 5 个 |
-| Tab 操作 | 13 个 |
-| Pane 操作 | 12 个 |
-| Workspace | 3 个 |
+| 系统操作 | 6 个 |
+| Tab 操作 | 8 个 |
+| Pane 操作 | 15 个 |
+| 导航操作 | 4 个（已注释） |
+| 调整操作 | 4 个 |
+| 系统功能 | 3 个 |
+| Workspace | 5 个 |
 | 背景图片 | 3 个 (可选) |
+| 快速选择 | 1 个 |
 | Copy Mode | 30+ 个 |
-| **总计** | **60+ 个** |
+| **总计** | **73+ 个** |
 
 ---
 
@@ -371,9 +400,9 @@ Leader + C → 创建新 Workspace
 #### 2. 窗格分割
 
 ```
-Leader + " → 水平分割
-Leader + % → 垂直分割
-Leader + H/J/K/L → 导航
+Leader + V → 垂直分割（左右）
+Leader + H → 水平分割（上下）
+Leader + 方向键 → 导航
 ```
 
 #### 3. 快速复制
@@ -386,25 +415,25 @@ v → 选择
 y → 复制
 ```
 
-### 记忆技巧
+---
 
-#### Pane 操作（Tmux 风格）
+## 🎯 快捷键速查卡
 
-- `"` = 水平分割（想象一条横线）
-- `%` = 垂直分割（想象一条竖线）
-- `H/J/K/L` = Vim 方向键
+### 最常用 Top 10
 
-#### Tab 操作（浏览器风格）
-
-- `MOD+T` = 新建 Tab
-- `MOD+W` = 关闭 Tab
-- `MOD+1-9` = 跳转到指定 Tab
-
-#### Workspace（项目管理）
-
-- `W` = Workspace（工作区）
-- `C` = Create（创建）
-- `N` = Name（命名）
+| 排名 | 快捷键 | 功能 | 说明 |
+|------|--------|------|------|
+| 1 | `Leader+[` | Copy Mode | 文本选择与复制 |
+| 2 | `MOD+T` | 新建 Tab | 创建新标签页 |
+| 3 | `MOD+W` | 关闭 Tab | 关闭当前标签页 |
+| 4 | `Leader+v` | 水平分割 | 上下分割窗格 |
+| 5 | `Leader+h` | 垂直分割 | 左右分割窗格 |
+| 6 | `Leader+w` | 切换 Workspace | 项目间快速切换 |
+| 7 | `MOD+1-9` | 跳转 Tab | 快速跳转到指定Tab |
+| 8 | `MOD+R` | 重载配置 | 重新加载配置 |
+| 9 | `Leader+p` | 命令面板 | 访问各种命令 |
+| 10 | `Leader+z` | 全屏窗格 | 窗格缩放切换 |
+| 11 | `Leader+o` | 切换窗格 | 循环切换窗格 |
 
 ---
 
@@ -433,7 +462,7 @@ config.keys = {
 config.leader = {
    key = "a",  -- 改为你想要的键
    mods = "CTRL",
-   timeout_milliseconds = 1000,
+   timeout_milliseconds = 2000,  -- 超时时间
 }
 ```
 
@@ -449,43 +478,6 @@ config.leader = {
 
 ---
 
-## 📝 快捷键冲突解决
-
-### 与系统快捷键冲突
-
-**macOS**:
-
-- `Cmd+Q` 退出可能被系统拦截
-- 解决：在系统设置中禁用或使用 `Leader+Q`
-
-**Linux**:
-
-- `Alt+F4` 关闭窗口可能冲突
-- 解决：使用 `MOD+Q` 替代
-
-### 与其他应用冲突
-
-使用 Leader 键系统避免大部分冲突。
-
----
-
-## 🎯 快捷键速查卡
-
-### 最常用 Top 10
-
-1. `Leader+[` - Copy Mode
-2. `MOD+T` - 新建 Tab
-3. `Leader+"` - 水平分割
-4. `Leader+H/J/K/L` - Pane 导航
-5. `Leader+W` - 切换 Workspace
-6. `MOD+1-9` - 跳转 Tab
-7. `Leader+Z` - 全屏 Pane
-8. `MOD+R` - 重载配置
-9. `Leader+P` - 命令面板
-10. `Leader+X` - 关闭 Pane
-
----
-
 ## 📖 相关文档
 
 - [ARCHITECTURE.md](./ARCHITECTURE.md) - 架构设计
@@ -498,11 +490,11 @@ config.leader = {
 
 ### 设计亮点
 
-1. ✅ **Leader 键系统** - 避免冲突，易于扩展
+1. ✅ **Leader 键系统** - 避免冲突，易于扩展 (`Ctrl+;`)
 2. ✅ **跨平台一致** - MOD 键自动适配
 3. ✅ **Vim 风格** - Copy Mode 使用 Vim 键位
 4. ✅ **逻辑分组** - 相似操作使用相同前缀
-5. ✅ **易于记忆** - 模仿 Tmux/Vim 习惯
+5. ✅ **窗格优化** - 分割方向与视觉一致
 
 ### 快捷键哲学
 
@@ -514,5 +506,6 @@ config.leader = {
 - **可发现性** - 通过命令面板发现新功能
 - **渐进式** - 从简单到复杂，逐步掌握
 - **可配置** - 可以根据个人习惯调整
+- **避免冲突** - 通过三层键绑定系统避免冲突
 
 **快捷键总评**: ⭐⭐⭐⭐⭐ (5/5) - 完美平衡！
