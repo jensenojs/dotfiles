@@ -61,6 +61,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 				:with_noremap()
 				:with_silent()
 				:with_desc("LSP: (跳转到)类型定义"),
+
 			["n|gr"] = map_callback(function()
 					if if_support(vim.lsp.protocol.Methods.textDocument_references) then
 						vim.lsp.buf.references()
@@ -71,7 +72,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
 				:with_silent()
 				:with_desc("LSP: (查找)引用"),
 
-			["n|<leader>o"] = map_callback(function()
+			-- <leader>o 作为 fallback, 会被 aerial_takeover/telescope_takeover 覆盖
+			["n|<leader>lo"] = map_callback(function()
 					if if_support(vim.lsp.protocol.Methods.textDocument_documentSymbol) then
 						vim.lsp.buf.document_symbol()
 					end
@@ -81,7 +83,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 				:with_silent()
 				:with_desc("LSP: (查找)当前文件符号"),
 
-			["n|<leader>O"] = map_callback(function()
+			["n|<leader>lO"] = map_callback(function()
 					if if_support(vim.lsp.protocol.Methods.workspace_symbol) then
 						vim.lsp.buf.workspace_symbol()
 					end
@@ -325,7 +327,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
 					if ev.buf == bufnr then
 						vim.lsp.buf.clear_references()
 						-- 仅当没有任何剩余客户端支持 documentHighlight 时, 才移除高亮组
-						local still_has = require("utils.lsp").if_support(vim.lsp.protocol.Methods.textDocument_documentHighlight, bufnr)
+						local still_has = require("utils.lsp").if_support(
+							vim.lsp.protocol.Methods.textDocument_documentHighlight,
+							bufnr
+						)
 						if not still_has then
 							pcall(vim.api.nvim_del_augroup_by_name, "lsp.highlight." .. bufnr)
 						end
@@ -336,7 +341,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		end
 
 		-- 内联提示(当任一支持的客户端附加时开启一次)
-		if if_support(vim.lsp.protocol.Methods.textDocument_inlayHint) and not vim.b[bufnr].__lsp_inlay_hint_enabled then
+		if
+			if_support(vim.lsp.protocol.Methods.textDocument_inlayHint) and not vim.b[bufnr].__lsp_inlay_hint_enabled
+		then
 			-- Default enable inlay hints for this buffer
 			pcall(vim.lsp.inlay_hint.enable, true, {
 				bufnr = bufnr,

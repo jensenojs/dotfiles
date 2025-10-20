@@ -30,6 +30,10 @@ $time\
 [ ](fg:color_bg1)\
 $line_break$character"""
 
+right_format = """
+[](color_bg1)$hostname[](fg:color_bg1)
+"""
+
 palette = 'gruvbox_dark'
 
 [palettes.gruvbox_dark]
@@ -153,6 +157,11 @@ format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
 symbol = ""
 style = "bg:color_bg3"
 format = '[[ $symbol( $context) ](fg:#83a598 bg:color_bg3)]($style)'
+
+[hostname]
+ssh_only = true
+style = "bg:color_bg1 fg:color_fg0"
+format = '[ $hostname ]($style)'
 
 # https://starship.rs/config/#command-duration
 [cmd_duration]

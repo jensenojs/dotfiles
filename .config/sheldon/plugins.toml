@@ -73,6 +73,13 @@ github = "ohmyzsh/ohmyzsh"
 dir = "plugins/sudo"
 apply = ["defer"]
 
+# 加载 OMZ 的 "lib/clipboard.zsh" 库文件
+# 这是 copyfile 和 copypath 插件的依赖
+# https://sheldon.cli.rs/Configuration.html#use
+[plugins.omz-lib-clipboard]
+github = "ohmyzsh/ohmyzsh"
+use = ["lib/clipboard.zsh"]
+
 # Copypath - 复制路径
 [plugins.omz-copypath]
 github = "ohmyzsh/ohmyzsh"

@@ -170,19 +170,30 @@
 
 ### Workspace 管理
 
+**使用嵌套模态：`Ctrl+, w` 进入 Workspace 模式**
+
 | 快捷键 | 功能 | 说明 |
 |--------|------|------|
-| `Leader+w` | 选择 Workspace | 模糊搜索切换 |
-| `Leader+n` | 下一个工作区 | 切换到下一个工作区 |
-| `Leader+Shift+p` | 上一个工作区 | 切换到上一个工作区 |
-| `Leader+,` | 重命名 Workspace | 重命名当前工作区 |
-| `Leader+c` | 创建 Workspace | 创建新工作区 |
+| `Ctrl+, w l` | 列表 Workspace | 模糊搜索切换工作区列表 |
+| `Ctrl+, w c` | 创建 Workspace | 输入名称创建/切换工作区 |
+| `Ctrl+, w r` | 重命名 Workspace | 重命名当前工作区 |
+| `Ctrl+, w n` | 下一个 Workspace | 切换到下一个工作区 |
+| `Ctrl+, w p` | 上一个 Workspace | 切换到上一个工作区 |
+
+**工作流示例**：
+```
+1. 按 Ctrl+,        → 进入 Leader 模式
+2. 按 w             → 进入 Workspace 子模式
+3. 按 c/l/r/n/p     → 执行对应操作
+4. 按 Escape        → 退出模式
+```
 
 **Workspace 说明**:
 
-- Workspace 是独立的 Tab 集合
-- 可以为不同项目创建不同 Workspace
-- 状态栏显示当前 Workspace（非 default 时）
+- Workspace 是独立的 Tab 集合，类似 tmux 的 session
+- 可以为不同项目创建不同 Workspace，完全隔离
+- 状态栏显示当前 Workspace 名称（非 default 时）
+- 使用嵌套模态避免快捷键冲突，更符合直觉
 
 ---
 

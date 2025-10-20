@@ -87,19 +87,20 @@ function M.takeover_lsp_buf(bufnr, client)
 			:with_silent()
 			:with_desc("LSP: (查找)引用"),
 
-		["n|<leader>o"] = map_callback(function()
-				if if_support(vim.lsp.protocol.Methods.textDocument_documentSymbol) then
-					tb.lsp_document_symbols({
-						ignore_symbols = { "field", "variable" },
-					})
-				end
-			end)
-			:with_buffer(bufnr)
-			:with_noremap()
-			:with_silent()
-			:with_desc("LSP: (查找)当前文件符号"),
+		-- <leader>lo 被 aerial 占用
+		-- ["n|<leader>lo"] = map_callback(function()
+		-- 		if if_support(vim.lsp.protocol.Methods.textDocument_documentSymbol) then
+		-- 			tb.lsp_document_symbols({
+		-- 				ignore_symbols = { "field", "variable" },
+		-- 			})
+		-- 		end
+		-- 	end)
+		-- 	:with_buffer(bufnr)
+		-- 	:with_noremap()
+		-- 	:with_silent()
+		-- 	:with_desc("LSP: (查找)当前文件符号"),
 
-		["n|<leader>O"] = map_callback(function()
+		["n|<leader>lO"] = map_callback(function()
 				if if_support(vim.lsp.protocol.Methods.workspace_symbol) then
 					tb.lsp_dynamic_workspace_symbols({})
 				end

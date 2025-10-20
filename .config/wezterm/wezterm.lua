@@ -31,6 +31,7 @@ local platform = require('config.platform')
 require('config.options').apply(config, platform)
 require('config.appearance').apply(config, platform)
 require('config.keymaps').apply(config, platform)
+require('config.mouse').apply(config, platform)
 
 -- Load event handlers with optional configuration
 require('config.events').setup({
@@ -46,6 +47,9 @@ require('config.events').setup({
    -- Feature toggles
    enable_command_palette = true,
 })
+
+-- Load hyperlinks handler
+require('config.hyperlinks').setup()
 
 -- ============================================================================
 -- Return Configuration

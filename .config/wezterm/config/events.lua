@@ -15,9 +15,10 @@ local default_config = {
 	show_process = true,
 	show_unseen_indicator = true,
 	enable_command_palette = true,
+	title_width = 16,
 }
 
-local config = {}
+local module_config = {}
 
 -- ============================================================================
 -- Helper Functions
@@ -30,39 +31,148 @@ local function basename(s)
 	return string.gsub(s, "(.*[/\\])(.*)", "%2")
 end
 
+local function trim(s)
+	if not s then
+		return ""
+	end
+	return s:match("^%s*(.-)%s*$")
+end
+
+local function pane_title(pane)
+	if not pane then
+		return ""
+	end
+	local ok, title = pcall(function()
+		return pane:get_title()
+	end)
+	if ok and type(title) == "string" then
+		return title
+	end
+	if type(pane.title) == "string" then
+		return pane.title
+	end
+	local vars = nil
+	if type(pane.get_user_vars) == "function" then
+		local ok, value = pcall(pane.get_user_vars, pane)
+		if ok and type(value) == "table" then
+			vars = value
+		end
+	end
+	if not vars and type(pane.user_vars) == "table" then
+		vars = pane.user_vars
+	end
+	if vars and type(vars.WEZTERM_PROG) == "string" then
+		return vars.WEZTERM_PROG
+	end
+	return ""
+end
+
+local ignored_processes = {
+	[""] = true,
+	zsh = true,
+	bash = true,
+	fish = true,
+	sh = true,
+	nu = true,
+	pwsh = true,
+	ash = true,
+	busybox = true,
+	login = true,
+	sx = true,
+}
+
+local function first_token(text)
+	local trimmed = trim(text)
+	if trimmed == "" then
+		return ""
+	end
+	local token = trimmed:match("^(%S+)") or ""
+	token = token:gsub("\\", "/")
+	token = token:match("([^/]+)$") or token
+	token = token:gsub("^%-+", "")
+	token = token:gsub("[%s%p]+$", "")
+	return string.lower(token)
+end
+
+local function is_ignored_command(name)
+	local token = first_token(name)
+	return token == "" or ignored_processes[token] == true
+end
+
+local function pad_to_width(text, width)
+	if not text or text == "" then
+		return string.rep(" ", width)
+	end
+	local truncated
+	if wezterm.truncate_left then
+		truncated = wezterm.truncate_left(text, width)
+	elseif #text > width then
+		truncated = "…" .. text:sub(-(width - 1))
+	else
+		truncated = text
+	end
+	local current_width = wezterm.column_width and wezterm.column_width(truncated) or #truncated
+	if current_width < width then
+		truncated = truncated .. string.rep(" ", width - current_width)
+	end
+	return truncated
+end
+
+local function active_command(pane)
+	if not module_config.show_process then
+		return nil
+	end
+	local title = trim(pane_title(pane))
+	if title ~= "" and not is_ignored_command(title) then
+		return title
+	end
+	local process_raw = trim(pane.foreground_process_name or "")
+	if process_raw ~= "" and not is_ignored_command(process_raw) then
+		return basename(process_raw)
+	end
+	return nil
+end
+
+local function format_directory(pane)
+	local cwd_uri = pane.current_working_dir
+	if not cwd_uri then
+		return "~"
+	end
+	local cwd = cwd_uri.file_path or tostring(cwd_uri)
+	local home = wezterm.home_dir
+	if home and home ~= "" then
+		cwd = cwd:gsub("^" .. home, "~")
+	end
+	local directory = basename(cwd)
+	if directory == "" then
+		directory = cwd ~= "" and cwd or "~"
+	end
+	return directory
+end
+
 -- ============================================================================
 -- Tab Title Formatting
 -- ============================================================================
 
-wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
-	local title = tab.tab_index + 1 .. ": "
-
-	-- Get current working directory
-	local cwd = tab.active_pane.current_working_dir
-	if cwd then
-		cwd = cwd.file_path or tostring(cwd)
-		-- Replace HOME with ~
-		local home = wezterm.home_dir
-		cwd = cwd:gsub("^" .. home, "~")
-		-- Only show the last directory
-		title = title .. basename(cwd)
-	else
-		title = title .. "zsh"
+wezterm.on("format-tab-title", function(tab, tabs, panes, window_config, hover, max_width)
+	local pane = tab.active_pane
+	local label = active_command(pane)
+	if not label or label == "" then
+		label = format_directory(pane)
 	end
+	local padded = pad_to_width(label, module_config.title_width)
 
-	-- Process name (if not a shell)
-	local process = basename(tab.active_pane.foreground_process_name or "")
-	if process ~= "zsh" and process ~= "bash" and process ~= "" then
-		title = title .. " [" .. process .. "]"
+	local composed = ""
+	if module_config.show_tab_index then
+		composed = composed .. tostring(tab.tab_index + 1) .. ": "
 	end
-
-	-- Unseen output indicator
-	if tab.active_pane.has_unseen_output then
-		title = title .. " *"
+	composed = composed .. padded
+	if module_config.show_unseen_indicator and pane.has_unseen_output then
+		composed = composed .. " *"
 	end
 
 	return {
-		{ Text = " " .. title .. " " },
+		{ Text = " " .. composed .. " " },
 	}
 end)
 
@@ -229,12 +339,12 @@ end)
 --- @return table Module reference for chaining
 function M.setup(opts)
 	opts = opts or {}
-	
+
 	-- Merge with defaults
 	for k, v in pairs(default_config) do
-		config[k] = opts[k] ~= nil and opts[k] or v
+		module_config[k] = opts[k] ~= nil and opts[k] or v
 	end
-	
+
 	return M
 end
 

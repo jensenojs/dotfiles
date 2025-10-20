@@ -19,17 +19,73 @@ local function home()
 end
 
 -- 智能关闭当前 buffer: 若只剩一个已列出 buffer 则直接退出
+-- 设计原则: 不感知具体插件, 通过 buftype 这个通用属性区分"真实文件"与"辅助 buffer"
 local function close_or_quit()
-	local listed = vim.fn.getbufinfo({
-		buflisted = 1,
-	})
-	if #listed <= 1 then
-		-- 尊重修改状态: 使用 confirm 给予保存/放弃的确认
+	local current_bufnr = vim.api.nvim_get_current_buf()
+
+	-- 1. 过滤出真正的文件 buffer (buftype 为空的才是普通文件)
+	local real_buffers = vim.tbl_filter(function(buf)
+		local buftype = vim.api.nvim_buf_get_option(buf.bufnr, "buftype")
+		return buftype == ""
+	end, vim.fn.getbufinfo({ buflisted = 1 }))
+
+	-- 2. 检查这是不是最后一个真实 buffer
+	if #real_buffers <= 1 then
+		-- 是最后一个, 直接退出
 		vim.cmd("confirm qa")
-	else
-		vim.cmd("bd")
+		return
 	end
+
+	-- 3. 还有其他 buffer, 找到当前 buffer 在列表中的索引
+	local current_idx = -1
+	for i, buf in ipairs(real_buffers) do
+		if buf.bufnr == current_bufnr then
+			current_idx = i
+			break
+		end
+	end
+
+	-- 如果我们不在一个 "真实" buffer 上 (比如在 aerial 窗口按了 <leader>q)
+	-- 那么就执行原始的 :bd 行为
+	if current_idx == -1 then
+		-- 原始的 :bd 会关闭当前窗口, 这在非真实 buffer 窗口上是合理的
+		vim.cmd("bd")
+		return
+	end
+
+	-- 4. 找到要切换到的下一个 buffer (循环)
+	local next_bufnr = real_buffers[(current_idx % #real_buffers) + 1].bufnr
+
+	-- 5. 关键: 在当前窗口切换到下一个 buffer
+	-- 这会保持你的 '代码 | Aerial' 布局
+	vim.api.nvim_set_current_buf(next_bufnr)
+
+	-- 6. 安全地在后台删除"前一个" buffer
+	-- 我们在切换 *之后* 再调用 :bd bufnr
+	-- 这样 :bd 不会关闭任何窗口, 只会从 buffer 列表删除
+	-- 并且, 如果 'current_bufnr' 未保存, :bd 会正确地报错提示 (E89)
+	vim.cmd("bd " .. current_bufnr)
 end
+
+-- local function close_or_quit()
+-- 	local listed = vim.fn.getbufinfo({
+-- 		buflisted = 1,
+-- 	})
+--
+-- 	-- 过滤出真正的文件 buffer (buftype 为空的才是普通文件)
+-- 	-- 插件 buffer (如 aerial/telescope/terminal) 都会设置 buftype 为 nofile/terminal 等
+-- 	local real_buffers = vim.tbl_filter(function(buf)
+-- 		local buftype = vim.api.nvim_buf_get_option(buf.bufnr, "buftype")
+-- 		return buftype == ""
+-- 	end, listed)
+--
+-- 	if #real_buffers <= 1 then
+-- 		-- 尊重修改状态: 使用 confirm 给予保存/放弃的确认
+-- 		vim.cmd("confirm qa")
+-- 	else
+-- 		vim.cmd("bd")
+-- 	end
+-- end
 
 local function copy_relative_path()
 	local name = vim.api.nvim_buf_get_name(0)
@@ -143,10 +199,10 @@ local keymaps = {
 	-----------------
 	--  缓冲区管理   --
 	-----------------
-
-	--
-	["n|<s-l>"] = map_cr("bnext"):with_noremap():with_silent():with_desc("切换到下一个buffer"),
-	["n|<s-h>"] = map_cr("bprevious"):with_noremap():with_silent():with_desc("切换到上一个buffer"),
+	-- ["n|<s-l>"] = map_cr("bnext"):with_noremap():with_silent():with_desc("切换到下一个buffer"),
+	-- ["n|<s-h>"] = map_cr("bprevious"):with_noremap():with_silent():with_desc("切换到上一个buffer"),
+	["n|<c-]>"] = map_cr("bnext"):with_noremap():with_silent():with_desc("切换到下一个buffer"),
+	["n|<c-[>"] = map_cr("bprevious"):with_noremap():with_silent():with_desc("切换到上一个buffer"),
 
 	-- ["n|<c-s-t>"] = map_cmd("<C-w>j"):with_noremap():with_silent():with_desc("打开上一个关闭的文件"),
 	-- 用插件来做这个功能
@@ -154,10 +210,10 @@ local keymaps = {
 	-----------------
 	--  窗口管理   --
 	-----------------
-	["n|<c-s-l>"] = map_cmd("<C-w>l"):with_noremap():with_silent():with_desc("窗口:光标向右移动"),
-	["n|<c-s-h>"] = map_cmd("<C-w>h"):with_noremap():with_silent():with_desc("窗口:光标向左移动"),
-	["n|<c-s-k>"] = map_cmd("<C-w>k"):with_noremap():with_silent():with_desc("窗口:光标向上移动"),
-	["n|<c-s-j>"] = map_cmd("<C-w>j"):with_noremap():with_silent():with_desc("窗口:光标向下移动"),
+	["n|<c-l>"] = map_cmd("<C-w>l"):with_noremap():with_silent():with_desc("窗口:光标向右移动"),
+	["n|<c-h>"] = map_cmd("<C-w>h"):with_noremap():with_silent():with_desc("窗口:光标向左移动"),
+	["n|<c-k>"] = map_cmd("<C-w>k"):with_noremap():with_silent():with_desc("窗口:光标向上移动"),
+	["n|<c-j>"] = map_cmd("<C-w>j"):with_noremap():with_silent():with_desc("窗口:光标向下移动"),
 
 	-----------------
 	--   保存与退出  --
