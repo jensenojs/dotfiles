@@ -43,8 +43,8 @@ WezTerm 的事件系统允许在特定时机执行自定义代码，实现动态
 
 | 部分 | 说明 | 示例 |
 |------|------|------|
-| 索引 | Tab 序号（从 1 开始） | `1:`, `2:` |
-| 目录 | 当前工作目录（最后一级） | `projects`, `.config` |
+| 索引 | Tab 序号(从 1 开始) | `1:`, `2:` |
+| 目录 | 当前工作目录(最后一级) | `projects`, `.config` |
 | 进程 | 非 shell 进程名 | `[nvim]`, `[htop]` |
 | 星号 | 未查看的输出指示器 | `*` |
 
@@ -67,7 +67,7 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
       title = title .. "zsh"
    end
    
-   -- 添加进程名（如果不是 shell）
+   -- 添加进程名(如果不是 shell)
    local process = basename(tab.active_pane.foreground_process_name or "")
    if process ~= "zsh" and process ~= "bash" and process ~= "" then
       title = title .. " [" .. process .. "]"
@@ -100,7 +100,7 @@ require('config.events').setup({
 
 ### 功能
 
-更新状态栏显示（左侧和右侧）
+更新状态栏显示(左侧和右侧)
 
 ### 左侧状态栏
 
@@ -134,11 +134,11 @@ CPU:15% MEM:60%
 - CPU: Gruvbox bright green `#b8bb26`
 - MEM: Gruvbox bright blue `#83a598`
 
-**注意**: 时间显示已移除（Starship 主题已包含）
+**注意**: 时间显示已移除(Starship 主题已包含)
 
 ### 性能优化：节流机制
 
-**问题**: `update-status` 事件触发频繁（每秒 10-50 次），直接调用外部命令会导致卡顿
+**问题**: `update-status` 事件触发频繁(每秒 10-50 次)，直接调用外部命令会导致卡顿
 
 **解决**: 使用缓存和节流
 
@@ -156,11 +156,11 @@ wezterm.on("update-status", function(window, pane)
    if current_time - last_update_time >= UPDATE_INTERVAL then
       last_update_time = current_time
       
-      -- 获取系统信息（外部命令）
+      -- 获取系统信息(外部命令)
       -- ...
    end
    
-   -- 使用缓存的信息更新状态栏（每次触发都执行，但使用缓存）
+   -- 使用缓存的信息更新状态栏(每次触发都执行，但使用缓存)
    window:set_right_status(cached_cpu_info .. cached_mem_info)
 end)
 ```
@@ -199,8 +199,8 @@ vm_stat | awk '/Pages active/ {active=$3} /Pages wired/ {wired=$4} /Pages free/ 
 
 ```lua
 require('config.events').setup({
-   show_seconds = false,      -- 不显示秒（Starship 已有时间）
-   date_format = '%H:%M',     -- 时间格式（已不使用）
+   show_seconds = false,      -- 不显示秒(Starship 已有时间)
+   date_format = '%H:%M',     -- 时间格式(已不使用)
 })
 ```
 
@@ -210,7 +210,7 @@ require('config.events').setup({
 
 ### 功能
 
-在命令面板（`Cmd+Shift+P` 或 `Leader+P`）中添加自定义命令
+在命令面板(`Cmd+Shift+P` 或 `Leader+P`)中添加自定义命令
 
 ### 默认命令
 
@@ -266,14 +266,14 @@ end)
 
 每个命令包含:
 
-- `brief` - 简短描述（显示在列表中）
-- `icon` - Nerd Font 图标名称（可选）
+- `brief` - 简短描述(显示在列表中)
+- `icon` - Nerd Font 图标名称(可选)
 - `action` - 执行的操作
 
 ### 使用方法
 
 1. 按 `Cmd+Shift+P` (Mac) 或 `Alt+Shift+P` (Linux/Win)
-2. 输入命令名称（模糊搜索）
+2. 输入命令名称(模糊搜索)
 3. 按 Enter 执行
 
 **优势**:
@@ -401,7 +401,7 @@ function M.setup(opts)
       config[k] = opts[k] ~= nil and opts[k] or v
    end
    
-   -- 注册事件（使用 config 变量）
+   -- 注册事件(使用 config 变量)
    wezterm.on('format-tab-title', function(...)
       -- 使用 config.show_tab_index 等
    end)
@@ -471,13 +471,13 @@ window:set_left_status(wezterm.format({
 
 **功能**: 右侧状态栏显示时间和电池
 
-**我们的实现**: ✅ 已简化 - 显示 CPU/MEM（无电池）
+**我们的实现**: ✅ 已简化 - 显示 CPU/MEM(无电池)
 
 **选择**: 台式机不需要电池显示，笔记本可添加
 
 ### tab-title.lua
 
-**功能**: 高度自定义的 Tab 标题（370 行）
+**功能**: 高度自定义的 Tab 标题(370 行)
 
 **我们的实现**: ✅ 已简化 - 96 行实现核心功能
 
@@ -492,17 +492,17 @@ window:set_left_status(wezterm.format({
 
 ### 1. 性能考虑
 
-**高频事件（update-status）**:
+**高频事件(update-status)**:
 
 - ✅ 使用缓存
 - ✅ 节流机制
 - ✅ 避免外部命令
 - ✅ 简单计算
 
-**低频事件（format-tab-title）**:
+**低频事件(format-tab-title)**:
 
 - ✅ 可以有复杂逻辑
-- ✅ 可以调用外部命令（适度）
+- ✅ 可以调用外部命令(适度)
 
 ### 2. 错误处理
 

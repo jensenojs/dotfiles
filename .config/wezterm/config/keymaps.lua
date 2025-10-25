@@ -2,10 +2,9 @@
 -- WezTerm Keybindings Configuration
 -- ============================================================================
 -- Architecture:
---   - MOD Layer: System operations (copy/paste, font, reload, tab navigation)
---   - LEADER Layer: WezTerm operations (window, tab, pane, workspace)
---     - Workspace Sub-mode: Nested modal for workspace operations
---   - Modal Layer: Copy mode, Search mode
+--   - MOD Layer: 最小化的系统操作，避免与 Nvim 冲突
+--   - LEADER Layer (Ctrl+,): WezTerm 专属命名空间
+--     - Workspace Sub-mode: 嵌套模态
 -- ============================================================================
 
 local wezterm = require('wezterm')
@@ -35,8 +34,13 @@ function M.apply(config, platform)
    -- =========================================================================
    config.keys = {
       -- ======================================================================
-      -- MOD Layer: System Operations
+      -- MOD Layer: 最小化的系统操作
       -- ======================================================================
+      
+      -- System
+      -- { key = 'phys:p', mods = 'LEADER', action = act.ActivateCommandPalette },
+      { key = 'phys:Space', mods = 'LEADER', action = act.ShowLauncher },
+      { key = 'phys:f', mods = 'LEADER', action = act.QuickSelect },
 
       -- Copy/Paste
       { key = 'phys:c', mods = mod, action = act.CopyTo('Clipboard') },
@@ -49,20 +53,15 @@ function M.apply(config, platform)
       -- Reload
       { key = 'phys:r', mods = mod, action = act.ReloadConfiguration },
 
-      -- Search
-      { key = 'phys:f', mods = mod, action = act.Search({ CaseSensitiveString = '' }) },
-
-      -- Scrolling
-      { key = 'phys:PageUp', mods = mod, action = act.ScrollByPage(-1) },
-      { key = 'phys:PageDown', mods = mod, action = act.ScrollByPage(1) },
-
       -- Tab navigation
       { key = '[', mods = mod, action = act.ActivateTabRelative(-1) },
       { key = ']', mods = mod, action = act.ActivateTabRelative(1) },
-      { key = 'LeftArrow', mods = mod .. '|SHIFT', action = act.ActivateTabRelative(-1) },
-      { key = 'RightArrow', mods = mod .. '|SHIFT', action = act.ActivateTabRelative(1) },
-      { key = 'LeftArrow', mods = mod .. '|SHIFT|CTRL', action = act.MoveTabRelative(-1) },
-      { key = 'RightArrow', mods = mod .. '|SHIFT|CTRL', action = act.MoveTabRelative(1) },
+      { key = '[', mods = mod .. '|SHIFT', action = act.MoveTabRelative(-1) },
+      { key = ']', mods = mod .. '|SHIFT', action = act.MoveTabRelative(1) },
+
+      -- 对齐 macos 使用习惯
+      { key = 'phys:t', mods = mod, action = act.SpawnTab('CurrentPaneDomain') },
+      { key = 'phys:w', mods = mod, action = act.CloseCurrentPane({ confirm = true }) },
 
       -- Quick tab switching
       { key = '1', mods = mod, action = act.ActivateTab(0) },
@@ -77,58 +76,28 @@ function M.apply(config, platform)
       { key = '0', mods = mod, action = act.ActivateTab(-1) },
 
       -- ======================================================================
-      -- LEADER Layer: WezTerm Operations
+      -- LEADER Layer (Ctrl+,): WezTerm 命名空间
       -- ======================================================================
 
-      -- Window
-      { key = 'phys:n', mods = 'LEADER', action = act.SpawnWindow },
-      { key = 'Enter', mods = 'LEADER', action = act.ToggleFullScreen },
-
-      -- Tab management
+      -- Window & Tab
       { key = 'phys:c', mods = 'LEADER', action = act.SpawnTab('CurrentPaneDomain') },
-      { key = 'phys:x', mods = 'LEADER', action = act.CloseCurrentTab({ confirm = true }) },
+      { key = 'phys:c', mods = 'LEADER|SHIFT', action = act.SpawnWindow },
+      { key = 'phys:n', mods = 'LEADER', action = act.ActivateTabRelative(1) },
+      { key = 'phys:p', mods = 'LEADER', action = act.ActivateTabRelative(-1) },
+      { key = 'phys:x', mods = 'LEADER', action = act.CloseCurrentPane({ confirm = true }) },
+      { key = 'Enter', mods = 'LEADER', action = act.ToggleFullScreen },
 
       -- Pane split
       { key = 'phys:h', mods = 'LEADER', action = act.SplitVertical({ domain = 'CurrentPaneDomain' }) },
       { key = 'phys:v', mods = 'LEADER', action = act.SplitHorizontal({ domain = 'CurrentPaneDomain' }) },
 
       -- Pane operations
-      { key = 'phys:q', mods = 'LEADER', action = act.CloseCurrentPane({ confirm = true }) },
       { key = 'phys:z', mods = 'LEADER', action = act.TogglePaneZoomState },
       { key = 'phys:o', mods = 'LEADER', action = act.ActivatePaneDirection('Next') },
       { key = 'phys:s', mods = 'LEADER', action = act.PaneSelect({ mode = 'SwapWithActive' }) },
 
       -- Copy Mode & Quick Select
       { key = '[', mods = 'LEADER', action = act.ActivateCopyMode },
-      { key = 'phys:f', mods = 'LEADER', action = act.QuickSelect },
-
-      -- System
-      { key = 'phys:p', mods = 'LEADER', action = act.ActivateCommandPalette },
-      { key = 'phys:Space', mods = 'LEADER', action = act.ShowLauncher },
-
-      -- Background (optional)
-      {
-         key = 'phys:b',
-         mods = 'LEADER',
-         action = wezterm.action_callback(function(window, _)
-            local appearance = require('config.appearance')
-            local backdrops = appearance._backdrops_instance
-            if backdrops and backdrops.enabled then
-               backdrops:cycle_forward(window)
-            end
-         end),
-      },
-      {
-         key = 'phys:B',
-         mods = 'LEADER|SHIFT',
-         action = wezterm.action_callback(function(window, _)
-            local appearance = require('config.appearance')
-            local backdrops = appearance._backdrops_instance
-            if backdrops and backdrops.enabled then
-               backdrops:cycle_back(window)
-            end
-         end),
-      },
 
       -- ======================================================================
       -- Workspace Sub-mode Activation (LEADER + w)
@@ -138,7 +107,7 @@ function M.apply(config, platform)
          mods = 'LEADER',
          action = act.ActivateKeyTable({
             name = 'workspace',
-            timeout_milliseconds = 1000,
+            timeout_milliseconds = 2000, -- 延长超时
             one_shot = false,
          }),
       },
@@ -230,11 +199,11 @@ function M.apply(config, platform)
          { key = '^', mods = 'NONE', action = act.CopyMode('MoveToStartOfLineContent') },
 
          -- Viewport movement
-         { key = 'g', mods = 'NONE', action = act.CopyMode('MoveToScrollbackTop') },
-         { key = 'G', mods = 'NONE', action = act.CopyMode('MoveToScrollbackBottom') },
-         { key = 'H', mods = 'NONE', action = act.CopyMode('MoveToViewportTop') },
-         { key = 'M', mods = 'NONE', action = act.CopyMode('MoveToViewportMiddle') },
-         { key = 'L', mods = 'NONE', action = act.CopyMode('MoveToViewportBottom') },
+         { key = 'phys:g', mods = 'NONE', action = act.CopyMode('MoveToScrollbackTop') },
+         { key = 'phys:G', mods = 'SHIFT', action = act.CopyMode('MoveToScrollbackBottom') },
+         { key = 'phys:H', mods = 'SHIFT', action = act.CopyMode('MoveToViewportTop') },
+         { key = 'phys:M', mods = 'SHIFT', action = act.CopyMode('MoveToViewportMiddle') },
+         { key = 'phys:L', mods = 'SHIFT', action = act.CopyMode('MoveToViewportBottom') },
 
          -- Page movement
          { key = 'PageUp', mods = 'NONE', action = act.CopyMode('PageUp') },
@@ -277,16 +246,6 @@ function M.apply(config, platform)
          { key = 'Escape', mods = 'NONE', action = act.CopyMode('Close') },
          { key = 'phys:c', mods = 'CTRL', action = act.CopyMode('Close') },
       },
-
-      -- Search Mode (commented out to avoid conflicts)
-      -- search_mode = {
-      --    { key = 'Enter', mods = 'NONE', action = act.CopyMode('NextMatch') },
-      --    { key = 'phys:n', mods = 'CTRL', action = act.CopyMode('NextMatch') },
-      --    { key = 'phys:p', mods = 'CTRL', action = act.CopyMode('PriorMatch') },
-      --    { key = 'phys:r', mods = 'CTRL', action = act.CopyMode('CycleMatchType') },
-      --    { key = 'phys:u', mods = 'CTRL', action = act.CopyMode('ClearPattern') },
-      --    { key = 'Escape', mods = 'NONE', action = act.CopyMode('Close') },
-      -- },
    }
 end
 

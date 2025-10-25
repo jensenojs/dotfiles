@@ -10,13 +10,13 @@ function M.apply(config, platform)
    -- Background Images (Optional)
    -- ============================================================================
 
-   -- 背景图片管理（默认关闭）
+   -- 背景图片管理
    -- 要启用：
    --   1. 将 enabled 设置为 true
-   --   2. 在 ~/.config/wezterm/backdrops/ 放置图片（已自动创建）
-   --   3. 重载配置（Cmd+R 或 Alt+R）
+   --   2. 在 ~/.config/wezterm/backdrops/ 放置图片(已自动创建)
+   --   3. 重载配置(Cmd+R 或 Alt+R)
    local backdrops = require('utils.backdrops'):new({
-      enabled = true, -- 默认关闭
+      enabled = true,
       images_dir = wezterm.config_dir .. '/backdrops/',
       opacity = 0.90, -- 背景透明度 (0.0-1.0)
       blur = 0, -- 模糊程度 (0-100)，0=不模糊
@@ -46,7 +46,7 @@ function M.apply(config, platform)
 
    -- Window decorations (platform-specific)
    if platform.is_mac then
-      config.window_decorations = 'INTEGRATED_BUTTONS|RESIZE'
+      config.window_decorations = 'TITLE|RESIZE'
    else
       config.window_decorations = 'RESIZE'
    end

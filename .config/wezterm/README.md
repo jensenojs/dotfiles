@@ -76,7 +76,7 @@ cp -r wezterm ~/.config/
 
 - Gruvbox Dark 主题
 - 底部标签栏
-- 状态栏（Leader 激活时显示 🌊 LEADER）
+- 状态栏(Leader 激活时显示 🌊 LEADER)
 
 ---
 
@@ -84,7 +84,7 @@ cp -r wezterm ~/.config/
 
 ### Leader 键
 
-**激活**: `Ctrl+Space`（状态栏显示 🌊 LEADER）
+**激活**: `Ctrl+Space`(状态栏显示 🌊 LEADER)
 
 ### 最常用快捷键
 
@@ -133,7 +133,7 @@ cp -r wezterm ~/.config/
 
 **性能**: 5 秒更新一次，无卡顿
 
-**注意**: 时间显示已移除（Starship 主题已包含）
+**注意**: 时间显示已移除(Starship 主题已包含)
 
 ---
 
@@ -346,7 +346,7 @@ wezterm.on("gui-startup", function(cmd)
 end)
 ```
 
-### 添加电池显示（笔记本）
+### 添加电池显示(笔记本)
 
 编辑 `config/events.lua` 的 `update-status` 事件，添加：
 
@@ -411,7 +411,7 @@ Total              11        3436         3282         100
 | options.lua | 103 | 13% |
 | 其他 | ~100 | 13% |
 
-**核心代码**: ~800 行（不含文档）
+**核心代码**: ~800 行(不含文档)
 
 ---
 
@@ -449,10 +449,10 @@ Total              11        3436         3282         100
 - ✅ Vim 风格 Copy Mode
 - ✅ Workspace 支持
 - ✅ Command Palette 增强
-- ✅ 智能状态栏（CPU/MEM）
-- ✅ 背景图片管理（可选）
+- ✅ 智能状态栏(CPU/MEM)
+- ✅ 背景图片管理(可选)
 - ✅ 跨平台支持
-- ✅ 性能优化（节流机制）
+- ✅ 性能优化(节流机制)
 - ✅ 完整文档
 
 ---

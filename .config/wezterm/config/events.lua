@@ -184,7 +184,7 @@ end)
 local last_update_time = 0
 local cached_cpu_info = ""
 local cached_mem_info = ""
-local UPDATE_INTERVAL = 5 -- 更新间隔（秒）
+local UPDATE_INTERVAL = 5 -- 更新间隔(秒)
 
 wezterm.on("update-status", function(window, pane)
 	-- Leader key indicator
@@ -337,11 +337,11 @@ end)
 wezterm.on("gui-startup", function(cmd)
 	local tab, pane, window = wezterm.mux.spawn_window(cmd or {})
 	
-	-- 启动时最大化窗口（可选）
+	-- 启动时最大化窗口(可选)
 	-- 如果不需要，注释掉下面这行
 	-- window:gui_window():maximize()
 	
-	-- 或者设置固定位置和大小（可选）
+	-- 或者设置固定位置和大小(可选)
 	-- window:gui_window():set_position(100, 100)
 end)
 

@@ -61,12 +61,12 @@ config:set_strict_mode(true)  -- 启用严格模式
 -- 加载平台检测
 local platform = require('config.platform')
 
--- 加载配置模块（apply 模式）
+-- 加载配置模块(apply 模式)
 require('config.options').apply(config, platform)
 require('config.appearance').apply(config, platform)
 require('config.keymaps').apply(config, platform)
 
--- 加载事件（setup 模式）
+-- 加载事件(setup 模式)
 require('config.events').setup({ ... })
 
 return config
@@ -263,7 +263,7 @@ return M
 ### 1. 无 OOP 开销
 
 - ❌ 不使用 Config 类
-- ❌ 不使用元表（除必要情况）
+- ❌ 不使用元表(除必要情况)
 - ✅ 直接操作对象
 
 ### 2. 节流机制
