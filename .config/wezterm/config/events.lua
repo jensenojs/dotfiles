@@ -193,6 +193,19 @@ wezterm.on("update-status", function(window, pane)
 		leader = "🌊 LEADER "
 	end
 
+	-- Key table indicator (for nested modes like workspace)
+	local key_table = window:active_key_table()
+	local mode = ""
+	if key_table then
+		if key_table == "workspace" then
+			mode = "📦 WORKSPACE "
+		elseif key_table == "copy_mode" then
+			mode = "📋 COPY "
+		elseif key_table == "search_mode" then
+			mode = "🔍 SEARCH "
+		end
+	end
+
 	-- Current workspace
 	local workspace = window:active_workspace()
 	local workspace_text = ""
@@ -204,6 +217,8 @@ wezterm.on("update-status", function(window, pane)
 	window:set_left_status(wezterm.format({
 		{ Foreground = { Color = "#d79921" } }, -- Gruvbox yellow
 		{ Text = leader },
+		{ Foreground = { Color = "#83a598" } }, -- Gruvbox blue
+		{ Text = mode },
 		{ Foreground = { Color = "#98971a" } }, -- Gruvbox green
 		{ Text = workspace_text },
 	}))

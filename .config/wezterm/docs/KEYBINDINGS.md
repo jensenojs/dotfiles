@@ -170,7 +170,7 @@
 
 ### Workspace 管理
 
-**使用嵌套模态：`Ctrl+, w` 进入 Workspace 模式**
+**使用嵌套模态：`Ctrl+, w` 进入 Workspace 子模式**
 
 | 快捷键 | 功能 | 说明 |
 |--------|------|------|
@@ -181,12 +181,10 @@
 | `Ctrl+, w p` | 上一个 Workspace | 切换到上一个工作区 |
 
 **工作流示例**：
-```
-1. 按 Ctrl+,        → 进入 Leader 模式
-2. 按 w             → 进入 Workspace 子模式
-3. 按 c/l/r/n/p     → 执行对应操作
-4. 按 Escape        → 退出模式
-```
+1. 按 `Ctrl+,` → 进入 Leader 模式
+2. 按 `w` → 进入 Workspace 子模式
+3. 按 `l/c/r/n/p` → 执行对应操作
+4. 按 `Escape` → 退出模式
 
 **Workspace 说明**:
 
