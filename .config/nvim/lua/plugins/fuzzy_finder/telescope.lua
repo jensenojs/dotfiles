@@ -32,12 +32,12 @@ local keymaps = {
 	-- 	:with_silent()
 	-- 	:with_desc("打开缓冲区列表"),
 
-	["n|<leader>g"] = map_callback(function()
-			require("telescope.builtin").git_status()
-		end)
-		:with_noremap()
-		:with_silent()
-		:with_desc("列出当前项目下修改了哪些文件"),
+	-- ["n|<leader>g"] = map_callback(function()
+	-- 		require("telescope.builtin").git_status()
+	-- 	end)
+	-- 	:with_noremap()
+	-- 	:with_silent()
+	-- 	:with_desc("列出当前项目下修改了哪些文件"),
 
 	["n|<c-p>"] = map_callback(function()
 			require("telescope.builtin").find_files()
@@ -196,16 +196,16 @@ return {
 					},
 				},
 
-				git_status = {
-					preview = {
-						hide_on_startup = false,
-					},
-					mappings = {
-						i = {
-							["<CR>"] = actions.select_drop,
-						},
-					},
-				},
+				-- git_status = {
+				-- 	preview = {
+				-- 		hide_on_startup = false,
+				-- 	},
+				-- 	mappings = {
+				-- 		i = {
+				-- 			["<CR>"] = actions.select_drop,
+				-- 		},
+				-- 	},
+				-- },
 
 				live_grep = {
 					preview = {
@@ -247,7 +247,7 @@ return {
 		require("telescope").load_extension("fzf")
 		require("telescope").load_extension("ui-select")
 		-- require("telescope").load_extension("vim_bookmarks")
-		require("telescope").load_extension("lazygit")
+		-- require("telescope").load_extension("lazygit")
 		-- require("telescope").load_extension("dap")
 
 		-- 注册自动命令: 在 LSP 附加时覆盖该 buffer 的按键

@@ -199,8 +199,8 @@ local keymaps = {
 	-----------------
 	--  缓冲区管理   --
 	-----------------
-	-- ["n|<s-l>"] = map_cr("bnext"):with_noremap():with_silent():with_desc("切换到下一个buffer"),
-	-- ["n|<s-h>"] = map_cr("bprevious"):with_noremap():with_silent():with_desc("切换到上一个buffer"),
+	["n|<s-l>"] = map_cr("bnext"):with_noremap():with_silent():with_desc("切换到下一个buffer"),
+	["n|<s-h>"] = map_cr("bprevious"):with_noremap():with_silent():with_desc("切换到上一个buffer"),
 	["n|<c-]>"] = map_cr("bnext"):with_noremap():with_silent():with_desc("切换到下一个buffer"),
 	["n|<c-[>"] = map_cr("bprevious"):with_noremap():with_silent():with_desc("切换到上一个buffer"),
 
