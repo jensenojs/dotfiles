@@ -28,7 +28,7 @@ function M.apply(config, platform)
          end),
       },
 
-      -- Ctrl+点击才打开链接，避免普通单击误触
+      -- Ctrl+点击才打开链接, 避免普通单击误触
       {
          event = { Up = { streak = 1, button = 'Left' } },
          mods = 'CTRL',
@@ -46,7 +46,7 @@ function M.apply(config, platform)
    -- Quick Select Patterns (智能选择增强)
    -- ============================================================================
 
-   -- 增强快速选择，支持更多模式
+   -- 增强快速选择, 支持更多模式
    config.quick_select_patterns = {
       -- 匹配文件路径(支持相对路径和绝对路径)
       '[./~]?[a-zA-Z0-9._/-]+\\.[a-zA-Z0-9]+',

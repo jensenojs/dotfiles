@@ -2,7 +2,7 @@
 -- WezTerm Keybindings Configuration
 -- ============================================================================
 -- Architecture:
---   - MOD Layer: 最小化的系统操作，避免与 Nvim 冲突
+--   - MOD Layer: 最小化的系统操作, 避免与 Nvim 冲突
 --   - LEADER Layer (Ctrl+,): WezTerm 专属命名空间
 --     - Workspace Sub-mode: 嵌套模态
 -- ============================================================================
@@ -107,8 +107,9 @@ function M.apply(config, platform)
          mods = 'LEADER',
          action = act.ActivateKeyTable({
             name = 'workspace',
-            timeout_milliseconds = 2000, -- 延长超时
+            timeout_milliseconds = 3000,
             one_shot = false,
+            prevent_fallback = true,
          }),
       },
    }
@@ -121,55 +122,88 @@ function M.apply(config, platform)
       -- Workspace Mode
       -- ======================================================================
       workspace = {
-         -- List workspaces
-         { key = 'phys:l', action = act.ShowLauncherArgs({ flags = 'FUZZY|WORKSPACES' }) },
+         -- List workspaces (执行后自动退出)
+         {
+            key = 'phys:l',
+            action = act.Multiple({
+               act.ShowLauncherArgs({ flags = 'FUZZY|WORKSPACES' }),
+               act.PopKeyTable,
+            }),
+         },
 
          -- Create/switch workspace
          {
-            key = 'phys:c',
-            action = act.PromptInputLine({
-               description = wezterm.format({
-                  { Attribute = { Intensity = 'Bold' } },
-                  { Foreground = { AnsiColor = 'Green' } },
-                  { Text = 'Enter/Create Workspace:' },
-               }),
-               action = wezterm.action_callback(function(window, pane, line)
-                  if line then
-                     window:perform_action(
-                        act.SwitchToWorkspace({
-                           name = line,
-                           spawn = { cwd = wezterm.home_dir },
-                        }),
-                        pane
-                     )
-                  end
-               end),
-            }),
+           key = 'phys:c',
+           action = wezterm.action_callback(function(window, pane)
+              -- 先退出 key_table, 然后弹出输入框
+              window:perform_action(act.PopKeyTable, pane)
+              window:perform_action(
+                 act.PromptInputLine({
+                    description = wezterm.format({
+                       { Attribute = { Intensity = 'Bold' } },
+                       { Foreground = { AnsiColor = 'Green' } },
+                       { Text = 'Enter/Create Workspace:' },
+                    }),
+                    action = wezterm.action_callback(function(win, p, line)
+                       if line then
+                          win:perform_action(
+                             act.SwitchToWorkspace({
+                                name = line,
+                                spawn = { cwd = wezterm.home_dir },
+                             }),
+                             p
+                          )
+                       end
+                    end),
+                 }),
+                 pane
+              )
+           end),
          },
 
          -- Rename workspace
          {
-            key = 'phys:r',
-            action = act.PromptInputLine({
-               description = wezterm.format({
-                  { Attribute = { Intensity = 'Bold' } },
-                  { Foreground = { AnsiColor = 'Fuchsia' } },
-                  { Text = 'Rename workspace:' },
-               }),
-               action = wezterm.action_callback(function(window, pane, line)
-                  if line then
-                     window:perform_action(act.SwitchToWorkspace({ name = line }), pane)
-                  end
-               end),
+           key = 'phys:r',
+           action = wezterm.action_callback(function(window, pane)
+              -- 先退出 key_table, 然后弹出输入框
+              window:perform_action(act.PopKeyTable, pane)
+              window:perform_action(
+                 act.PromptInputLine({
+                    description = wezterm.format({
+                       { Attribute = { Intensity = 'Bold' } },
+                       { Foreground = { AnsiColor = 'Fuchsia' } },
+                       { Text = 'Rename workspace:' },
+                    }),
+                    action = wezterm.action_callback(function(win, p, line)
+                       if line then
+                          win:perform_action(act.SwitchToWorkspace({ name = line }), p)
+                       end
+                    end),
+                 }),
+                 pane
+              )
+           end),
+         },
+
+         -- Navigate workspaces (执行后自动退出)
+         {
+            key = 'phys:n',
+            action = act.Multiple({
+               act.SwitchWorkspaceRelative(1),
+               act.PopKeyTable,
+            }),
+         },
+         {
+            key = 'phys:p',
+            action = act.Multiple({
+               act.SwitchWorkspaceRelative(-1),
+               act.PopKeyTable,
             }),
          },
 
-         -- Navigate workspaces
-         { key = 'phys:n', action = act.SwitchWorkspaceRelative(1) },
-         { key = 'phys:p', action = act.SwitchWorkspaceRelative(-1) },
-
          -- Exit workspace mode
          { key = 'Escape', action = 'PopKeyTable' },
+         { key = 'phys:q', action = 'PopKeyTable' },
       },
 
       -- ======================================================================
@@ -215,7 +249,7 @@ function M.apply(config, platform)
 
          -- Selection
          { key = 'phys:v', mods = 'NONE', action = act.CopyMode({ SetSelectionMode = 'Cell' }) },
-         { key = 'phys:V', mods = 'NONE', action = act.CopyMode({ SetSelectionMode = 'Line' }) },
+         { key = 'phys:v', mods = 'SHIFT', action = act.CopyMode({ SetSelectionMode = 'Line' }) },
          { key = 'phys:v', mods = 'CTRL', action = act.CopyMode({ SetSelectionMode = 'Block' }) },
 
          -- Copy

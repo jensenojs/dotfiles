@@ -180,11 +180,19 @@ end)
 -- Status Line Updates
 -- ============================================================================
 
--- 节流机制：缓存系统信息，避免频繁调用
+-- 节流机制：缓存系统信息, 避免频繁调用
 local last_update_time = 0
 local cached_cpu_info = ""
 local cached_mem_info = ""
 local UPDATE_INTERVAL = 5 -- 更新间隔(秒)
+
+local function run_sh_command(command)
+	local success, stdout, _ = wezterm.run_child_process({ "/bin/sh", "-c", command })
+	if success and stdout then
+		return (stdout:gsub("%s+", ""))
+	end
+	return nil
+end
 
 wezterm.on("update-status", function(window, pane)
 	-- Leader key indicator
@@ -224,43 +232,39 @@ wezterm.on("update-status", function(window, pane)
 	}))
 
 	-- Set right status (CPU + Memory with throttling)
-	-- NOTE: Starship 主题已包含时间显示，所以这里不显示时间
+	-- NOTE: Starship 主题已包含时间显示, 所以这里不显示时间
 	
 	-- 获取当前时间戳
 	local current_time = os.time()
 	
 	-- 只有超过更新间隔才重新获取系统信息
-	if current_time - last_update_time >= UPDATE_INTERVAL then
-		last_update_time = current_time
-		
-		-- 获取 CPU 使用率
-		local success, cpu_output = pcall(function()
-			local handle = io.popen("top -l 1 | grep 'CPU usage' | awk '{print $3}' | sed 's/%//'")
-			if handle then
-				local result = handle:read("*a")
-				handle:close()
-				return result:gsub("%s+", "")
+		if current_time - last_update_time >= UPDATE_INTERVAL then
+			last_update_time = current_time
+
+			-- 获取 CPU 使用率
+			local cpu_output = run_sh_command([[top -l 1 -n 0 | grep "CPU usage" | awk '{print $3}' | tr -d '%']])
+			if cpu_output and cpu_output ~= "" then
+				cached_cpu_info = " CPU:" .. cpu_output .. "%"
 			end
-			return ""
-		end)
-		if success and cpu_output and cpu_output ~= "" then
-			cached_cpu_info = " CPU:" .. cpu_output .. "%"
-		end
-		
-		-- 获取内存使用率
-		local success_mem, mem_output = pcall(function()
-			local handle = io.popen("vm_stat | awk '/Pages active/ {active=$3} /Pages wired/ {wired=$4} /Pages free/ {free=$3} END {print int((active+wired)/(active+wired+free)*100)}'")
-			if handle then
-				local result = handle:read("*a")
-				handle:close()
-				return result:gsub("%s+", "")
+
+			-- 获取内存使用率
+			local mem_output = run_sh_command([[
+				vm_stat | awk '
+					/Pages active/ {active=$3}
+					/Pages wired/ {wired=$4}
+					/Pages free/ {free=$3}
+					END {
+						total = active + wired + free
+						if (total > 0) {
+							printf "%d", int((active + wired) / total * 100)
+						}
+					}
+				'
+			]])
+			if mem_output and mem_output ~= "" then
+				cached_mem_info = " MEM:" .. mem_output .. "%"
 			end
-			return ""
-		end)
-		if success_mem and mem_output and mem_output ~= "" then
-			cached_mem_info = " MEM:" .. mem_output .. "%"
 		end
-	end
 	
 	-- 使用缓存的信息更新状态栏
 	window:set_right_status(wezterm.format({
@@ -338,7 +342,7 @@ wezterm.on("gui-startup", function(cmd)
 	local tab, pane, window = wezterm.mux.spawn_window(cmd or {})
 	
 	-- 启动时最大化窗口(可选)
-	-- 如果不需要，注释掉下面这行
+	-- 如果不需要, 注释掉下面这行
 	-- window:gui_window():maximize()
 	
 	-- 或者设置固定位置和大小(可选)

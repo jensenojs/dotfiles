@@ -24,7 +24,7 @@ function M:new(opts)
       images_dir = opts.images_dir or DEFAULT_CONFIG.images_dir,
       focus_color = opts.focus_color or DEFAULT_CONFIG.focus_color,
       opacity = opts.opacity or DEFAULT_CONFIG.opacity,
-      blur = opts.blur or 0,  -- 模糊程度 (0-100)，0 为不模糊
+      blur = opts.blur or 0,  -- 模糊程度 (0-100), 0 为不模糊
       current_idx = 1,
       images = {},
       focus_on = false,
@@ -90,7 +90,7 @@ function M:get_background_opts()
          },
       }
       
-      -- 如果设置了模糊，添加模糊层
+      -- 如果设置了模糊, 添加模糊层
       if self.blur > 0 then
          table.insert(layers, {
             source = { File = self.images[self.current_idx] },

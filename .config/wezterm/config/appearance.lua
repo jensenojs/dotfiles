@@ -19,16 +19,16 @@ function M.apply(config, platform)
       enabled = true,
       images_dir = wezterm.config_dir .. '/backdrops/',
       opacity = 0.90, -- 背景透明度 (0.0-1.0)
-      blur = 0, -- 模糊程度 (0-100)，0=不模糊
+      blur = 0, -- 模糊程度 (0-100), 0=不模糊
    })
 
-   -- 如果启用了背景，应用到配置
+   -- 如果启用了背景, 应用到配置
    local bg_opts = backdrops:get_background_opts()
    if bg_opts then
       config.background = bg_opts
    end
 
-   -- 保存实例到模块，供快捷键使用
+   -- 保存实例到模块, 供快捷键使用
    M._backdrops_instance = backdrops
    -- ============================================================================
    -- Color Scheme
@@ -61,8 +61,8 @@ function M.apply(config, platform)
    config.window_padding = {
       left = 8,
       right = 8,
-      top = 35, -- 增加顶部空间，避免与红绿灯按钮重叠
-      bottom = 1, -- 减少底部间隔，紧贴 lualine
+      top = 35, -- 增加顶部空间, 避免与红绿灯按钮重叠
+      bottom = 1, -- 减少底部间隔, 紧贴 lualine
    }
    -- else
    -- 	config.window_padding = {
