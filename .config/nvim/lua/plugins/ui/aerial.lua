@@ -1,8 +1,5 @@
 -- https://github.com/stevearc/aerial.nvim
 -- 文件大纲
--- 设计说明:
---   1. 不再全局绑定 <leader>lo, 而是在 LSP buffer 上自动接管
---   2. 参考 telescope 的 lsp_takeover 模式, 实现键位的上下文感知
 return {
 	"stevearc/aerial.nvim",
 	dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },

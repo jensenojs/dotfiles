@@ -33,9 +33,9 @@ return {
 			request = "attach",
 			cwd = "${workspaceFolder}",
 			processId = function()
-				local filter = vim.fn.input("Filter process (lua pattern, empty for all): ")
+				local ok, filter = pcall(vim.fn.input, "Filter process (lua pattern, empty for all): ")
 				local opts = {}
-				if type(filter) == "string" and #filter > 0 then
+				if ok and type(filter) == "string" and #filter > 0 then
 					opts.filter = filter
 				end
 				return require("dap.utils").pick_process(opts)

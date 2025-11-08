@@ -1,36 +1,129 @@
 -- https://github.com/nvim-telescope/telescope.nvim
 -- define common options
 local bind = require("utils.bind")
-local map_callback = bind.map_callback
-local map_cr = bind.map_cr
+local buf_util = require("utils.buf")
 local takeover = require("plugins.fuzzy_finder.lsp_takeover")
 local api = vim.api
+
+local map_callback = bind.map_callback
+local map_cr = bind.map_cr
+
+local ROOT_MARKERS = {
+	".git",
+	".hg",
+	".svn",
+	"pyproject.toml",
+	"package.json",
+	"Cargo.toml",
+	"go.mod",
+}
+
+local function bool_var(name, default)
+	local val = vim.g[name]
+	if val == nil then
+		return default
+	end
+	if type(val) == "string" then
+		val = val:lower()
+		if val == "false" or val == "0" then
+			return false
+		end
+	end
+	return not (val == false or val == 0)
+end
+
+local function string_var(name)
+	local val = vim.g[name]
+	if type(val) == "string" and val ~= "" then
+		return vim.fn.expand(val)
+	end
+	return nil
+end
+
+local function list_var(name)
+	local val = vim.g[name]
+	if type(val) == "string" and val ~= "" then
+		return { vim.fn.expand(val) }
+	end
+	if type(val) == "table" then
+		local out = {}
+		for _, entry in ipairs(val) do
+			if type(entry) == "string" and entry ~= "" then
+				out[#out + 1] = vim.fn.expand(entry)
+			end
+		end
+		if #out > 0 then
+			return out
+		end
+	end
+	return nil
+end
+
+local function resolve_cwd(var_name)
+	return string_var(var_name) or buf_util.find_root(nil, {
+		markers = ROOT_MARKERS,
+	})
+end
+
+local function find_files_opts()
+	return {
+		cwd = resolve_cwd("telescope_find_files_cwd"),
+		hidden = bool_var("telescope_find_files_hidden", true),
+		follow = bool_var("telescope_find_files_follow", true),
+		no_ignore = bool_var("telescope_find_files_no_ignore", false),
+		no_ignore_parent = bool_var("telescope_find_files_no_ignore_parent", false),
+		search_dirs = list_var("telescope_find_files_dirs"),
+	}
+end
+
+local function live_grep_opts()
+	local extra = {}
+	if bool_var("telescope_live_grep_hidden", true) then
+		extra[#extra + 1] = "--hidden"
+	end
+	if bool_var("telescope_live_grep_no_ignore", false) then
+		extra[#extra + 1] = "--no-ignore"
+	end
+	if bool_var("telescope_live_grep_no_ignore_parent", false) then
+		extra[#extra + 1] = "--no-ignore-parent"
+	end
+	local additional
+	if #extra > 0 then
+		additional = function()
+			return vim.deepcopy(extra)
+		end
+	end
+	return {
+		cwd = resolve_cwd("telescope_live_grep_cwd"),
+		search_dirs = list_var("telescope_live_grep_dirs"),
+		additional_args = additional,
+	}
+end
 
 local keymaps = {
 	-- more telescope-relative shortcut, plz refer to lsp-config.lua
 	["n|/"] = map_callback(function()
 			-- You can pass additional configuration to telescope to change theme, layout, etc.
-			require("telescope.builtin").current_buffer_fuzzy_find()
-			-- require("telescope.builtin").live_grep()
+			local ok, builtin = pcall(require, "telescope.builtin")
+			if not ok then
+				return
+			end
+			builtin.current_buffer_fuzzy_find()
 		end)
 		:with_noremap()
 		:with_silent()
 		:with_desc("模糊搜索当前文件"),
 
 	["n|<leader>/"] = map_callback(function()
-			require("telescope.builtin").live_grep()
+			local ok, builtin = pcall(require, "telescope.builtin")
+			if not ok then
+				return
+			end
+			builtin.live_grep(live_grep_opts())
 		end)
 		:with_noremap()
 		:with_silent()
 		:with_desc("全局模糊搜索"),
-
-	-- 这个函数的耗时莫名其妙要很久, 不要用它了
-	-- ["n|<leader>b"] = map_callback(function()
-	-- 		require("telescope.builtin").buffers()
-	-- 	end)
-	-- 	:with_noremap()
-	-- 	:with_silent()
-	-- 	:with_desc("打开缓冲区列表"),
 
 	-- ["n|<leader>g"] = map_callback(function()
 	-- 		require("telescope.builtin").git_status()
@@ -40,14 +133,22 @@ local keymaps = {
 	-- 	:with_desc("列出当前项目下修改了哪些文件"),
 
 	["n|<c-p>"] = map_callback(function()
-			require("telescope.builtin").find_files()
+			local ok, builtin = pcall(require, "telescope.builtin")
+			if not ok then
+				return
+			end
+			builtin.find_files(find_files_opts())
 		end)
 		:with_noremap()
 		:with_silent()
 		:with_desc("查找文件"),
 
 	["n|<leader>r"] = map_callback(function()
-			require("telescope.builtin").registers()
+			local ok, builtin = pcall(require, "telescope.builtin")
+			if not ok then
+				return
+			end
+			builtin.registers()
 		end)
 		:with_noremap()
 		:with_silent()
@@ -121,7 +222,7 @@ return {
 	opts = function()
 		local actions = require("telescope.actions")
 
-		require("telescope").setup({
+		return {
 			defaults = {
 				-- 可爱捏
 				prompt_prefix = "Search: ",
@@ -145,7 +246,8 @@ return {
 
 				-- 这些路径下的文件不需要被搜索, 但注意下面的 current_buffer_fuzzy_find 也会失效...
 				-- https://github.com/nvim-telescope/telescope.nvim/issues/3318
-				file_ignore_patterns = { ".git/", "%.pdf", "%.mkv", "%.mp4", "%.zip" },
+				-- file_ignore_patterns = { ".git/", "%.pdf", "%.mkv", "%.mp4", "%.zip" },
+				file_ignore_patterns = { "%.pdf", "%.mkv", "%.mp4", "%.zip" },
 
 				layout_config = {
 					horizontal = {
@@ -177,7 +279,23 @@ return {
 
 			pickers = {
 				find_files = {
-					find_command = { "fd", "--type", "f", "--strip-cwd-prefix" },
+					find_command = function(_, opts)
+						opts = opts or {}
+						local cmd = { "fd", "--type", "f", "--strip-cwd-prefix" }
+						if opts.follow then
+							cmd[#cmd + 1] = "--follow"
+						end
+						if opts.hidden then
+							cmd[#cmd + 1] = "--hidden"
+						end
+						if opts.no_ignore then
+							cmd[#cmd + 1] = "--no-ignore"
+						end
+						if opts.no_ignore_parent then
+							cmd[#cmd + 1] = "--no-ignore-parent"
+						end
+						return cmd
+					end,
 					mappings = {
 						i = {
 							["<CR>"] = actions.select_drop,
@@ -242,10 +360,14 @@ return {
 					-- }),
 				},
 			},
-		})
-		--
-		require("telescope").load_extension("fzf")
-		require("telescope").load_extension("ui-select")
+		}
+	end,
+	config = function(_, opts)
+		local telescope = require("telescope")
+		telescope.setup(opts)
+
+		pcall(telescope.load_extension, "fzf")
+		pcall(telescope.load_extension, "ui-select")
 		-- require("telescope").load_extension("vim_bookmarks")
 		-- require("telescope").load_extension("lazygit")
 		-- require("telescope").load_extension("dap")

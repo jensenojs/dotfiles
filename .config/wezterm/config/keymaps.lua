@@ -36,7 +36,7 @@ function M.apply(config, platform)
       -- ======================================================================
       -- MOD Layer: 最小化的系统操作
       -- ======================================================================
-      
+
       -- System
       -- { key = 'phys:p', mods = 'LEADER', action = act.ActivateCommandPalette },
       { key = 'phys:Space', mods = 'LEADER', action = act.ShowLauncher },
@@ -56,6 +56,8 @@ function M.apply(config, platform)
       -- Tab navigation
       { key = '[', mods = mod, action = act.ActivateTabRelative(-1) },
       { key = ']', mods = mod, action = act.ActivateTabRelative(1) },
+      { key = 'h', mods = mod, action = act.ActivateTabRelative(-1) },
+      { key = 'l', mods = mod, action = act.ActivateTabRelative(1) },
       { key = '[', mods = mod .. '|SHIFT', action = act.MoveTabRelative(-1) },
       { key = ']', mods = mod .. '|SHIFT', action = act.MoveTabRelative(1) },
 
@@ -88,8 +90,16 @@ function M.apply(config, platform)
       { key = 'Enter', mods = 'LEADER', action = act.ToggleFullScreen },
 
       -- Pane split
-      { key = 'phys:h', mods = 'LEADER', action = act.SplitVertical({ domain = 'CurrentPaneDomain' }) },
-      { key = 'phys:v', mods = 'LEADER', action = act.SplitHorizontal({ domain = 'CurrentPaneDomain' }) },
+      {
+         key = 'phys:h',
+         mods = 'LEADER',
+         action = act.SplitVertical({ domain = 'CurrentPaneDomain' }),
+      },
+      {
+         key = 'phys:v',
+         mods = 'LEADER',
+         action = act.SplitHorizontal({ domain = 'CurrentPaneDomain' }),
+      },
 
       -- Pane operations
       { key = 'phys:z', mods = 'LEADER', action = act.TogglePaneZoomState },
@@ -133,56 +143,56 @@ function M.apply(config, platform)
 
          -- Create/switch workspace
          {
-           key = 'phys:c',
-           action = wezterm.action_callback(function(window, pane)
-              -- 先退出 key_table, 然后弹出输入框
-              window:perform_action(act.PopKeyTable, pane)
-              window:perform_action(
-                 act.PromptInputLine({
-                    description = wezterm.format({
-                       { Attribute = { Intensity = 'Bold' } },
-                       { Foreground = { AnsiColor = 'Green' } },
-                       { Text = 'Enter/Create Workspace:' },
-                    }),
-                    action = wezterm.action_callback(function(win, p, line)
-                       if line then
-                          win:perform_action(
-                             act.SwitchToWorkspace({
-                                name = line,
-                                spawn = { cwd = wezterm.home_dir },
-                             }),
-                             p
-                          )
-                       end
-                    end),
-                 }),
-                 pane
-              )
-           end),
+            key = 'phys:c',
+            action = wezterm.action_callback(function(window, pane)
+               -- 先退出 key_table, 然后弹出输入框
+               window:perform_action(act.PopKeyTable, pane)
+               window:perform_action(
+                  act.PromptInputLine({
+                     description = wezterm.format({
+                        { Attribute = { Intensity = 'Bold' } },
+                        { Foreground = { AnsiColor = 'Green' } },
+                        { Text = 'Enter/Create Workspace:' },
+                     }),
+                     action = wezterm.action_callback(function(win, p, line)
+                        if line then
+                           win:perform_action(
+                              act.SwitchToWorkspace({
+                                 name = line,
+                                 spawn = { cwd = wezterm.home_dir },
+                              }),
+                              p
+                           )
+                        end
+                     end),
+                  }),
+                  pane
+               )
+            end),
          },
 
          -- Rename workspace
          {
-           key = 'phys:r',
-           action = wezterm.action_callback(function(window, pane)
-              -- 先退出 key_table, 然后弹出输入框
-              window:perform_action(act.PopKeyTable, pane)
-              window:perform_action(
-                 act.PromptInputLine({
-                    description = wezterm.format({
-                       { Attribute = { Intensity = 'Bold' } },
-                       { Foreground = { AnsiColor = 'Fuchsia' } },
-                       { Text = 'Rename workspace:' },
-                    }),
-                    action = wezterm.action_callback(function(win, p, line)
-                       if line then
-                          win:perform_action(act.SwitchToWorkspace({ name = line }), p)
-                       end
-                    end),
-                 }),
-                 pane
-              )
-           end),
+            key = 'phys:r',
+            action = wezterm.action_callback(function(window, pane)
+               -- 先退出 key_table, 然后弹出输入框
+               window:perform_action(act.PopKeyTable, pane)
+               window:perform_action(
+                  act.PromptInputLine({
+                     description = wezterm.format({
+                        { Attribute = { Intensity = 'Bold' } },
+                        { Foreground = { AnsiColor = 'Fuchsia' } },
+                        { Text = 'Rename workspace:' },
+                     }),
+                     action = wezterm.action_callback(function(win, p, line)
+                        if line then
+                           win:perform_action(act.SwitchToWorkspace({ name = line }), p)
+                        end
+                     end),
+                  }),
+                  pane
+               )
+            end),
          },
 
          -- Navigate workspaces (执行后自动退出)
@@ -284,3 +294,4 @@ function M.apply(config, platform)
 end
 
 return M
+

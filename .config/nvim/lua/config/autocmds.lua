@@ -14,6 +14,8 @@ local function augroup(name)
 	return vim.api.nvim_create_augroup("lazyvim_" .. name, { clear = true })
 end
 
+local buf_util = require("utils.buf")
+
 -- 焦点返回/终端关闭/离开终端时执行 checktime
 vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
 	group = augroup("checktime"),
@@ -24,15 +26,39 @@ vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
 -- 说明: 仅在系统存在 im-select 时注册, 避免无意义系统调用
 local ok_env, env = pcall(require, "config.environment")
 if ok_env and env.has.im_select then
+	local target_layout = "com.apple.keylayout.ABC"
+	local switching = false
+
+	local function switch_to_target_layout()
+		if switching then
+			return
+		end
+		switching = true
+
+		local function reset()
+			switching = false
+		end
+
+		if vim.system then
+			vim.system({ "im-select", target_layout }, {}, function()
+				vim.schedule(reset)
+			end)
+		elseif vim.fn.jobstart then
+			vim.fn.jobstart({ "im-select", target_layout }, {
+				on_exit = function()
+					vim.schedule(reset)
+				end,
+			})
+		else
+			vim.fn.system("im-select " .. target_layout)
+			reset()
+		end
+	end
+
 	vim.api.nvim_create_autocmd({ "ModeChanged" }, {
 		pattern = "i:n,i:v",
 		group = augroup("im-select"),
-		callback = function()
-			local result = vim.fn.system("im-select")
-			if not string.find(result, "com.apple.keylayout.ABC") then
-				vim.fn.system("im-select com.apple.keylayout.ABC")
-			end
-		end,
+		callback = switch_to_target_layout,
 	})
 end
 
@@ -101,8 +127,30 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 	end,
 })
 
--- 修复通过 telescope 打开的文件无法折叠的问题
-vim.api.nvim_create_autocmd({ "BufEnter" }, {
-	pattern = { "*" },
-	command = "normal zx",
+-- 修复通过 telescope 打开的文件无法折叠的问题; 仅对真实文件 buffer 执行 zx
+vim.api.nvim_create_autocmd("BufEnter", {
+	group = augroup("fold_refresh"),
+	callback = function(event)
+		if not buf_util.is_real_file(event.buf, {
+			require_name = false,
+		}) then
+			return
+		end
+
+		local already_refreshed = pcall(vim.api.nvim_buf_get_var, event.buf, "lazyvim_fold_refreshed")
+		if already_refreshed then
+			return
+		end
+
+		pcall(vim.api.nvim_buf_set_var, event.buf, "lazyvim_fold_refreshed", true)
+
+		vim.schedule(function()
+			if not vim.api.nvim_buf_is_valid(event.buf) then
+				return
+			end
+			pcall(vim.api.nvim_buf_call, event.buf, function()
+				vim.cmd([[silent! normal! zx]])
+			end)
+		end)
+	end,
 })

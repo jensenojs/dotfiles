@@ -15,6 +15,7 @@ local keymap_adapter = require("utils.keymap_adapter")
 local icons = require("utils.icons")
 local dap = require("utils.dap")
 local health = require("utils.health")
+local buf = require("utils.buf")
 
 local M = {}
 
@@ -43,5 +44,6 @@ M.keymap_adapter = keymap_adapter
 M.icons = icons
 M.dap = dap
 M.health = health
+M.buf = buf
 
 return M

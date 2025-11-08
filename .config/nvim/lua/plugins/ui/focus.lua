@@ -4,9 +4,17 @@ return {
     "nvim-focus/focus.nvim",
     event = "VeryLazy",
     init = function()
-        -- 忽略的 filetype 列表, 这些窗口不参与自动调整
-        local ignore_filetypes = {"NvimTree"}
-        local ignore_buftypes = {"nofile", "prompt", "popup"}
+		-- 忽略的 filetype/bo 类型: 包含侧边栏与虚拟窗口, 防止 focus 干扰布局
+		local ignore_filetypes = {
+			"NvimTree",
+			"DiffviewFiles",
+			"DiffviewFileHistory",
+			"aerial",
+			"TelescopePrompt",
+			"TelescopeResults",
+			"TelescopePreview",
+		}
+		local ignore_buftypes = { "nofile", "prompt", "popup", "quickfix", "terminal" }
         local augroup = vim.api.nvim_create_augroup("FocusDisable", { clear = true })
         -- 根据 BufType 禁用自动调整
         vim.api.nvim_create_autocmd("WinEnter", {
@@ -33,8 +41,17 @@ return {
             desc = "根据 FileType 禁用 focus 自动调整"
         })
     end,
-    main = "focus",
-    opts = {
-        excluded_filetypes = {"NvimTree"}
-    }
+	main = "focus",
+	opts = {
+		excluded_filetypes = {
+			"NvimTree",
+			"DiffviewFiles",
+			"DiffviewFileHistory",
+			"aerial",
+			"TelescopePrompt",
+			"TelescopeResults",
+			"TelescopePreview",
+		},
+		excluded_buftypes = { "nofile", "prompt", "popup", "quickfix", "terminal" },
+	}
 }

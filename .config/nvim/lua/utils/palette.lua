@@ -10,6 +10,25 @@
 
 local color = require("utils.color")
 
+local _settings_cache
+
+local function get_core_settings()
+	if _settings_cache then
+		return _settings_cache
+	end
+	local ok, settings = pcall(require, "core.settings")
+	if ok and type(settings) == "table" then
+		_settings_cache = settings
+		return _settings_cache
+	end
+	_settings_cache = {
+		palette_overwrite = {},
+		transparent_background = false,
+		background = (vim.o.background ~= "" and vim.o.background) or "dark",
+	}
+	return _settings_cache
+end
+
 ---@type nil|table
 local _palette = nil
 ---@type boolean
@@ -61,7 +80,7 @@ local function init_palette()
 				crust = "#161320",
 			}
 
-		_palette = vim.tbl_extend("force", { none = "NONE" }, _palette, require("core.settings").palette_overwrite)
+		_palette = vim.tbl_extend("force", { none = "NONE" }, _palette, get_core_settings().palette_overwrite)
 	end
 
 	return _palette
@@ -129,8 +148,9 @@ function M.gen_alpha_hl()
 end
 
 function M.gen_neodim_blend_attr()
-	local trans_bg = require("core.settings").transparent_background
-	local appearance = require("core.settings").background
+	local settings = get_core_settings()
+	local trans_bg = settings.transparent_background
+	local appearance = settings.background
 	if trans_bg and appearance == "dark" then
 		return "#000000"
 	elseif trans_bg and appearance == "light" then

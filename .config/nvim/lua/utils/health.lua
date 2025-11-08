@@ -65,7 +65,7 @@ end
 
 -- 剪贴板专属检查
 local function check_clipboard()
-	local global = require("core.global")
+	local env = require("config.environment")
 	start("clipboard")
 
 	-- 处于 tmux 会话: 期望由 tmux 接管剪贴板
@@ -80,13 +80,13 @@ local function check_clipboard()
 		if type(gcb) == "table" and gcb.name == "tmux-clipboard" then
 			ok("g:clipboard = tmux-clipboard (优先使用 tmux buffer)")
 		else
-			warn("g:clipboard 未设置为 tmux-clipboard, 请确保在 init.lua 早期调用 core.clipboard.setup()")
+			warn("g:clipboard 未设置为 tmux-clipboard, 请确认 config.environment 已初始化")
 		end
 		return
 	end
 
 	-- macOS: 期望 pbcopy/pbpaste 存在, 且 g:clipboard 被设置
-	if global.is_mac then
+	if env.is_mac then
 		local has_pbcopy = (vim.fn.executable("pbcopy") == 1)
 		local has_pbpaste = (vim.fn.executable("pbpaste") == 1)
 		if has_pbcopy and has_pbpaste then
@@ -98,15 +98,13 @@ local function check_clipboard()
 		if type(gcb) == "table" and gcb.name == "macOS-clipboard" then
 			ok("g:clipboard = macOS-clipboard")
 		else
-			warn(
-				"g:clipboard 未由 core.clipboard 设置为 macOS-clipboard, 请确认加载顺序(core.global -> core.clipboard)"
-			)
+			warn("g:clipboard 未由 config.environment 设置为 macOS-clipboard, 请确认加载顺序")
 		end
 		return
 	end
 
 	-- WSL: 期望 win32yank.exe 可用
-	if global.is_wsl then
+	if env.is_wsl then
 		local has_win32yank = (vim.fn.executable("win32yank.exe") == 1)
 		if has_win32yank then
 			ok("win32yank.exe detected")
@@ -117,7 +115,7 @@ local function check_clipboard()
 		if type(gcb) == "table" and gcb.name == "win32yank-wsl" then
 			ok("g:clipboard = win32yank-wsl")
 		else
-			warn("g:clipboard 未由 core.clipboard 设置为 win32yank-wsl, 请确认加载顺序")
+			warn("g:clipboard 未由 config.environment 设置为 win32yank-wsl, 请确认加载顺序")
 		end
 		return
 	end

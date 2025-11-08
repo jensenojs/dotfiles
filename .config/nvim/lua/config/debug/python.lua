@@ -49,7 +49,11 @@ return {
 			name = "Launch Module",
 			request = "launch",
 			module = function()
-				return vim.fn.input("Module to debug: ")
+				local ok, module_name = pcall(vim.fn.input, "Module to debug: ")
+				if ok and module_name ~= "" then
+					return module_name
+				end
+				return nil
 			end,
 			cwd = "${workspaceFolder}",
 			pythonPath = function()

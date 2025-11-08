@@ -11,11 +11,6 @@
     - 仓库: <https://github.com/ellisonleao/gruvbox.nvim>
     - 配置: `lua/plugins/ui/gruvbox.lua`
 
-- satellite: 装饰滚动条。
-    - 触发: `event = "VeryLazy"`
-    - 仓库: <https://github.com/lewis6991/satellite.nvim>
-    - 配置: `lua/plugins/ui/satellite.lua`
-
 - lualine: 状态栏, 主题与分段可配置。
     - 触发: `event = "VeryLazy"`
     - 备注: 主题 `gruvbox_light`, 集成 `copilot-lualine`

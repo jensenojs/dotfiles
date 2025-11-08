@@ -21,6 +21,13 @@ local DEFAULT_KEYS = {
 	buffer = "<leader>sS",
 }
 
+local function pick(value, default)
+	if value == nil then
+		return default
+	end
+	return value
+end
+
 local function in_visual_mode()
 	local m = vim.fn.mode()
 	return m == "v" or m == "V" or m == "\022"
@@ -46,16 +53,29 @@ local function choose_delimiter(oldword, newword, candidates)
 			return d
 		end
 	end
-	local input = vim.fn.input("分隔符不可用, 请输入一个不含于两端字符串的单字符: ")
-	if type(input) == "string" and #input >= 1 then
+	local ok, input = pcall(vim.fn.input, "分隔符不可用, 请输入一个不含于两端字符串的单字符: ")
+	if ok and type(input) == "string" and #input >= 1 then
 		return string.sub(input, 1, 1)
 	end
 	return "/"
 end
 
-local function resolve_flags(flags, smartcase)
+local function resolve_flags(flags, smartcase, pattern)
 	local f = flags or ""
-	if smartcase then
+	if not smartcase then
+		return f
+	end
+	local ignorecase = vim.opt.ignorecase:get()
+	if not ignorecase then
+		return f:gsub("I", "")
+	end
+	local has_smartcase = vim.opt.smartcase:get()
+	local has_upper = pattern and pattern:match("%u") ~= nil
+	if has_smartcase and has_upper then
+		return f:gsub("[iI]", "")
+	end
+	if not f:match("[iI]") then
+		f = f .. "i"
 	end
 	return f
 end
@@ -137,16 +157,16 @@ function M.run(opts)
 	local cfg = M.state.defaults
 
 	-- 计算最终配置(浅合并)
-	local scope = opts.scope or cfg.scope
-	local word_boundary = opts.word_boundary or cfg.word_boundary
-	local flags = resolve_flags(opts.flags or cfg.flags, opts.smartcase or cfg.smartcase)
-	local keep_selection = opts.keep_selection or cfg.keep_selection
-	local nohlsearch = opts.nohlsearch or cfg.nohlsearch
-	local preview = opts.preview or cfg.preview
-	local delimiters = cfg.delimiters
+	local scope = pick(opts.scope, cfg.scope)
+	local word_boundary = pick(opts.word_boundary, cfg.word_boundary)
+	local smartcase = pick(opts.smartcase, cfg.smartcase)
+	local keep_selection = pick(opts.keep_selection, cfg.keep_selection)
+	local nohlsearch = pick(opts.nohlsearch, cfg.nohlsearch)
+	local preview = pick(opts.preview, cfg.preview)
+	local delimiters = pick(opts.delimiters, cfg.delimiters)
+	local base_flags = pick(opts.flags, cfg.flags)
 
 	local has_visual = in_visual_mode()
-	local buf = 0 -- 当前 buffer
 
 	local srow, scol, erow, ecol
 	if has_visual then
@@ -176,6 +196,8 @@ function M.run(opts)
 		vim.notify("未提供旧字符串, 已取消", vim.log.levels.INFO, { title = "quick_substitute" })
 		return
 	end
+
+	local flags = resolve_flags(base_flags, smartcase, oldword)
 
 	-- 选择分隔符并构造模式/替换串
 	local delimiter = choose_delimiter(oldword, newword, delimiters)

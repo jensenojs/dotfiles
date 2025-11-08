@@ -32,10 +32,11 @@ return {
 		{
 			"<leader>gc",
 			function()
-				local commit = vim.fn.input("Commit hash: ")
-				if commit ~= "" then
-					vim.cmd("DiffviewOpen " .. commit .. "^!")
+				local ok, commit = pcall(vim.fn.input, "Commit hash: ")
+				if not ok or not commit or commit == "" then
+					return
 				end
+				vim.cmd("DiffviewOpen " .. commit .. "^!")
 			end,
 			desc = "查看某个 Commit 的详情",
 		},

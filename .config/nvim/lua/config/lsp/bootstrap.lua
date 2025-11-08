@@ -3,6 +3,7 @@
 -- LSP bootstrap autocommands group (idempotent and discoverable)
 -- 全局 LSP 命令
 local api, lsp, diagnostic = vim.api, vim.lsp, vim.diagnostic
+local buf_util = require("utils.buf")
 
 local LSP_BOOTSTRAP = vim.api.nvim_create_augroup("lsp.bootstrap", {
 	clear = true,
@@ -14,6 +15,14 @@ local ui = {
 	max_width = math.floor(vim.o.columns * 0.8),
 	max_height = math.floor(vim.o.lines * 0.7),
 }
+
+local function should_bootstrap(bufnr)
+	return buf_util.is_real_file(bufnr, {
+		require_modifiable = true,
+	})
+end
+
+local lsp_bootstrap_done = false
 
 lsp.handlers["textDocument/hover"] = lsp.with(lsp.handlers.hover, ui)
 lsp.handlers["textDocument/signatureHelp"] = lsp.with(lsp.handlers.signature_help, ui)
@@ -100,11 +109,18 @@ end, {
 api.nvim_create_autocmd("FileType", {
 	group = LSP_BOOTSTRAP,
 	desc = "Enable configured LSP clients",
-	callback = function()
+	callback = function(args)
+		if lsp_bootstrap_done then
+			return
+		end
+		if not should_bootstrap(args.buf) then
+			return
+		end
 		local servers = require("config.lsp.enable-list")
 		for _, server_name in ipairs(servers) do
 			vim.lsp.enable(server_name)
 		end
+		lsp_bootstrap_done = true
 	end,
 })
 
