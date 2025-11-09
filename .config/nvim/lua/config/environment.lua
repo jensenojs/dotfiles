@@ -109,6 +109,9 @@ setmetatable(M, {
 })
 
 -- Clipboard setup
+-- 注意: 此配置会覆盖 options.lua 中的 opt.clipboard = "unnamedplus"
+-- 因为 vim.g.clipboard 的优先级高于 vim.opt.clipboard
+-- 这样做的好处是使用平台原生的剪贴板工具, 性能更好且支持更多功能(如图像)
 -- https://tao.zz.ac/vim/vim-copy-over-ssh.html
 if M.is_mac then
 	vim.g.clipboard = {

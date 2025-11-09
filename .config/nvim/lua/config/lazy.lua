@@ -111,6 +111,29 @@ lazy.setup({
 		}, -- UI 美化相关
 	},
 }, {
+	-- 在 lazy.nvim 完成插件加载后初始化 LSP
+	-- 这样可以确保 neotest 等插件已就绪，避免测试识别问题
+	config = function()
+		-- 加载 LSP bootstrap 配置（包括 handlers、diagnostic 设置和命令）
+		require("config.lsp.bootstrap")
+		
+		-- 为所有已打开的 buffer 触发 FileType 事件，确保 LSP 正确附加
+		-- 因为 vim.lsp.enable() 只是启用服务器，需要 FileType 事件来触发实际附加
+		vim.schedule(function()
+			local bufs = vim.api.nvim_list_bufs()
+			local count = 0
+			for _, buf in ipairs(bufs) do
+				if vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_buf_is_loaded(buf) then
+					local filetype = vim.bo[buf].filetype
+					if filetype and filetype ~= "" then
+						vim.api.nvim_exec_autocmds("FileType", { buffer = buf })
+						count = count + 1
+					end
+				end
+			end
+			vim.notify("LSP 初始化完成，已为 " .. count .. " 个 buffer 启用 LSP", vim.log.levels.INFO)
+		end)
+	end,
 	ui = {
 		border = "rounded",
 		icons = (next(icons) and {

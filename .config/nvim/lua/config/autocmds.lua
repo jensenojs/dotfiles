@@ -137,12 +137,12 @@ vim.api.nvim_create_autocmd("BufEnter", {
 			return
 		end
 
-		local already_refreshed = pcall(vim.api.nvim_buf_get_var, event.buf, "lazyvim_fold_refreshed")
+		local already_refreshed = vim.b[event.buf].lazyvim_fold_refreshed
 		if already_refreshed then
 			return
 		end
 
-		pcall(vim.api.nvim_buf_set_var, event.buf, "lazyvim_fold_refreshed", true)
+		vim.b[event.buf].lazyvim_fold_refreshed = true
 
 		vim.schedule(function()
 			if not vim.api.nvim_buf_is_valid(event.buf) then

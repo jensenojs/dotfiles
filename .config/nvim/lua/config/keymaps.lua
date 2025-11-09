@@ -25,7 +25,8 @@ local function close_or_quit()
 
 	-- 1. 过滤出真正的文件 buffer (buftype 为空的才是普通文件)
 	local real_buffers = vim.tbl_filter(function(buf)
-		local buftype = vim.api.nvim_buf_get_option(buf.bufnr, "buftype")
+			-- 使用 nvim_get_option_value 替代已弃用的 nvim_buf_get_option (Neovim 0.10+)
+			local buftype = vim.api.nvim_get_option_value("buftype", { buf = buf.bufnr })
 		return buftype == ""
 	end, vim.fn.getbufinfo({ buflisted = 1 }))
 

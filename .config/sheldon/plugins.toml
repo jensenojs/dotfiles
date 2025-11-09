@@ -114,3 +114,7 @@ inline = 'eval "$(zoxide init zsh)"'
 [plugins.zsh-syntax-highlighting]
 github = "zsh-users/zsh-syntax-highlighting"
 apply = ["defer"]
+
+[plugins.zsh-kimi-cli]
+github = "MoonshotAI/zsh-kimi-cli"
+apply = ["defer"]

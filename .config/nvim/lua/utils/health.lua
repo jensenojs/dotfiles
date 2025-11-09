@@ -197,7 +197,7 @@ function M.check()
 	check_executables()
 
 	check_clipboard()
-	check_blink_cmp()
+	M.check_blink_cmp()  -- 调用模块内的 blink.cmp 检查函数
 end
 
 return M
