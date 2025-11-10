@@ -40,9 +40,14 @@ GpuAdapters.AVAILABLE_BACKENDS = {
    mac = { 'Metal' }, -- macOS 只支持 Metal
 }
 
--- 枚举系统所有可用的 GPU
+-- 枚举系统所有可用的 GPU (需在 GUI 环境下才能获取)
 ---@type WeztermGPUAdapter[]
-GpuAdapters.ENUMERATED_GPUS = wezterm.gui.enumerate_gpus()
+GpuAdapters.ENUMERATED_GPUS = {}
+if wezterm.gui and wezterm.gui.enumerate_gpus then
+   GpuAdapters.ENUMERATED_GPUS = wezterm.gui.enumerate_gpus()
+else
+   wezterm.log_debug('wezterm.gui unavailable; GPU enumeration skipped')
+end
 
 ---初始化 GPU 适配器映射表
 ---@return GpuAdapters
@@ -151,6 +156,11 @@ end
 
 ---打印 GPU 信息(用于调试)
 function GpuAdapters:print_info()
+   if #self.ENUMERATED_GPUS == 0 then
+      wezterm.log_info('No GPU info available (non-GUI context).')
+      return
+   end
+   
    wezterm.log_info('=== Available GPU Adapters ===')
    for i, gpu in ipairs(self.ENUMERATED_GPUS) do
       wezterm.log_info(string.format('[%d] %s', i, gpu.name))

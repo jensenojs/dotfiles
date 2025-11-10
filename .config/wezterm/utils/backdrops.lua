@@ -50,10 +50,12 @@ function M:load_images()
    self.images = wezterm.glob(pattern)
    
    if #self.images == 0 then
-      wezterm.log_warn("No background images found in: " .. self.images_dir)
-   else
-      wezterm.log_info("Loaded " .. #self.images .. " background images")
+      self.enabled = false
+      wezterm.log_info("Backdrops disabled: no images found in " .. self.images_dir)
+      return
    end
+
+   wezterm.log_info("Loaded " .. #self.images .. " background images")
    
    -- Random initial image
    if #self.images > 0 then
