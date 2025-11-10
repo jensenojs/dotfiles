@@ -18,19 +18,19 @@ local M = {}
 M._server_configs = {}
 
 local LSP_BOOTSTRAP = vim.api.nvim_create_augroup("lsp.bootstrap", {
-    clear = true
+    clear = true,
 })
 
 local ui = {
     border = "rounded", -- 圆角
     zindex = 50, -- 保证在普通浮动窗口之上
     max_width = math.floor(vim.o.columns * 0.8),
-    max_height = math.floor(vim.o.lines * 0.7)
+    max_height = math.floor(vim.o.lines * 0.7),
 }
 
 local function should_bootstrap(bufnr)
     return buf_util.is_real_file(bufnr, {
-        require_modifiable = true
+        require_modifiable = true,
     })
 end
 
@@ -40,7 +40,7 @@ local function register_lsp_configs()
     local ok_list, servers = pcall(require, "config.lsp.enable-list")
     if not ok_list or type(servers) ~= "table" then
         vim.notify("无法加载 LSP 服务器列表: " .. tostring(servers), vim.log.levels.ERROR, {
-            title = "LSP Bootstrap"
+            title = "LSP Bootstrap",
         })
         return
     end
@@ -60,32 +60,41 @@ local function register_lsp_configs()
                     -- 保存配置和 filetypes 信息
                     M._server_configs[server_name] = {
                         config = config,
-                        filetypes = config.filetypes or {}
+                        filetypes = config.filetypes or {},
                     }
 
                     -- 注册配置
                     local ok_reg, reg_err = pcall(vim.lsp.config, server_name, config)
                     if not ok_reg then
-                        vim.notify("注册 LSP 配置失败: " .. server_name .. " - " .. tostring(reg_err),
-                            vim.log.levels.WARN, {
-                                title = "LSP Bootstrap"
-                            })
+                        vim.notify(
+                            "注册 LSP 配置失败: " .. server_name .. " - " .. tostring(reg_err),
+                            vim.log.levels.WARN,
+                            {
+                                title = "LSP Bootstrap",
+                            }
+                        )
                     end
                 else
-                    vim.notify("执行 LSP 配置失败: " .. server_name .. " - " .. tostring(config),
-                        vim.log.levels.ERROR, {
-                            title = "LSP Bootstrap"
-                        })
+                    vim.notify(
+                        "执行 LSP 配置失败: " .. server_name .. " - " .. tostring(config),
+                        vim.log.levels.ERROR,
+                        {
+                            title = "LSP Bootstrap",
+                        }
+                    )
                 end
             else
-                vim.notify("加载 LSP 配置失败: " .. server_name .. " - " .. tostring(load_err),
-                    vim.log.levels.ERROR, {
-                        title = "LSP Bootstrap"
-                    })
+                vim.notify(
+                    "加载 LSP 配置失败: " .. server_name .. " - " .. tostring(load_err),
+                    vim.log.levels.ERROR,
+                    {
+                        title = "LSP Bootstrap",
+                    }
+                )
             end
         else
             vim.notify("LSP 配置文件不存在: " .. config_file, vim.log.levels.WARN, {
-                title = "LSP Bootstrap"
+                title = "LSP Bootstrap",
             })
         end
     end
@@ -131,26 +140,26 @@ lsp.handlers["textDocument/signatureHelp"] = lsp.with(lsp.handlers.signature_hel
 diagnostic.config({
     float = vim.tbl_extend("force", ui, {
         header = "💡 诊断",
-        source = "if_many"
+        source = "if_many",
     }),
     virtual_text = {
-        prefix = '●',
+        prefix = "●",
         spacing = 4,
-        source = "if_many"
+        source = "if_many",
     },
     signs = true,
     underline = true,
-    update_in_insert = false
+    update_in_insert = false,
 })
 
 api.nvim_create_user_command("LspInfo", ":checkhealth vim.lsp", {
-    desc = "Alias to `:checkhealth vim.lsp`"
+    desc = "Alias to `:checkhealth vim.lsp`",
 })
 
 api.nvim_create_user_command("LspLog", function()
     vim.cmd(string.format("tabnew %s", lsp.get_log_path()))
 end, {
-    desc = "Opens the Nvim LSP client log."
+    desc = "Opens the Nvim LSP client log.",
 })
 
 local function complete_server(arg)
@@ -179,14 +188,16 @@ api.nvim_create_user_command("LspRestart", function(info)
     for _, name in ipairs(targets) do
         if not whitelist[name] then
             vim.notify(("Invalid server name '%s'"):format(name), vim.log.levels.WARN, {
-                title = "LspRestart"
+                title = "LspRestart",
             })
         else
             local ok_disable = pcall(vim.lsp.enable, name, false)
             if not ok_disable then
-                for _, c in ipairs(vim.lsp.get_clients({
-                    name = name
-                })) do
+                for _, c in
+                    ipairs(vim.lsp.get_clients({
+                        name = name,
+                    }))
+                do
                     pcall(c.stop, c, true)
                 end
             end
@@ -201,7 +212,7 @@ api.nvim_create_user_command("LspRestart", function(info)
 end, {
     desc = "Restart the given client(s)",
     nargs = "+",
-    complete = complete_server
+    complete = complete_server,
 })
 
 -- 为已打开的 buffer 启用 LSP
@@ -221,7 +232,7 @@ local function enable_lsp_for_opened_buffers()
 
                 for _, server_name in ipairs(matching_servers) do
                     vim.lsp.enable(server_name, {
-                        bufnr = buf
+                        bufnr = buf,
                     })
                     server_count = server_count + 1
                 end
@@ -254,10 +265,10 @@ api.nvim_create_autocmd("FileType", {
 
         for _, server_name in ipairs(matching_servers) do
             vim.lsp.enable(server_name, {
-                bufnr = args.buf
+                bufnr = args.buf,
             })
         end
-    end
+    end,
 })
 
 -- 导出函数供外部调用

@@ -1,6 +1,6 @@
 -- Appearance configuration module
 -- Visual settings: colors, window decorations, tab bar, backgrounds
-local wezterm = require('wezterm')
+local wezterm = require("wezterm")
 
 local M = {}
 
@@ -14,11 +14,11 @@ function M.apply(config, platform)
     --   1. 将 enabled 设置为 true
     --   2. 在 ~/.config/wezterm/backdrops/ 放置图片(已自动创建)
     --   3. 重载配置(Cmd+R 或 Alt+R)
-    local backdrops = require('utils.backdrops'):new({
+    local backdrops = require("utils.backdrops"):new({
         enabled = true,
-        images_dir = wezterm.config_dir .. '/backdrops/',
+        images_dir = wezterm.config_dir .. "/backdrops/",
         opacity = 0.90, -- 背景透明度 (0.0-1.0)
-        blur = 0 -- 模糊程度 (0-100), 0=不模糊
+        blur = 0, -- 模糊程度 (0-100), 0=不模糊
     })
 
     -- 如果启用了背景, 应用到配置
@@ -33,10 +33,10 @@ function M.apply(config, platform)
     -- Color Scheme
     -- ============================================================================
 
-    config.color_scheme = 'Gruvbox Dark (Gogh)'
+    config.color_scheme = "Gruvbox Dark (Gogh)"
 
     -- Import custom color schemes
-    local colors = require('utils.colors')
+    local colors = require("utils.colors")
     config.color_schemes = colors.get_schemes()
 
     -- ============================================================================
@@ -45,9 +45,9 @@ function M.apply(config, platform)
 
     -- Window decorations (platform-specific)
     if platform.is_mac then
-        config.window_decorations = 'TITLE|RESIZE'
+        config.window_decorations = "TITLE|RESIZE"
     else
-        config.window_decorations = 'RESIZE'
+        config.window_decorations = "RESIZE"
     end
 
     -- Window opacity
@@ -61,7 +61,7 @@ function M.apply(config, platform)
         left = 8,
         right = 8,
         top = 35, -- 增加顶部空间, 避免与红绿灯按钮重叠
-        bottom = 1 -- 减少底部间隔, 紧贴 lualine
+        bottom = 1, -- 减少底部间隔, 紧贴 lualine
     }
     -- else
     -- 	config.window_padding = {
@@ -91,82 +91,82 @@ function M.apply(config, platform)
     -- Colors for tab bar and UI elements (Gruvbox)
     config.colors = {
         -- Foreground/Background
-        foreground = '#ebdbb2',
-        background = '#282828',
+        foreground = "#ebdbb2",
+        background = "#282828",
 
         -- Cursor
-        cursor_bg = '#ebdbb2',
-        cursor_fg = '#282828',
-        cursor_border = '#ebdbb2',
+        cursor_bg = "#ebdbb2",
+        cursor_fg = "#282828",
+        cursor_border = "#ebdbb2",
 
         -- Selection
-        selection_fg = '#ebdbb2',
-        selection_bg = '#504945',
+        selection_fg = "#ebdbb2",
+        selection_bg = "#504945",
 
         -- Scrollbar
-        scrollbar_thumb = '#504945',
+        scrollbar_thumb = "#504945",
 
         -- Split lines
-        split = '#504945',
+        split = "#504945",
 
         -- Compose cursor (for IME)
-        compose_cursor = '#fe8019',
+        compose_cursor = "#fe8019",
 
         -- Copy mode colors (使用 Gruvbox 颜色)
         copy_mode_active_highlight_bg = {
-            Color = '#fabd2f'
+            Color = "#fabd2f",
         },
         copy_mode_active_highlight_fg = {
-            Color = '#282828'
+            Color = "#282828",
         },
         copy_mode_inactive_highlight_bg = {
-            Color = '#665c54'
+            Color = "#665c54",
         },
         copy_mode_inactive_highlight_fg = {
-            Color = '#ebdbb2'
+            Color = "#ebdbb2",
         },
         quick_select_label_bg = {
-            Color = '#fb4934'
+            Color = "#fb4934",
         },
         quick_select_label_fg = {
-            Color = '#282828'
+            Color = "#282828",
         },
         quick_select_match_bg = {
-            Color = '#fabd2f'
+            Color = "#fabd2f",
         },
         quick_select_match_fg = {
-            Color = '#282828'
+            Color = "#282828",
         },
 
         tab_bar = {
-            background = '#282828',
+            background = "#282828",
 
             active_tab = {
-                bg_color = '#504945',
-                fg_color = '#ebdbb2',
-                intensity = 'Bold'
+                bg_color = "#504945",
+                fg_color = "#ebdbb2",
+                intensity = "Bold",
             },
 
             inactive_tab = {
-                bg_color = '#3c3836',
-                fg_color = '#a89984'
+                bg_color = "#3c3836",
+                fg_color = "#a89984",
             },
 
             inactive_tab_hover = {
-                bg_color = '#504945',
-                fg_color = '#d5c4a1'
+                bg_color = "#504945",
+                fg_color = "#d5c4a1",
             },
 
             new_tab = {
-                bg_color = '#3c3836',
-                fg_color = '#a89984'
+                bg_color = "#3c3836",
+                fg_color = "#a89984",
             },
 
             new_tab_hover = {
-                bg_color = '#504945',
-                fg_color = '#d5c4a1'
-            }
-        }
+                bg_color = "#504945",
+                fg_color = "#d5c4a1",
+            },
+        },
     }
 end
 

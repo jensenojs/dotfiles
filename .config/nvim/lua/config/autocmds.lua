@@ -11,146 +11,146 @@
  ]]
 
 local function augroup(name)
-	return vim.api.nvim_create_augroup("lazyvim_" .. name, { clear = true })
+    return vim.api.nvim_create_augroup("lazyvim_" .. name, { clear = true })
 end
 
 local buf_util = require("utils.buf")
 
 -- 焦点返回/终端关闭/离开终端时执行 checktime
 vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
-	group = augroup("checktime"),
-	command = "checktime",
+    group = augroup("checktime"),
+    command = "checktime",
 })
 
 -- 输入法: 从插入模式切回普通/可视时切换到英文
 -- 说明: 仅在系统存在 im-select 时注册, 避免无意义系统调用
 local ok_env, env = pcall(require, "config.environment")
 if ok_env and env.has.im_select then
-	local target_layout = "com.apple.keylayout.ABC"
-	local switching = false
+    local target_layout = "com.apple.keylayout.ABC"
+    local switching = false
 
-	local function switch_to_target_layout()
-		if switching then
-			return
-		end
-		switching = true
+    local function switch_to_target_layout()
+        if switching then
+            return
+        end
+        switching = true
 
-		local function reset()
-			switching = false
-		end
+        local function reset()
+            switching = false
+        end
 
-		if vim.system then
-			vim.system({ "im-select", target_layout }, {}, function()
-				vim.schedule(reset)
-			end)
-		elseif vim.fn.jobstart then
-			vim.fn.jobstart({ "im-select", target_layout }, {
-				on_exit = function()
-					vim.schedule(reset)
-				end,
-			})
-		else
-			vim.fn.system("im-select " .. target_layout)
-			reset()
-		end
-	end
+        if vim.system then
+            vim.system({ "im-select", target_layout }, {}, function()
+                vim.schedule(reset)
+            end)
+        elseif vim.fn.jobstart then
+            vim.fn.jobstart({ "im-select", target_layout }, {
+                on_exit = function()
+                    vim.schedule(reset)
+                end,
+            })
+        else
+            vim.fn.system("im-select " .. target_layout)
+            reset()
+        end
+    end
 
-	vim.api.nvim_create_autocmd({ "ModeChanged" }, {
-		pattern = "i:n,i:v",
-		group = augroup("im-select"),
-		callback = switch_to_target_layout,
-	})
+    vim.api.nvim_create_autocmd({ "ModeChanged" }, {
+        pattern = "i:n,i:v",
+        group = augroup("im-select"),
+        callback = switch_to_target_layout,
+    })
 end
 
 -- 文本被 yank 后高亮
 vim.api.nvim_create_autocmd("TextYankPost", {
-	group = augroup("highlight_yank"),
-	callback = function()
-		vim.highlight.on_yank()
-	end,
+    group = augroup("highlight_yank"),
+    callback = function()
+        vim.highlight.on_yank()
+    end,
 })
 
 -- 窗口尺寸变化时等比分屏
 vim.api.nvim_create_autocmd({ "VimResized" }, {
-	group = augroup("resize_splits"),
-	callback = function()
-		vim.cmd("tabdo wincmd =")
-	end,
+    group = augroup("resize_splits"),
+    callback = function()
+        vim.cmd("tabdo wincmd =")
+    end,
 })
 
 -- 特定 FileType 下按 q 关闭窗口
 vim.api.nvim_create_autocmd("FileType", {
-	group = augroup("close_with_q"),
-	pattern = {
-		"PlenaryTestPopup",
-		"help",
-		"grug-far",
-		"lspinfo",
-		"man",
-		"notify",
-		"qf",
-		"spectre_panel",
-		"startuptime",
-		"tsplayground",
-		"neotest-output",
-		"checkhealth",
-		"neotest-summary",
-		"neotest-output-panel",
-	},
-	callback = function(event)
-		vim.bo[event.buf].buflisted = false
-		vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
-	end,
+    group = augroup("close_with_q"),
+    pattern = {
+        "PlenaryTestPopup",
+        "help",
+        "grug-far",
+        "lspinfo",
+        "man",
+        "notify",
+        "qf",
+        "spectre_panel",
+        "startuptime",
+        "tsplayground",
+        "neotest-output",
+        "checkhealth",
+        "neotest-summary",
+        "neotest-output-panel",
+    },
+    callback = function(event)
+        vim.bo[event.buf].buflisted = false
+        vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
+    end,
 })
 
 -- 文本类文件自动换行与拼写检查
 vim.api.nvim_create_autocmd("FileType", {
-	group = augroup("wrap_spell"),
-	pattern = { "gitcommit" },
-	callback = function()
-		vim.opt_local.wrap = true
-		vim.opt_local.spell = true
-		vim.opt_local.conceallevel = 2
-		vim.opt_local.formatoptions:remove({ "o", "t" })
-	end,
+    group = augroup("wrap_spell"),
+    pattern = { "gitcommit" },
+    callback = function()
+        vim.opt_local.wrap = true
+        vim.opt_local.spell = true
+        vim.opt_local.conceallevel = 2
+        vim.opt_local.formatoptions:remove({ "o", "t" })
+    end,
 })
 
 -- 保存前自动创建目录
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-	group = augroup("auto_create_dir"),
-	callback = function(event)
-		if event.match:match("^%w%w+://") then
-			return
-		end
-		local file = vim.loop.fs_realpath(event.match) or event.match
-		vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
-	end,
+    group = augroup("auto_create_dir"),
+    callback = function(event)
+        if event.match:match("^%w%w+://") then
+            return
+        end
+        local file = vim.loop.fs_realpath(event.match) or event.match
+        vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
+    end,
 })
 
 -- 修复通过 telescope 打开的文件无法折叠的问题; 仅对真实文件 buffer 执行 zx
 vim.api.nvim_create_autocmd("BufEnter", {
-	group = augroup("fold_refresh"),
-	callback = function(event)
-		if not buf_util.is_real_file(event.buf, {
-			require_name = false,
-		}) then
-			return
-		end
+    group = augroup("fold_refresh"),
+    callback = function(event)
+        if not buf_util.is_real_file(event.buf, {
+            require_name = false,
+        }) then
+            return
+        end
 
-		local already_refreshed = vim.b[event.buf].lazyvim_fold_refreshed
-		if already_refreshed then
-			return
-		end
+        local already_refreshed = vim.b[event.buf].lazyvim_fold_refreshed
+        if already_refreshed then
+            return
+        end
 
-		vim.b[event.buf].lazyvim_fold_refreshed = true
+        vim.b[event.buf].lazyvim_fold_refreshed = true
 
-		vim.schedule(function()
-			if not vim.api.nvim_buf_is_valid(event.buf) then
-				return
-			end
-			pcall(vim.api.nvim_buf_call, event.buf, function()
-				vim.cmd([[silent! normal! zx]])
-			end)
-		end)
-	end,
+        vim.schedule(function()
+            if not vim.api.nvim_buf_is_valid(event.buf) then
+                return
+            end
+            pcall(vim.api.nvim_buf_call, event.buf, function()
+                vim.cmd([[silent! normal! zx]])
+            end)
+        end)
+    end,
 })

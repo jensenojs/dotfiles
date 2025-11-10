@@ -4,7 +4,7 @@
 -- 1) 懒加载：本插件在 lazy.nvim 的 `VeryLazy` 事件时才加载, config() 也只在加载发生时执行；
 --    避免启动期执行重逻辑；配置中的 require("dap")/require("dapui") 也仅在此时求值。
 -- 2) 会话期键位：只在 DAP 会话开始时加载(临时覆盖 K 键), 会话结束时恢复原 K 键, 避免键位“污染”。
--- 3) 生命周期监听：使用 `dap.listeners.*["dapui_config"] = function() ... end` 命名空间, 
+-- 3) 生命周期监听：使用 `dap.listeners.*["dapui_config"] = function() ... end` 命名空间,
 --    确保多次设置时是覆盖而非叠加, 不会产生重复回调。
 local M = {}
 
@@ -13,7 +13,7 @@ local debug_keymaps_loaded = false
 -- 记录会话开始前 K 键的原有映射(分别记录普通/可视模式), 用于会话结束时恢复
 local prev_keymaps = {
     n = nil,
-    v = nil
+    v = nil,
 }
 
 -- 加载调试期间的键位映射
@@ -55,8 +55,10 @@ function M.load_debug_keymaps()
     local map_cmd = bind.map_cmd
 
     local debug_keymaps = {
-        ["nv|K"] = map_cmd("<Cmd>lua require('dapui').eval()<CR>"):with_noremap():with_nowait():with_desc(
-            "Debug: Evaluate expression under cursor")
+        ["nv|K"] = map_cmd("<Cmd>lua require('dapui').eval()<CR>")
+            :with_noremap()
+            :with_nowait()
+            :with_desc("Debug: Evaluate expression under cursor"),
     }
 
     bind.nvim_load_mapping(debug_keymaps)
@@ -84,7 +86,7 @@ function M.clear_debug_keymaps()
             expr = map.expr,
             nowait = map.nowait,
             desc = map.desc,
-            buffer = map.buffer
+            buffer = map.buffer,
         }
         if map.callback then
             pcall(vim.keymap.set, mode, "K", map.callback, opts)
@@ -101,7 +103,7 @@ end
 
 return {
     "rcarriga/nvim-dap-ui",
-    dependencies = {"nvim-neotest/nvim-nio"},
+    dependencies = { "nvim-neotest/nvim-nio" },
     main = "dapui",
     lazy = true,
 
@@ -111,7 +113,7 @@ return {
         if ok then
             icons = {
                 ui = icon_module.get("ui"),
-                dap = icon_module.get("dap")
+                dap = icon_module.get("dap"),
             }
         end
         return {
@@ -119,15 +121,15 @@ return {
             icons = {
                 expanded = icons.ui and icons.ui.ArrowOpen or "v",
                 collapsed = icons.ui and icons.ui.ArrowClosed or ">",
-                current_frame = icons.ui and icons.ui.Indicator or "->"
+                current_frame = icons.ui and icons.ui.Indicator or "->",
             },
             mappings = {
                 edit = "e",
-                expand = {"<CR>", "<2-LeftMouse>"},
+                expand = { "<CR>", "<2-LeftMouse>" },
                 open = "o",
                 remove = "d",
                 repl = "r",
-                toggle = "t"
+                toggle = "t",
             },
             controls = {
                 enabled = true,
@@ -140,20 +142,20 @@ return {
                     step_out = icons.dap and icons.dap.StepOut or "⏮",
                     step_back = icons.dap and icons.dap.StepBack or "b",
                     run_last = icons.dap and icons.dap.RunLast or "▶▶",
-                    terminate = icons.dap and icons.dap.Terminate or "⏹"
-                }
+                    terminate = icons.dap and icons.dap.Terminate or "⏹",
+                },
             },
             floating = {
                 max_height = nil,
                 max_width = nil,
                 mappings = {
-                    close = {"q", "<Esc>"}
-                }
+                    close = { "q", "<Esc>" },
+                },
             },
             render = {
                 indent = 1,
-                max_value_lines = 85
-            }
+                max_value_lines = 85,
+            },
         }
     end,
 
@@ -168,11 +170,11 @@ return {
             local ok_focus, focus = pcall(require, "focus")
             if ok_focus then
                 focus.setup({
-                    enable = false
+                    enable = false,
                 })
             end
             dapui.open({
-                reset = true
+                reset = true,
             })
         end
 
@@ -181,7 +183,7 @@ return {
             local ok_focus, focus = pcall(require, "focus")
             if ok_focus then
                 focus.setup({
-                    enable = true
+                    enable = true,
                 })
             end
             M.clear_debug_keymaps()
@@ -192,7 +194,7 @@ return {
             local ok_focus, focus = pcall(require, "focus")
             if ok_focus then
                 focus.setup({
-                    enable = true
+                    enable = true,
                 })
             end
             M.clear_debug_keymaps()
@@ -208,31 +210,31 @@ return {
             text = icons.Breakpoint or "B",
             texthl = "DapBreakpoint",
             linehl = "",
-            numhl = ""
+            numhl = "",
         })
         vim.fn.sign_define("DapBreakpointCondition", {
             text = icons.BreakpointCondition or "C",
             texthl = "DapBreakpoint",
             linehl = "",
-            numhl = ""
+            numhl = "",
         })
         vim.fn.sign_define("DapStopped", {
             text = icons.Stopped or "->",
             texthl = "DapStopped",
             linehl = "",
-            numhl = ""
+            numhl = "",
         })
         vim.fn.sign_define("DapBreakpointRejected", {
-			text = icons.BreakpointRejected,
-			texthl = "DapBreakpoint",
-			linehl = "",
-			numhl = "",
-		})
-		vim.fn.sign_define("DapLogPoint", {
-			text = icons.LogPoint,
-			texthl = "DapLogPoint",
-			linehl = "",
-			numhl = "",
-		})
-    end
+            text = icons.BreakpointRejected,
+            texthl = "DapBreakpoint",
+            linehl = "",
+            numhl = "",
+        })
+        vim.fn.sign_define("DapLogPoint", {
+            text = icons.LogPoint,
+            texthl = "DapLogPoint",
+            linehl = "",
+            numhl = "",
+        })
+    end,
 }

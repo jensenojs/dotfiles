@@ -38,7 +38,7 @@ local default_config = {
     show_process = true,
     show_unseen_indicator = true,
     enable_command_palette = true,
-    title_width = DEFAULT_TITLE_WIDTH
+    title_width = DEFAULT_TITLE_WIDTH,
 }
 
 local module_config = {}
@@ -101,7 +101,7 @@ local ignored_processes = {
     ash = true,
     busybox = true,
     login = true,
-    sx = true
+    sx = true,
 }
 
 local function first_token(text)
@@ -194,9 +194,9 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, window_config, hover, 
         composed = composed .. " *"
     end
 
-    return {{
-        Text = " " .. composed .. " "
-    }}
+    return { {
+        Text = " " .. composed .. " ",
+    } }
 end)
 
 -- ============================================================================
@@ -208,7 +208,7 @@ local metrics_cache = {
     cpu = " CPU:--",
     mem = " MEM:--",
     disk = " DISK:--",
-    net = " NET:--/--"
+    net = " NET:--/--",
 }
 
 -- ============================================================================
@@ -263,7 +263,7 @@ end
 
 local METRIC_SCRIPTS = {
     mac = get_script_path() .. "/metrics-macos.sh",
-    linux = get_script_path() .. "/metrics-linux.sh"
+    linux = get_script_path() .. "/metrics-linux.sh",
 }
 
 -- 旧的内联脚本(保留作为降级方案)
@@ -320,7 +320,7 @@ read rx tx <<EOF
 $(awk 'NR>2 {sub(/:/,"",$1); if ($1!="lo") {rx+=$2; tx+=$10}} END {if(rx=="") rx=0; if(tx=="") tx=0; printf "%.0f %.0f\n", rx, tx}' /proc/net/dev 2>/dev/null)
 EOF
 	printf "CPU=%s MEM=%s DISK=%s RX=%s TX=%s\n" "${cpu:-0}" "${mem:-0}" "${disk:-0}" "${rx:-0}" "${tx:-0}"
-]]
+]],
 }
 
 -- 根据当前平台选择相应的脚本
@@ -442,10 +442,10 @@ local function start_metrics_refresh()
         local cmd
         if script:sub(1, 1) == "/" or script:sub(1, 1) == "~" then
             -- 脚本文件路径
-            cmd = {script}
+            cmd = { script }
         else
             -- 内联脚本
-            cmd = {"/bin/sh", "-c", script}
+            cmd = { "/bin/sh", "-c", script }
         end
         local success, stdout, stderr = wezterm.run_child_process(cmd)
         handle_metrics_result(success, stdout, stderr, now_seconds())
@@ -488,7 +488,7 @@ wezterm.on("update-status", function(window, pane)
     local mode_icons = {
         workspace = "📦 WORKSPACE ",
         copy_mode = "📋 COPY ",
-        search_mode = "🔍 SEARCH "
+        search_mode = "🔍 SEARCH ",
     }
     local mode = key_table and mode_icons[key_table] or ""
 
@@ -497,59 +497,68 @@ wezterm.on("update-status", function(window, pane)
     local workspace_text = (workspace ~= "default") and ("  📁 " .. workspace) or ""
 
     -- Set left status
-    window:set_left_status(wezterm.format({{
-        Foreground = {
-            Color = "#d79921"
-        }
-    }, -- Gruvbox yellow
-    {
-        Text = leader
-    }, {
-        Foreground = {
-            Color = "#83a598"
-        }
-    }, -- Gruvbox blue
-    {
-        Text = mode
-    }, {
-        Foreground = {
-            Color = "#98971a"
-        }
-    }, -- Gruvbox green
-    {
-        Text = workspace_text
-    }}))
+    window:set_left_status(wezterm.format({
+        {
+            Foreground = {
+                Color = "#d79921",
+            },
+        }, -- Gruvbox yellow
+        {
+            Text = leader,
+        },
+        {
+            Foreground = {
+                Color = "#83a598",
+            },
+        }, -- Gruvbox blue
+        {
+            Text = mode,
+        },
+        {
+            Foreground = {
+                Color = "#98971a",
+            },
+        }, -- Gruvbox green
+        {
+            Text = workspace_text,
+        },
+    }))
 
     -- 使用缓存的信息更新状态栏
-    window:set_right_status(wezterm.format({{
-        Foreground = {
-            Color = "#b8bb26"
-        }
-    }, -- Gruvbox bright green
-    {
-        Text = metrics_cache.cpu
-    }, {
-        Foreground = {
-            Color = "#83a598"
-        }
-    }, -- Gruvbox bright blue
-    {
-        Text = metrics_cache.mem
-    }, {
-        Foreground = {
-            Color = "#fe8019"
-        }
-    }, -- Gruvbox bright orange
-    {
-        Text = metrics_cache.disk
-    }, {
-        Foreground = {
-            Color = "#d3869b"
-        }
-    }, -- Gruvbox bright purple
-    {
-        Text = metrics_cache.net
-    }}))
+    window:set_right_status(wezterm.format({
+        {
+            Foreground = {
+                Color = "#b8bb26",
+            },
+        }, -- Gruvbox bright green
+        {
+            Text = metrics_cache.cpu,
+        },
+        {
+            Foreground = {
+                Color = "#83a598",
+            },
+        }, -- Gruvbox bright blue
+        {
+            Text = metrics_cache.mem,
+        },
+        {
+            Foreground = {
+                Color = "#fe8019",
+            },
+        }, -- Gruvbox bright orange
+        {
+            Text = metrics_cache.disk,
+        },
+        {
+            Foreground = {
+                Color = "#d3869b",
+            },
+        }, -- Gruvbox bright purple
+        {
+            Text = metrics_cache.net,
+        },
+    }))
 end)
 
 -- ============================================================================
@@ -557,51 +566,58 @@ end)
 -- ============================================================================
 
 wezterm.on("augment-command-palette", function(window, pane)
-    return {{
-        brief = "📁 Pick Workspace",
-        icon = "md_briefcase",
-        action = act.ShowLauncherArgs({
-            flags = "FUZZY|WORKSPACES"
-        })
-    }, {
-        brief = "🔄 Reload Configuration",
-        icon = "md_refresh",
-        action = act.ReloadConfiguration
-    }, {
-        brief = "👁️  Toggle Tab Bar",
-        icon = "md_tab",
-        action = wezterm.action_callback(function(win, _)
-            local overrides = win:get_config_overrides() or {}
-            if overrides.enable_tab_bar == false then
-                overrides.enable_tab_bar = true
-            else
-                overrides.enable_tab_bar = false
-            end
-            win:set_config_overrides(overrides)
-        end)
-    }, {
-        brief = "🖼️  Toggle Opacity",
-        icon = "md_opacity",
-        action = wezterm.action_callback(function(win, _)
-            local overrides = win:get_config_overrides() or {}
-            if overrides.window_background_opacity == 1.0 then
-                overrides.window_background_opacity = 0.95
-            else
-                overrides.window_background_opacity = 1.0
-            end
-            win:set_config_overrides(overrides)
-        end)
-    }, {
-        brief = "⬆️  Maximize Window",
-        icon = "md_window_maximize",
-        action = wezterm.action_callback(function(win, _)
-            win:maximize()
-        end)
-    }, {
-        brief = "📋 Copy Mode",
-        icon = "md_content_copy",
-        action = act.ActivateCopyMode
-    }}
+    return {
+        {
+            brief = "📁 Pick Workspace",
+            icon = "md_briefcase",
+            action = act.ShowLauncherArgs({
+                flags = "FUZZY|WORKSPACES",
+            }),
+        },
+        {
+            brief = "🔄 Reload Configuration",
+            icon = "md_refresh",
+            action = act.ReloadConfiguration,
+        },
+        {
+            brief = "👁️  Toggle Tab Bar",
+            icon = "md_tab",
+            action = wezterm.action_callback(function(win, _)
+                local overrides = win:get_config_overrides() or {}
+                if overrides.enable_tab_bar == false then
+                    overrides.enable_tab_bar = true
+                else
+                    overrides.enable_tab_bar = false
+                end
+                win:set_config_overrides(overrides)
+            end),
+        },
+        {
+            brief = "🖼️  Toggle Opacity",
+            icon = "md_opacity",
+            action = wezterm.action_callback(function(win, _)
+                local overrides = win:get_config_overrides() or {}
+                if overrides.window_background_opacity == 1.0 then
+                    overrides.window_background_opacity = 0.95
+                else
+                    overrides.window_background_opacity = 1.0
+                end
+                win:set_config_overrides(overrides)
+            end),
+        },
+        {
+            brief = "⬆️  Maximize Window",
+            icon = "md_window_maximize",
+            action = wezterm.action_callback(function(win, _)
+                win:maximize()
+            end),
+        },
+        {
+            brief = "📋 Copy Mode",
+            icon = "md_content_copy",
+            action = act.ActivateCopyMode,
+        },
+    }
 end)
 
 -- ============================================================================

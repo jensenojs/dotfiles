@@ -49,9 +49,9 @@ function M.get_default_prog()
     if M.is_windows then
         local comspec = normalize_shell_env(os.getenv("COMSPEC"))
         if comspec then
-            return {comspec}
+            return { comspec }
         end
-        return {"pwsh.exe", "-NoLogo"}
+        return { "pwsh.exe", "-NoLogo" }
     end
 
     local shell = normalize_shell_env(os.getenv("SHELL"))
@@ -66,10 +66,10 @@ function M.get_default_prog()
 
     local shell_name = shell:match("([^/]+)$") or shell
     if login_supported(shell_name) then
-        return {shell, "-l"}
+        return { shell, "-l" }
     end
 
-    return {shell}
+    return { shell }
 end
 
 -- Backwards-compatible helper (returns the binary path only)

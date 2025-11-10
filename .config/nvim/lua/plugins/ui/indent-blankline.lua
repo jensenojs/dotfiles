@@ -8,12 +8,12 @@ return {
         vim.opt.termguicolors = true
         vim.api.nvim_set_hl(0, "IndentBlanklineIndent", {
             fg = "#565552",
-            nocombine = true
+            nocombine = true,
         })
     end,
     opts = {
         exclude = {
-            filetypes = {"dashboard"}
-        }
-    }
+            filetypes = { "dashboard" },
+        },
+    },
 }

@@ -5,12 +5,36 @@ return {
     branch = "main",
     event = "VeryLazy",
     build = ":TSUpdate",
-    dependencies = {"andymass/vim-matchup", "nvim-dap-repl-highlights"},
+    dependencies = { "andymass/vim-matchup", "nvim-dap-repl-highlights" },
     opts = {
         -- 支持的语言, 它们的代码高亮就会更准确
-        ensure_installed = {"dap_repl", "bash", "c", "cpp", "cmake", "make", "go", "gomod", "gosum", "gowork", "java",
-                            "rust", "ron", "lua", "scheme", "python", "json", "vim", "vimdoc", "sql", "scala", "toml",
-                            "html", "markdown", "markdown_inline"},
+        ensure_installed = {
+            "dap_repl",
+            "bash",
+            "c",
+            "cpp",
+            "cmake",
+            "make",
+            "go",
+            "gomod",
+            "gosum",
+            "gowork",
+            "java",
+            "rust",
+            "ron",
+            "lua",
+            "scheme",
+            "python",
+            "json",
+            "vim",
+            "vimdoc",
+            "sql",
+            "scala",
+            "toml",
+            "html",
+            "markdown",
+            "markdown_inline",
+        },
         sync_install = false,
         auto_install = false,
         highlight = {
@@ -25,18 +49,18 @@ return {
                 end
                 return st and st.size and st.size > max
             end,
-            additional_vim_regex_highlighting = false
+            additional_vim_regex_highlighting = false,
         },
         matchup = {
-            enable = true
-        }
+            enable = true,
+        },
     },
     init = function()
         -- Treesitter 折叠配置（main 分支使用新的 API）
         local group = vim.api.nvim_create_augroup("treesitter-fold", {
-            clear = true
+            clear = true,
         })
-        vim.api.nvim_create_autocmd({"BufReadPost", "BufNewFile"}, {
+        vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
             group = group,
             callback = function(args)
                 local buf = args.buf
@@ -58,7 +82,7 @@ return {
                         vim.opt_local.foldlevel = 10
                     end)
                 end
-            end
+            end,
         })
-    end
+    end,
 }

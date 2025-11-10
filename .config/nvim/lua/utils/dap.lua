@@ -14,14 +14,14 @@ local M = {}
 
 -- 安全输入: 捕捉 <C-c>/中断并静默返回
 local function safe_input(prompt, default, completion)
-	local ok, result = pcall(vim.fn.input, prompt, default, completion)
-	if not ok then
-		return nil
-	end
-	if type(result) ~= "string" then
-		return nil
-	end
-	return result
+    local ok, result = pcall(vim.fn.input, prompt, default, completion)
+    if not ok then
+        return nil
+    end
+    if type(result) ~= "string" then
+        return nil
+    end
+    return result
 end
 
 --[[
@@ -35,8 +35,8 @@ end
   - `vim.fn.split(str, " ", true)` 使用 Lua 模式为字面空格分割; 第三个参数 `true` 表示忽略空字段。
 ]]
 function M.input_args()
-	local argument_string = safe_input("Program arg(s) (enter nothing to leave it null): ") or ""
-	return vim.fn.split(argument_string, " ", true)
+    local argument_string = safe_input("Program arg(s) (enter nothing to leave it null): ") or ""
+    return vim.fn.split(argument_string, " ", true)
 end
 
 --[[
@@ -50,9 +50,9 @@ end
   - `vim.fn.expand("%:p:h")` 取当前缓冲区文件的目录; 拼接默认的 a.out。
 ]]
 function M.input_exec_path()
-	local default_path = vim.fn.expand("%:p:h") .. "/a.out"
-	local path = safe_input('Path to executable (default to "a.out"): ', default_path, "file")
-	return (path and #path > 0) and path or nil
+    local default_path = vim.fn.expand("%:p:h") .. "/a.out"
+    local path = safe_input('Path to executable (default to "a.out"): ', default_path, "file")
+    return (path and #path > 0) and path or nil
 end
 
 --[[
@@ -63,9 +63,9 @@ end
   string 文件绝对路径。
 ]]
 function M.input_file_path()
-	local default_file = vim.fn.expand("%:p")
-	local path = safe_input("Path to debuggee (default to the current file): ", default_file, "file")
-	return (path and #path > 0) and path or nil
+    local default_file = vim.fn.expand("%:p")
+    local path = safe_input("Path to debuggee (default to the current file): ", default_file, "file")
+    return (path and #path > 0) and path or nil
 end
 
 --[[
@@ -76,11 +76,11 @@ end
   string[] 形如 "K=V" 的字符串数组.
 ]]
 function M.get_env()
-  local variables = {}
-  for k, v in pairs(vim.fn.environ()) do
-    table.insert(variables, string.format("%s=%s", k, v))
-  end
-  return variables
+    local variables = {}
+    for k, v in pairs(vim.fn.environ()) do
+        table.insert(variables, string.format("%s=%s", k, v))
+    end
+    return variables
 end
 
 return M

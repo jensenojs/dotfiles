@@ -13,6 +13,6 @@
 --    sample* text                yssb            (sample text)
 -- 3. autojump
 return {
-	"kylechui/nvim-surround",
-	config = true,
+    "kylechui/nvim-surround",
+    config = true,
 }

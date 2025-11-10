@@ -5,11 +5,18 @@ return {
     event = "VeryLazy",
     init = function()
         -- 忽略的 filetype/bo 类型: 包含侧边栏与虚拟窗口, 防止 focus 干扰布局
-        local ignore_filetypes = {"NvimTree", "DiffviewFiles", "DiffviewFileHistory", "aerial", "TelescopePrompt",
-                                  "TelescopeResults", "TelescopePreview"}
-        local ignore_buftypes = {"nofile", "prompt", "popup", "quickfix", "terminal"}
+        local ignore_filetypes = {
+            "NvimTree",
+            "DiffviewFiles",
+            "DiffviewFileHistory",
+            "aerial",
+            "TelescopePrompt",
+            "TelescopeResults",
+            "TelescopePreview",
+        }
+        local ignore_buftypes = { "nofile", "prompt", "popup", "quickfix", "terminal" }
         local augroup = vim.api.nvim_create_augroup("FocusDisable", {
-            clear = true
+            clear = true,
         })
         -- 根据 BufType 禁用自动调整
         vim.api.nvim_create_autocmd("WinEnter", {
@@ -21,7 +28,7 @@ return {
                     vim.w.focus_disable = false
                 end
             end,
-            desc = "根据 BufType 禁用 focus 自动调整"
+            desc = "根据 BufType 禁用 focus 自动调整",
         })
         -- 根据 FileType 禁用自动调整
         vim.api.nvim_create_autocmd("FileType", {
@@ -33,13 +40,20 @@ return {
                     vim.w.focus_disable = false
                 end
             end,
-            desc = "根据 FileType 禁用 focus 自动调整"
+            desc = "根据 FileType 禁用 focus 自动调整",
         })
     end,
     main = "focus",
     opts = {
-        excluded_filetypes = {"NvimTree", "DiffviewFiles", "DiffviewFileHistory", "aerial", "TelescopePrompt",
-                              "TelescopeResults", "TelescopePreview"},
-        excluded_buftypes = {"nofile", "prompt", "popup", "quickfix", "terminal"}
-    }
+        excluded_filetypes = {
+            "NvimTree",
+            "DiffviewFiles",
+            "DiffviewFileHistory",
+            "aerial",
+            "TelescopePrompt",
+            "TelescopeResults",
+            "TelescopePreview",
+        },
+        excluded_buftypes = { "nofile", "prompt", "popup", "quickfix", "terminal" },
+    },
 }

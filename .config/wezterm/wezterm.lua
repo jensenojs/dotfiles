@@ -11,7 +11,7 @@
 -- Configuration Version: 1.0
 -- Design: Modular, Cross-platform, Leader-key System
 
-local wezterm = require('wezterm')
+local wezterm = require("wezterm")
 
 -- ============================================================================
 -- Initialize Configuration
@@ -21,35 +21,35 @@ local config = wezterm.config_builder and wezterm.config_builder() or {}
 
 -- Enable strict mode to catch configuration errors early
 if wezterm.config_builder then
-   config:set_strict_mode(true)
+    config:set_strict_mode(true)
 end
 
 -- Load platform detection (must be first)
-local platform = require('config.platform')
+local platform = require("config.platform")
 
 -- Load configuration modules
-require('config.options').apply(config, platform)
-require('config.appearance').apply(config, platform)
-require('config.keymaps').apply(config, platform)
-require('config.mouse').apply(config, platform)
+require("config.options").apply(config, platform)
+require("config.appearance").apply(config, platform)
+require("config.keymaps").apply(config, platform)
+require("config.mouse").apply(config, platform)
 
 -- Load event handlers with optional configuration
-require('config.events').setup({
-   -- Status bar settings
-   show_seconds = false,
-   date_format = '%H:%M',
+require("config.events").setup({
+    -- Status bar settings
+    show_seconds = false,
+    date_format = "%H:%M",
 
-   -- Tab title settings
-   show_tab_index = true,
-   show_process = true,
-   show_unseen_indicator = true,
+    -- Tab title settings
+    show_tab_index = true,
+    show_process = true,
+    show_unseen_indicator = true,
 
-   -- Feature toggles
-   enable_command_palette = true,
+    -- Feature toggles
+    enable_command_palette = true,
 })
 
 -- Load hyperlinks handler
-require('config.hyperlinks').setup()
+require("config.hyperlinks").setup()
 
 -- ============================================================================
 -- Return Configuration

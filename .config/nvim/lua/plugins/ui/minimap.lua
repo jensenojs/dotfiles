@@ -14,12 +14,12 @@ return {
         vim.g.neominimap = {
             auto_enable = true,
             click = {
-                enabled = true
+                enabled = true,
             },
             --- Used when `layout` is set to `float`
             float = {
-                minimap_width = 10
-            }
+                minimap_width = 10,
+            },
         }
-    end
+    end,
 }

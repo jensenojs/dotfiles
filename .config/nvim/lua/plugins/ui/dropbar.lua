@@ -3,10 +3,10 @@
 return {
     "Bekaboo/dropbar.nvim",
     event = "UIEnter",
-    dependencies = {{
+    dependencies = { {
         "nvim-telescope/telescope-fzf-native.nvim",
-        build = "make"
-    }},
+        build = "make",
+    } },
     main = "dropbar",
-    opts = {}
+    opts = {},
 }

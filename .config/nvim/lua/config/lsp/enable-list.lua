@@ -5,17 +5,17 @@
 -- 添加或移除一个服务器就像编辑这个列表一样简单。
 
 return {
-	-- "bashls",
-	"clangd",
-	"gopls",
-	"golangci_lint_ls", -- 并行启动, 与 attach.lua 修复后的幂等逻辑兼容
-	-- "jsonls",
-	"lua_ls",
-	"markdown_oxide",
-	"ruff",
-	"pyright",
-	-- "rust_analyzer",  -- 由rustaceanvim插件管理
-	-- "sqls",
-	-- "vimls",
-	-- "yamlls",
+    -- "bashls",
+    "clangd",
+    "gopls",
+    "golangci_lint_ls", -- 并行启动, 与 attach.lua 修复后的幂等逻辑兼容
+    -- "jsonls",
+    "lua_ls",
+    "markdown_oxide",
+    "ruff",
+    "pyright",
+    -- "rust_analyzer",  -- 由rustaceanvim插件管理
+    -- "sqls",
+    -- "vimls",
+    -- "yamlls",
 }

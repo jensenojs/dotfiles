@@ -4,9 +4,9 @@
 -- If tmux is available, copy to a tmux clipboard buffer (enables history)
 -- If ssh session is detected, use OSC52 to copy to the terminal host clipboard
 return {
-	"ibhagwan/smartyank.nvim",
-	event = { "BufRead", "BufNewFile" },
-	opts = function()
-		require("smartyank").setup({})
-	end,
+    "ibhagwan/smartyank.nvim",
+    event = { "BufRead", "BufNewFile" },
+    opts = function()
+        require("smartyank").setup({})
+    end,
 }
