@@ -4,7 +4,7 @@ return {
 	"stevearc/aerial.nvim",
 	dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
 
-	config = function()
+	opts = function()
 		local api = vim.api
 		local bind = require("utils.bind")
 		local map_callback = bind.map_callback

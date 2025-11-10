@@ -1,3 +1,8 @@
+-- 启用 Lua 字节码缓存，提升启动性能
+if vim.loader then
+    vim.loader.enable()
+end
+
 local function load_codestral_api_key()
     local key = vim.fn.getenv("CODESTRAL_API_KEY")
     if key ~= vim.NIL and key ~= "" then
@@ -16,23 +21,30 @@ local ok_env, env = pcall(require, "config.environment")
 -- end
 
 -- 加载核心配置（按键、选项、自动命令）
-require("config.keymaps")
-require("config.options")
-require("config.autocmds")
+local ok_keymaps = pcall(require, "config.keymaps")
+if not ok_keymaps then
+    vim.notify("加载 keymaps 配置失败", vim.log.levels.ERROR)
+end
 
--- 加载 LSP 基础配置（命令、handlers、diagnostic 设置）
--- 注意：这里只加载基础配置，不启动 LSP 服务器
--- LSP 服务器在 lazy.nvim 加载完成后启动，确保 neotest 等插件已就绪
-require("config.lsp.bootstrap")
+local ok_options = pcall(require, "config.options")
+if not ok_options then
+    vim.notify("加载 options 配置失败", vim.log.levels.ERROR)
+end
+
+local ok_autocmds = pcall(require, "config.autocmds")
+if not ok_autocmds then
+    vim.notify("加载 autocmds 配置失败", vim.log.levels.ERROR)
+end
+
+-- 加载 LSP 基础配置（命令、handlers、diagnostic 设置、autocmds）
+-- 注意：LSP 服务器在此处即注册并启用，不依赖 lazy.nvim
+local ok_lsp_bootstrap = pcall(require, "config.lsp.bootstrap")
+if not ok_lsp_bootstrap then
+    vim.notify("加载 LSP bootstrap 配置失败", vim.log.levels.ERROR)
+end
 
 -- 加载 lazy.nvim 插件管理器
-require("config.lazy")
-
--- 在 lazy.nvim 加载完成后，为已打开的 buffer 启用 LSP
--- 这确保了 neotest 等插件已就绪，避免测试识别问题
-vim.schedule(function()
-    local ok, bootstrap = pcall(require, "config.lsp.bootstrap")
-    if ok and bootstrap.enable_lsp_for_opened_buffers then
-        bootstrap.enable_lsp_for_opened_buffers()
-    end
-end)
+local ok_lazy = pcall(require, "config.lazy")
+if not ok_lazy then
+    vim.notify("加载 lazy.nvim 失败", vim.log.levels.ERROR)
+end

@@ -220,17 +220,26 @@ local data = {
 		claude = "󰋦",
 		openai = "󱢆",
 		codestral = "󱎥",
-		gemini = "",
-		Groq = "",
+		gemini = "",
+		Groq = "",
 		Openrouter = "󱂇",
 		Ollama = "󰳆",
 		["Llama.cpp"] = "󰳆",
-		Deepseek = "",
+		Deepseek = "",
+	},
+	test = {
+		passed = "✓",
+		running = "⟳",
+		failed = "✗",
+		skipped = "⊘",
+		unknown = "?",
+		watching = "󰈈",
+		running_animated = { "/", "|", "\\", "-" },
 	},
 }
 
 ---Get a specific icon set.
----@param category "kind"|"type"|"documents"|"git"|"ui"|"diagnostics"|"misc"|"cmp"|"dap"|"llm"
+---@param category "kind"|"type"|"documents"|"git"|"ui"|"diagnostics"|"misc"|"cmp"|"dap"|"llm"|"test"
 ---@param add_space? boolean @Add trailing space after the icon.
 function icons.get(category, add_space)
 	if add_space then

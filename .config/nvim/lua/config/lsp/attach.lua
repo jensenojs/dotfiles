@@ -1,8 +1,6 @@
 -- lua/lsp/attach.lua
--- 作用: 为 LspAttach 安装缓冲区级能力(按键/高亮/可选折叠)
+-- 作用: 为 LspAttach 安装缓冲区级能力(按键/高亮/折叠/自动补全)
 local bind = require("utils.bind")
-local map_cr = bind.map_cr
-local map_cmd = bind.map_cmd
 local map_callback = bind.map_callback
 
 local LSP_ATTACH = vim.api.nvim_create_augroup("lsp.attach", {
@@ -293,7 +291,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
 			bind.nvim_load_mapping(lsp_keymaps)
 		end
 
-		-- 自动补全：打开 + 改键
+		-- 启用原生 LSP 自动补全（fallback，实际由 blink.cmp 提供补全）
+		-- 注意: 这里只是启用补全能力，不设置键位映射，因为 blink.cmp 会接管
 		if client:supports_method("textDocument/completion") then
 			vim.lsp.completion.enable(true, client.id, bufnr, {
 				autotrigger = true,

@@ -13,13 +13,10 @@ return {
 			lazy = true,
 			opts = true,
 		},
-		{
-			"LiadOz/nvim-dap-repl-highlights",
-			lazy = true,
-			opts = true,
-		}, -- persistent-breakpoints is configured in its own spec to ensure early load on BufReadPost
+		-- nvim-dap-repl-highlights 已在单独文件中配置 (dap-repl-highlights.lua)
+		-- persistent-breakpoints is configured in its own spec to ensure early load on BufReadPost
 		"nvim-neotest/nvim-nio",
-        -- https://github.com/leoluz/nvim-dap-go
+		-- https://github.com/leoluz/nvim-dap-go
 		"leoluz/nvim-dap-go",
 	},
 	keys = {

@@ -68,26 +68,6 @@ local function close_or_quit()
 	vim.cmd("bd " .. current_bufnr)
 end
 
--- local function close_or_quit()
--- 	local listed = vim.fn.getbufinfo({
--- 		buflisted = 1,
--- 	})
---
--- 	-- 过滤出真正的文件 buffer (buftype 为空的才是普通文件)
--- 	-- 插件 buffer (如 aerial/telescope/terminal) 都会设置 buftype 为 nofile/terminal 等
--- 	local real_buffers = vim.tbl_filter(function(buf)
--- 		local buftype = vim.api.nvim_buf_get_option(buf.bufnr, "buftype")
--- 		return buftype == ""
--- 	end, listed)
---
--- 	if #real_buffers <= 1 then
--- 		-- 尊重修改状态: 使用 confirm 给予保存/放弃的确认
--- 		vim.cmd("confirm qa")
--- 	else
--- 		vim.cmd("bd")
--- 	end
--- end
-
 local function copy_relative_path()
 	local name = vim.api.nvim_buf_get_name(0)
 	if name == "" then

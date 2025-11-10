@@ -17,7 +17,7 @@ opt.timeout = true
 
 opt.timeoutlen = 1000
 
--- 更快的 CursorHold/LSP 反馈
+-- 更快的 CursorHold/LSP 反馈 (配合 FixCursorHold 插件)
 opt.updatetime = 200
 
 -- pattern uses more memory than ‘maxmempattern’
@@ -132,7 +132,6 @@ opt.ignorecase = true
 -- 智能大小写匹配(当搜索文本有大写字母的时候会进行匹配)
 opt.smartcase = true
 
--- 与系统剪贴板同步
 -- 与系统剪贴板同步
 -- 注意: config.environment 会根据平台(macOS/WSL/tmux)设置 vim.g.clipboard 来覆盖此设置
 -- 这是为了使用平台原生的剪贴板工具(pbcopy/win32yank/tmux)而非默认行为
