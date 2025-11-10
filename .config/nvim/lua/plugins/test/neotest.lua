@@ -130,7 +130,8 @@ return {
         -- 从统一图标源获取测试图标
         local icons = require("utils.icons").get("test")
 
-        require("neotest").setup({
+        -- ✅ 返回配置表，让 lazy.nvim 自动调用 setup(opts)
+        return {
             -- 日志级别：生产环境用 WARN，调试时用 DEBUG
             log_level = vim.log.levels.WARN,
 
@@ -190,6 +191,6 @@ return {
                 watching = icons.watching,
                 running_animated = icons.running_animated,
             },
-        })
+        }
     end,
 }

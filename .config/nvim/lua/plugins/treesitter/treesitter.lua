@@ -5,7 +5,7 @@ return {
     branch = "main",
     event = "VeryLazy",
     build = ":TSUpdate",
-    dependencies = { "andymass/vim-matchup", "nvim-dap-repl-highlights" },
+    dependencies = { "andymass/vim-matchup" },
     opts = {
         -- 支持的语言, 它们的代码高亮就会更准确
         ensure_installed = {

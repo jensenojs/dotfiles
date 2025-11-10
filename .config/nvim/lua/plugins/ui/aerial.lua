@@ -1,8 +1,11 @@
 -- https://github.com/stevearc/aerial.nvim
--- 文件大纲
+-- 文件大纲 - 延迟加载：只在 LSP 附加时或手动调用时加载
 return {
     "stevearc/aerial.nvim",
     dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
+    -- 延迟加载：LSP 附加时或使用命令时才加载
+    event = "LspAttach",
+    cmd = { "AerialToggle", "AerialOpen", "AerialClose" },
 
     opts = function()
         local api = vim.api
@@ -10,7 +13,7 @@ return {
         local map_callback = bind.map_callback
         local is_lsp_attached = require("utils.lsp").is_lsp_attached
 
-        -- 键位接管函数: 在 LSP buffer 上覆盖 <leader>o
+        -- 键位接管函数: 在 LSP buffer 上覆盖 <leader>lo
         local function takeover_lsp_buf(bufnr, client)
             if not is_lsp_attached(bufnr) then
                 return
@@ -31,7 +34,7 @@ return {
                 return
             end
 
-            -- 覆盖 <leader>o: 聚焦并打开 aerial
+            -- 覆盖 <leader>lo: 聚焦并打开 aerial
             local keymaps = {
                 ["n|<leader>lo"] = map_callback(function()
                         require("aerial").toggle({
@@ -52,18 +55,29 @@ return {
         end
 
         require("aerial").setup({
-            -- 自动打开: 仅当 LSP 支持 documentSymbol 时
-            open_automatic = function(bufnr)
-                local clients = vim.lsp.get_clients({
-                    bufnr = bufnr,
-                })
-                for _, client in ipairs(clients) do
-                    if client.server_capabilities.documentSymbolProvider then
-                        return true
-                    end
-                end
-                return false
-            end,
+            -- 自动打开: 基于文档示例的正确配置
+            open_automatic = true,
+            -- open_automatic = function(bufnr)
+            --     local aerial = require("aerial")
+
+            --     -- 检查 LSP 支持
+            --     local clients = vim.lsp.get_clients({ bufnr = bufnr })
+            --     local has_lsp_support = false
+            --     for _, client in ipairs(clients) do
+            --         local caps = client.server_capabilities
+            --         if caps.documentSymbolProvider or
+            --            caps.document_symbol or
+            --            (caps.textDocument and caps.textDocument.documentSymbol) then
+            --             has_lsp_support = true
+            --             break
+            --         end
+            --     end
+
+            --     -- 条件：有 LSP 支持 + 最小符号数量 + 没有被手动关闭过
+            --     return has_lsp_support
+            --         and aerial.num_symbols(bufnr) > 2  -- 最少 3 个符号
+            --         and not aerial.was_closed()         -- 没有被手动关闭
+            -- end,
 
             autojump = true,
 

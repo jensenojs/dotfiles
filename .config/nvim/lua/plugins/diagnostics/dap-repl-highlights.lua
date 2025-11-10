@@ -8,7 +8,7 @@ return {
         "mfussenegger/nvim-dap",
     },
     ft = "dap_repl", -- 只在 DAP REPL buffer 类型时加载
-    opts = function()
+    config = function()
         -- 确保 treesitter parser 已安装（main 分支使用新 API）
         local ok, parsers = pcall(require, "nvim-treesitter.parsers")
         if ok then
@@ -26,7 +26,7 @@ return {
             end
         end
 
-        -- 设置插件
+        -- 设置插件（不需要参数）
         require("nvim-dap-repl-highlights").setup()
     end,
 }
