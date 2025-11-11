@@ -1,12 +1,8 @@
 -- https://github.com/nvim-telescope/telescope.nvim
 -- define common options
-local bind = require("utils.bind")
 local buf_util = require("utils.buf")
 local takeover = require("plugins.fuzzy_finder.lsp_takeover")
 local api = vim.api
-
-local map_callback = bind.map_callback
-local map_cr = bind.map_cr
 
 local ROOT_MARKERS = {
     ".git",
@@ -100,63 +96,6 @@ local function live_grep_opts()
     }
 end
 
-local keymaps = {
-    -- more telescope-relative shortcut, plz refer to lsp-config.lua
-    ["n|/"] = map_callback(function()
-            -- You can pass additional configuration to telescope to change theme, layout, etc.
-            local ok, builtin = pcall(require, "telescope.builtin")
-            if not ok then
-                return
-            end
-            builtin.current_buffer_fuzzy_find()
-        end)
-        :with_noremap()
-        :with_silent()
-        :with_desc("模糊搜索当前文件"),
-
-    ["n|<leader>/"] = map_callback(function()
-            local ok, builtin = pcall(require, "telescope.builtin")
-            if not ok then
-                return
-            end
-            builtin.live_grep(live_grep_opts())
-        end)
-        :with_noremap()
-        :with_silent()
-        :with_desc("全局模糊搜索"),
-
-    -- ["n|<leader>g"] = map_callback(function()
-    -- 		require("telescope.builtin").git_status()
-    -- 	end)
-    -- 	:with_noremap()
-    -- 	:with_silent()
-    -- 	:with_desc("列出当前项目下修改了哪些文件"),
-
-    ["n|<c-p>"] = map_callback(function()
-            local ok, builtin = pcall(require, "telescope.builtin")
-            if not ok then
-                return
-            end
-            builtin.find_files(find_files_opts())
-        end)
-        :with_noremap()
-        :with_silent()
-        :with_desc("查找文件"),
-
-    ["n|<leader>r"] = map_callback(function()
-            local ok, builtin = pcall(require, "telescope.builtin")
-            if not ok then
-                return
-            end
-            builtin.registers()
-        end)
-        :with_noremap()
-        :with_silent()
-        :with_desc("打开寄存器列表"),
-}
-
-bind.nvim_load_mapping(keymaps)
-
 -- 对预览的设置
 -- Ignore files bigger than a threshold
 -- and don't preview binaries
@@ -218,7 +157,42 @@ return {
         "nvim-tree/nvim-web-devicons", -- "nvim-telescope/telescope-aerial.nvim"
     },
 
-    event = "VeryLazy",
+    keys = {
+        {
+            "/",
+            mode = "n",
+            function()
+                -- 注意: 您的 helper functions 必须在文件顶部定义
+                require("telescope.builtin").current_buffer_fuzzy_find()
+            end,
+            desc = "Telescope: 模糊搜索当前文件",
+        },
+        {
+            "<leader>/",
+            mode = "n",
+            function()
+                require("telescope.builtin").live_grep(live_grep_opts())
+            end,
+            desc = "Telescope: 全局模糊搜索 (live_grep)",
+        },
+        {
+            "<c-p>",
+            mode = "n",
+            function()
+                require("telescope.builtin").find_files(find_files_opts())
+            end,
+            desc = "Telescope: 查找文件",
+        },
+        {
+            "<leader>r",
+            mode = "n",
+            function()
+                require("telescope.builtin").registers()
+            end,
+            desc = "Telescope: 打开寄存器列表",
+        },
+    },
+
     opts = function()
         local actions = require("telescope.actions")
 
@@ -270,9 +244,16 @@ return {
                         -- map actions.which_key to <C-h> (default: <C-/>)
                         -- actions.which_key shows the mappings for your picker,
                         -- e.g. git_{create, delete, ...}_branch for the git_branches picker
-                        ["<c-u>"] = false, --  clear prompt
+                        ["<c-l>"] = false, --  clear prompt
                         ["<c-h>"] = "which_key", -- 显示快捷指令的作用
                         ["<f1>"] = "which_key", -- 显示快捷指令的作用
+                        ["<Esc>"] = actions.close,
+                        ["<C-c>"] = actions.close,
+                    },
+                    n = {
+                        ["<Esc>"] = actions.close,
+                        ["<C-c>"] = actions.close,
+                        ["q"] = actions.close,
                     },
                 },
             },

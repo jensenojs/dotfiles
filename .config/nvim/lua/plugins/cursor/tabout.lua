@@ -1,13 +1,12 @@
 -- https://github.com/abecodes/tabout.nvim
 -- 在Insert模式下, 按<Tab>可以跳出括号
--- Lua
 return {
     "abecodes/tabout.nvim",
-    lazy = false,
-    -- events = { "BufReadPost", "BufNewFile" },
-    config = function()
-        -- opts = function()
-        require("tabout").setup({
+    -- 移除 lazy = false，使用 event 触发懒加载
+    event = "InsertEnter", -- 进入插入模式时加载，比 InsertCharPre 更合理
+    -- 移除无效的 opt = true
+    opts = function()
+        return {
             tabkey = "", -- we drive <Plug>(Tabout) from blink.cmp; don't map <Tab> directly here
             backwards_tabkey = "", -- same for <S-Tab>
             act_as_tab = true, -- shift content if tab out is not possible
@@ -44,12 +43,6 @@ return {
             },
             ignore_beginning = true, --[[ if the cursor is at the beginning of a filled element it will rather tab out than shift the content ]]
             exclude = {}, -- tabout will ignore these filetypes
-        })
+        }
     end,
-    -- dependencies = { -- These are optional
-    -- 	"nvim-treesitter/nvim-treesitter",
-    -- },
-    opt = true, -- Set this to true if the plugin is optional
-    event = "InsertCharPre", -- Set the event to 'InsertCharPre' for better compatibility
-    priority = 1000,
 }

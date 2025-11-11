@@ -14,5 +14,13 @@
 -- 3. autojump
 return {
     "kylechui/nvim-surround",
+
+    keys = {
+        { "ys", mode = "n", desc = "添加环绕 (ys)" },
+        { "ds", mode = "n", desc = "删除环绕 (ds)" },
+        { "cs", mode = "n", desc = "修改环绕 (cs)" },
+    },
+
+    -- 插件配置: 在加载后运行 config
     config = true,
 }
