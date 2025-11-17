@@ -53,13 +53,21 @@ function M.apply(config, platform)
         -- Reload
         { key = "phys:r", mods = mod, action = act.ReloadConfiguration },
 
-        -- Tab navigation
+        -- ======================================================================
+        -- Navigation Strategy
+        -- ======================================================================
+        { key = "phys:n", mods = "LEADER", action = act.ActivatePaneDirection("Next") },
+        -- { key = "phys:p", mods = "LEADER", action = act.ActivatePaneDirection("Prev") },
         { key = "[", mods = mod, action = act.ActivateTabRelative(-1) },
         { key = "]", mods = mod, action = act.ActivateTabRelative(1) },
-        { key = "h", mods = mod, action = act.ActivateTabRelative(-1) },
-        { key = "l", mods = mod, action = act.ActivateTabRelative(1) },
-        { key = "[", mods = mod .. "|SHIFT", action = act.MoveTabRelative(-1) },
-        { key = "]", mods = mod .. "|SHIFT", action = act.MoveTabRelative(1) },
+
+        { key = "phys:h", mods = mod, action = act.ActivateTabRelative(-1) },
+        { key = "phys:l", mods = mod, action = act.ActivateTabRelative(1) },
+        { key = "phys:j", mods = mod, action = act.ActivatePaneDirection("Next") },
+        { key = "phys:k", mods = mod, action = act.ActivatePaneDirection("Prev") },
+
+        { key = "[", mods = "LEADER|SHIFT", action = act.MoveTabRelative(-1) }, -- 把当前 Tab 往左搬
+        { key = "]", mods = "LEADER|SHIFT", action = act.MoveTabRelative(1) }, -- 把当前 Tab 往右搬
 
         -- 对齐 macos 使用习惯
         { key = "phys:t", mods = mod, action = act.SpawnTab("CurrentPaneDomain") },
@@ -84,26 +92,23 @@ function M.apply(config, platform)
         -- Window & Tab
         { key = "phys:c", mods = "LEADER", action = act.SpawnTab("CurrentPaneDomain") },
         { key = "phys:c", mods = "LEADER|SHIFT", action = act.SpawnWindow },
-        { key = "phys:n", mods = "LEADER", action = act.ActivateTabRelative(1) },
-        { key = "phys:p", mods = "LEADER", action = act.ActivateTabRelative(-1) },
         { key = "phys:x", mods = "LEADER", action = act.CloseCurrentPane({ confirm = true }) },
         { key = "Enter", mods = "LEADER", action = act.ToggleFullScreen },
 
         -- Pane split
         {
-            key = "phys:h",
+            key = "-",
             mods = "LEADER",
             action = act.SplitVertical({ domain = "CurrentPaneDomain" }),
         },
         {
-            key = "phys:v",
+            key = "\\",
             mods = "LEADER",
             action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }),
         },
 
         -- Pane operations
         { key = "phys:z", mods = "LEADER", action = act.TogglePaneZoomState },
-        { key = "phys:o", mods = "LEADER", action = act.ActivatePaneDirection("Next") },
         { key = "phys:s", mods = "LEADER", action = act.PaneSelect({ mode = "SwapWithActive" }) },
 
         -- Copy Mode & Quick Select

@@ -1,0 +1,594 @@
+
+
+s  <Tab>       * <Lua 26: vim/_defaults.lua:0>
+                 vim.snippet.jump if active, otherwise <Tab>
+	Last set from Lua (run Nvim with -V1 for more details)
+n  <Space>bt   * <Lua 302: ~/.local/share/nvim/lazy/buffer-reopen.nvim/lua/buffer-reopen/utils.lua:4>
+                 Reopen Last Closed Buffer
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>gs   * <Lua 243: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Git Status (Neogit)
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>dt   * <Lua 237: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Debug: Terminate
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>dr   * <Lua 236: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Debug: Open REPL
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>dc   * <Lua 235: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Debug: Continue
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>dB   * <Lua 234: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Debug: Set Conditional Breakpoint (persistent)
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>db   * <Lua 233: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Debug: Toggle Breakpoint (persistent)
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>td   * <Lua 221: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 调试最近的测试
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>ts   * <Lua 220: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 停止测试
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>tl   * <Lua 219: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 重新运行上次测试
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>tA   * <Lua 218: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 运行所有测试
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>tf   * <Lua 217: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 运行当前文件
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>tn   * <Lua 52: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 运行最近的测试
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>tw   * <Lua 215: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 监视当前文件
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>tS   * <Lua 214: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 切换测试摘要
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>tO   * <Lua 213: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 切换输出面板
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>to   * <Lua 212: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 显示测试输出
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>tD   * <Lua 209: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 调试当前文件
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>/    * <Lua 194: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Telescope: 全局模糊搜索 (live_grep)
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>r    * <Lua 192: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Telescope: 打开寄存器列表
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>f    * <Lua 150: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 格式化 : 仅修改的部分
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>F    * <Lua 148: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 格式化 : 整个文件
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+v  <Space>gl   * <Lua 145: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 选中行的历史
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>gF   * <Lua 144: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 整个仓库的 Commit 历史
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>gf   * <Lua 143: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 当前文件的 Commit 历史
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>gc   * <Lua 142: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 查看某个 Commit 的详情
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>gd   * <Lua 140: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 查看未提交的改动
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>pl   * <Lua 117: ~/.config/nvim/lua/plugins/buffer/persistence.lua:14>
+                 恢复上一次session连接
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>pc   * <Lua 116: ~/.config/nvim/lua/plugins/buffer/persistence.lua:7>
+                 恢复当前目录下的session连接
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>px   * <Lua 115: ~/.config/nvim/lua/plugins/buffer/persistence.lua:23>
+                 这次的会话不要在退出时保存
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>mc   * :Telescope vim_bookmarks current_file<CR>
+                 书签:查找当前文件下的书签
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>mn   * :BookmarkNext<CR>
+                 书签:jump to next
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>mC   * :Telescope vim_bookmarks all<CR>
+                 书签:查找当前项目下的书签
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>mm   * :BookmarkToggle<CR>
+                 书签:在当前行添加/删除书签
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>mp   * :BookmarkPrev<CR>
+                 书签:jump to prev
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>mi   * :BookmarkAnnotate<CR>
+                 书签:添加/修改注释
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>sS   * <Lua 81: ~/.config/nvim/lua/config/quick_substitute.lua:147>
+                 快速替换: 整个缓冲区
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>ss   * <Lua 80: ~/.config/nvim/lua/config/quick_substitute.lua:142>
+                 快速替换: 当前行
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+x  <Space>ss   * <Lua 79: ~/.config/nvim/lua/config/quick_substitute.lua:137>
+                 快速替换: 作用于可视选区
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+s  <Space>ss   * <Lua 78: ~/.config/nvim/lua/config/quick_substitute.lua:137>
+                 快速替换: 作用于可视选区
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>W    * :wa<CR>
+                 保存所有的buffer
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>Q    * :qa<CR>
+                 强制退出neovim
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>q    * <Lua 69: ~/.config/nvim/lua/config/keymaps.lua:23>
+                 删除当前buffer/若为最后一个则退出
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Space>w    * :w<CR>
+                 保存当前buffer
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+x  #           * <Lua 9: vim/_defaults.lua:0>
+                 :help v_#-default
+	Last set from Lua (run Nvim with -V1 for more details)
+o  %             <Plug>(MatchitOperationForward)
+	Last set from /opt/homebrew/Cellar/neovim/0.11.3/share/nvim/runtime/pack/dist/opt/matchit/plugin/matchit.vim line 74
+x  %             <Plug>(MatchitVisualForward)
+	Last set from /opt/homebrew/Cellar/neovim/0.11.3/share/nvim/runtime/pack/dist/opt/matchit/plugin/matchit.vim line 72
+n  %             <Plug>(MatchitNormalForward)
+	Last set from /opt/homebrew/Cellar/neovim/0.11.3/share/nvim/runtime/pack/dist/opt/matchit/plugin/matchit.vim line 70
+n  &           * :&&<CR>
+                 :help &-default
+	Last set from Lua (run Nvim with -V1 for more details)
+x  *           * <Lua 4: vim/_defaults.lua:0>
+                 :help v_star-default
+	Last set from Lua (run Nvim with -V1 for more details)
+n  .           * <Lua 166: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  /           * <Lua 191: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Telescope: 模糊搜索当前文件
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  0           * <Lua 73: ~/.config/nvim/lua/config/keymaps.lua:14>
+                 光标:先按相当于^, 再按到行首
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+v  <           * <gv
+                 重新选择上一次选择的区域
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+v  >           * >gv
+                 重新选择上一次选择的区域, 并向右移动一次缩进
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+x  @           * mode() ==# 'V' ? ':normal! @'.getcharstr().'<CR>' : '@'
+                 :help v_@-default
+	Last set from Lua (run Nvim with -V1 for more details)
+o  F           * <Lua 179: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Flash: F-跳转
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+x  F           * <Lua 178: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Flash: F-跳转
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  F           * <Lua 171: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Flash: F-跳转
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  H           * :bprevious<CR>
+                 切换到上一个buffer
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+v  J           * :m '>+1<CR>gv=gv
+                 可视:Move this line down
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+v  K           * :m '<-2<CR>gv=gv
+                 可视:Move this line up
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  L           * :bnext<CR>
+                 切换到下一个buffer
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  N           * <Lua 76: ~/.config/nvim/lua/config/keymaps.lua:168>
+                 向上找当前光标所在单词
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+x  Q           * mode() ==# 'V' ? ':normal! @<C-R>=reg_recorded()<CR><CR>' : 'Q'
+                 :help v_Q-default
+	Last set from Lua (run Nvim with -V1 for more details)
+o  S           * <Lua 175: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Flash: Treesitter (S)
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+x  S           * <Lua 174: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Flash: Treesitter (S)
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  S           * <Lua 169: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Flash: Treesitter (S)
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  Y           * y$
+                 :help Y-default
+	Last set from Lua (run Nvim with -V1 for more details)
+o  [%            <Plug>(MatchitOperationMultiBackward)
+	Last set from /opt/homebrew/Cellar/neovim/0.11.3/share/nvim/runtime/pack/dist/opt/matchit/plugin/matchit.vim line 82
+x  [%            <Plug>(MatchitVisualMultiBackward)
+	Last set from /opt/homebrew/Cellar/neovim/0.11.3/share/nvim/runtime/pack/dist/opt/matchit/plugin/matchit.vim line 80
+n  [%            <Plug>(MatchitNormalMultiBackward)
+	Last set from /opt/homebrew/Cellar/neovim/0.11.3/share/nvim/runtime/pack/dist/opt/matchit/plugin/matchit.vim line 78
+n  [<Space>    * <Lua 60: vim/_defaults.lua:0>
+                 Add empty line above cursor
+	Last set from Lua (run Nvim with -V1 for more details)
+n  [B          * <Lua 58: vim/_defaults.lua:0>
+                 :brewind
+	Last set from Lua (run Nvim with -V1 for more details)
+n  [b          * <Lua 56: vim/_defaults.lua:0>
+                 :bprevious
+	Last set from Lua (run Nvim with -V1 for more details)
+n  [<C-T>      * <Lua 54: vim/_defaults.lua:0>
+                  :ptprevious
+	Last set from Lua (run Nvim with -V1 for more details)
+n  [T          * <Lua 53: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 跳转到上一个失败测试
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  [t          * <Lua 51: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 跳转到上一个测试
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  [A          * <Lua 48: vim/_defaults.lua:0>
+                 :rewind
+	Last set from Lua (run Nvim with -V1 for more details)
+n  [a          * <Lua 46: vim/_defaults.lua:0>
+                 :previous
+	Last set from Lua (run Nvim with -V1 for more details)
+n  [<C-L>      * <Lua 44: vim/_defaults.lua:0>
+                 :lpfile
+	Last set from Lua (run Nvim with -V1 for more details)
+n  [L          * <Lua 42: vim/_defaults.lua:0>
+                 :lrewind
+	Last set from Lua (run Nvim with -V1 for more details)
+n  [l          * <Lua 40: vim/_defaults.lua:0>
+                 :lprevious
+	Last set from Lua (run Nvim with -V1 for more details)
+n  [<C-Q>      * <Lua 38: vim/_defaults.lua:0>
+                 :cpfile
+	Last set from Lua (run Nvim with -V1 for more details)
+n  [Q          * <Lua 36: vim/_defaults.lua:0>
+                 :crewind
+	Last set from Lua (run Nvim with -V1 for more details)
+n  [q          * <Lua 34: vim/_defaults.lua:0>
+                 :cprevious
+	Last set from Lua (run Nvim with -V1 for more details)
+n  [D          * <Lua 32: vim/_defaults.lua:0>
+                 Jump to the first diagnostic in the current buffer
+	Last set from Lua (run Nvim with -V1 for more details)
+n  [d          * <Lua 30: vim/_defaults.lua:0>
+                 Jump to the previous diagnostic in the current buffer
+	Last set from Lua (run Nvim with -V1 for more details)
+o  ]%            <Plug>(MatchitOperationMultiForward)
+	Last set from /opt/homebrew/Cellar/neovim/0.11.3/share/nvim/runtime/pack/dist/opt/matchit/plugin/matchit.vim line 83
+x  ]%            <Plug>(MatchitVisualMultiForward)
+	Last set from /opt/homebrew/Cellar/neovim/0.11.3/share/nvim/runtime/pack/dist/opt/matchit/plugin/matchit.vim line 81
+n  ]%            <Plug>(MatchitNormalMultiForward)
+	Last set from /opt/homebrew/Cellar/neovim/0.11.3/share/nvim/runtime/pack/dist/opt/matchit/plugin/matchit.vim line 79
+n  ]<Space>    * <Lua 61: vim/_defaults.lua:0>
+                 Add empty line below cursor
+	Last set from Lua (run Nvim with -V1 for more details)
+n  ]B          * <Lua 59: vim/_defaults.lua:0>
+                 :blast
+	Last set from Lua (run Nvim with -V1 for more details)
+n  ]b          * <Lua 57: vim/_defaults.lua:0>
+                 :bnext
+	Last set from Lua (run Nvim with -V1 for more details)
+n  ]<C-T>      * <Lua 55: vim/_defaults.lua:0>
+                 :ptnext
+	Last set from Lua (run Nvim with -V1 for more details)
+n  ]T          * <Lua 50: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 跳转到下一个失败测试
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  ]t          * <Lua 216: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 跳转到下一个测试
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  ]A          * <Lua 49: vim/_defaults.lua:0>
+                 :last
+	Last set from Lua (run Nvim with -V1 for more details)
+n  ]a          * <Lua 47: vim/_defaults.lua:0>
+                 :next
+	Last set from Lua (run Nvim with -V1 for more details)
+n  ]<C-L>      * <Lua 45: vim/_defaults.lua:0>
+                 :lnfile
+	Last set from Lua (run Nvim with -V1 for more details)
+n  ]L          * <Lua 43: vim/_defaults.lua:0>
+                 :llast
+	Last set from Lua (run Nvim with -V1 for more details)
+n  ]l          * <Lua 41: vim/_defaults.lua:0>
+                 :lnext
+	Last set from Lua (run Nvim with -V1 for more details)
+n  ]<C-Q>      * <Lua 39: vim/_defaults.lua:0>
+                 :cnfile
+	Last set from Lua (run Nvim with -V1 for more details)
+n  ]Q          * <Lua 37: vim/_defaults.lua:0>
+                 :clast
+	Last set from Lua (run Nvim with -V1 for more details)
+n  ]q          * <Lua 35: vim/_defaults.lua:0>
+                 :cnext
+	Last set from Lua (run Nvim with -V1 for more details)
+n  ]D          * <Lua 31: vim/_defaults.lua:0>
+                 Jump to the last diagnostic in the current buffer
+	Last set from Lua (run Nvim with -V1 for more details)
+n  ]d          * <Lua 29: vim/_defaults.lua:0>
+                 Jump to the next diagnostic in the current buffer
+	Last set from Lua (run Nvim with -V1 for more details)
+x  a%            <Plug>(MatchitVisualTextObject)
+	Last set from /opt/homebrew/Cellar/neovim/0.11.3/share/nvim/runtime/pack/dist/opt/matchit/plugin/matchit.vim line 86
+x  aS          * <Lua 119: ~/.config/nvim/lua/plugins/cursor/nvim-various-textobjs.lua:25>
+                 textobj: inner subword(treating -, _, and . as word delimiters)
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+o  aS          * <Lua 118: ~/.config/nvim/lua/plugins/cursor/nvim-various-textobjs.lua:25>
+                 textobj: inner subword(treating -, _, and . as word delimiters)
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  cs          * <Lua 238: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 修改环绕 (cs)
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  ds          * <Lua 241: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 删除环绕 (ds)
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  f           * <Lua 180: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Flash: f-跳转
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+o  f           * <Lua 177: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Flash: f-跳转
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+x  f           * <Lua 176: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Flash: f-跳转
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+o  g%            <Plug>(MatchitOperationBackward)
+	Last set from /opt/homebrew/Cellar/neovim/0.11.3/share/nvim/runtime/pack/dist/opt/matchit/plugin/matchit.vim line 75
+x  g%            <Plug>(MatchitVisualBackward)
+	Last set from /opt/homebrew/Cellar/neovim/0.11.3/share/nvim/runtime/pack/dist/opt/matchit/plugin/matchit.vim line 73
+n  g%            <Plug>(MatchitNormalBackward)
+	Last set from /opt/homebrew/Cellar/neovim/0.11.3/share/nvim/runtime/pack/dist/opt/matchit/plugin/matchit.vim line 71
+n  g;          * <Lua 168: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  gi;         * <Lua 167: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+o  gc          * <Lua 15: vim/_defaults.lua:0>
+                 Comment textobject
+	Last set from Lua (run Nvim with -V1 for more details)
+n  gcc         * <Lua 14: vim/_defaults.lua:0>
+                 Toggle comment line
+	Last set from Lua (run Nvim with -V1 for more details)
+x  gc          * <Lua 13: vim/_defaults.lua:0>
+                 Toggle comment
+	Last set from Lua (run Nvim with -V1 for more details)
+n  gc          * <Lua 12: vim/_defaults.lua:0>
+                 Toggle comment
+	Last set from Lua (run Nvim with -V1 for more details)
+x  gx          * <Lua 11: vim/_defaults.lua:0>
+                 Opens filepath or URI under cursor with the system handler (file explorer, web browser, …)
+	Last set from Lua (run Nvim with -V1 for more details)
+n  gx          * <Lua 10: vim/_defaults.lua:0>
+                 Opens filepath or URI under cursor with the system handler (file explorer, web browser, …)
+	Last set from Lua (run Nvim with -V1 for more details)
+x  iS          * <Lua 121: ~/.config/nvim/lua/plugins/cursor/nvim-various-textobjs.lua:32>
+                 textobj: outer subword(includes trailing _,-, or space)
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+o  iS          * <Lua 120: ~/.config/nvim/lua/plugins/cursor/nvim-various-textobjs.lua:32>
+                 textobj: outer subword(includes trailing _,-, or space)
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  j           * <Plug>(accelerated_jk_gj)
+                 光标: 下移,持续按会加速
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  k           * <Plug>(accelerated_jk_gk)
+                 光标: 上移,持续按会加速
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  mg            <Plug>BookmarkMoveToLine
+	Last set from ~/.local/share/nvim/lazy/vim-bookmarks/plugin/bookmark.vim line 571
+n  mjj           <Plug>BookmarkMoveDown
+	Last set from ~/.local/share/nvim/lazy/vim-bookmarks/plugin/bookmark.vim line 571
+n  mkk           <Plug>BookmarkMoveUp
+	Last set from ~/.local/share/nvim/lazy/vim-bookmarks/plugin/bookmark.vim line 571
+n  mx            <Plug>BookmarkClearAll
+	Last set from ~/.local/share/nvim/lazy/vim-bookmarks/plugin/bookmark.vim line 571
+n  mc            <Plug>BookmarkClear
+	Last set from ~/.local/share/nvim/lazy/vim-bookmarks/plugin/bookmark.vim line 571
+n  mp            <Plug>BookmarkPrev
+	Last set from ~/.local/share/nvim/lazy/vim-bookmarks/plugin/bookmark.vim line 571
+n  mn            <Plug>BookmarkNext
+	Last set from ~/.local/share/nvim/lazy/vim-bookmarks/plugin/bookmark.vim line 571
+n  mi            <Plug>BookmarkAnnotate
+	Last set from ~/.local/share/nvim/lazy/vim-bookmarks/plugin/bookmark.vim line 571
+n  mm            <Plug>BookmarkToggle
+	Last set from ~/.local/share/nvim/lazy/vim-bookmarks/plugin/bookmark.vim line 571
+n  ma            <Plug>BookmarkShowAll
+	Last set from ~/.local/share/nvim/lazy/vim-bookmarks/plugin/bookmark.vim line 571
+n  n           * <Lua 77: ~/.config/nvim/lua/config/keymaps.lua:157>
+                 向下找当前光标所在单词
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+o  s           * <Lua 173: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Flash: 跳转 (s)
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+x  s           * <Lua 172: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Flash: 跳转 (s)
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  s           * <Lua 170: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Flash: 跳转 (s)
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  ys          * <Lua 240: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 添加环绕 (ys)
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+x  <Plug>(MatchitVisualTextObject)   <Plug>(MatchitVisualMultiBackward)o<Plug>(MatchitVisualMultiForward)
+	Last set from /opt/homebrew/Cellar/neovim/0.11.3/share/nvim/runtime/pack/dist/opt/matchit/plugin/matchit.vim line 67
+o  <Plug>(MatchitOperationMultiForward) * :<C-U>call matchit#MultiMatch("W",  "o")<CR>
+	Last set from /opt/homebrew/Cellar/neovim/0.11.3/share/nvim/runtime/pack/dist/opt/matchit/plugin/matchit.vim line 64
+o  <Plug>(MatchitOperationMultiBackward) * :<C-U>call matchit#MultiMatch("bW", "o")<CR>
+	Last set from /opt/homebrew/Cellar/neovim/0.11.3/share/nvim/runtime/pack/dist/opt/matchit/plugin/matchit.vim line 63
+x  <Plug>(MatchitVisualMultiForward) * :<C-U>call matchit#MultiMatch("W",  "n")<CR>m'gv``
+	Last set from /opt/homebrew/Cellar/neovim/0.11.3/share/nvim/runtime/pack/dist/opt/matchit/plugin/matchit.vim line 62
+x  <Plug>(MatchitVisualMultiBackward) * :<C-U>call matchit#MultiMatch("bW", "n")<CR>m'gv``
+	Last set from /opt/homebrew/Cellar/neovim/0.11.3/share/nvim/runtime/pack/dist/opt/matchit/plugin/matchit.vim line 61
+n  <Plug>(MatchitNormalMultiForward) * :<C-U>call matchit#MultiMatch("W",  "n")<CR>
+	Last set from /opt/homebrew/Cellar/neovim/0.11.3/share/nvim/runtime/pack/dist/opt/matchit/plugin/matchit.vim line 60
+n  <Plug>(MatchitNormalMultiBackward) * :<C-U>call matchit#MultiMatch("bW", "n")<CR>
+	Last set from /opt/homebrew/Cellar/neovim/0.11.3/share/nvim/runtime/pack/dist/opt/matchit/plugin/matchit.vim line 59
+o  <Plug>(MatchitOperationBackward) * :<C-U>call matchit#Match_wrapper('',0,'o')<CR>
+	Last set from /opt/homebrew/Cellar/neovim/0.11.3/share/nvim/runtime/pack/dist/opt/matchit/plugin/matchit.vim line 56
+o  <Plug>(MatchitOperationForward) * :<C-U>call matchit#Match_wrapper('',1,'o')<CR>
+	Last set from /opt/homebrew/Cellar/neovim/0.11.3/share/nvim/runtime/pack/dist/opt/matchit/plugin/matchit.vim line 55
+x  <Plug>(MatchitVisualBackward) * :<C-U>call matchit#Match_wrapper('',0,'v')<CR>m'gv``
+	Last set from /opt/homebrew/Cellar/neovim/0.11.3/share/nvim/runtime/pack/dist/opt/matchit/plugin/matchit.vim line 54
+x  <Plug>(MatchitVisualForward) * :<C-U>call matchit#Match_wrapper('',1,'v')<CR>:if col("''") != col("$") | exe ":normal! m'" | endif<CR>gv``
+	Last set from /opt/homebrew/Cellar/neovim/0.11.3/share/nvim/runtime/pack/dist/opt/matchit/plugin/matchit.vim line 52
+n  <Plug>(MatchitNormalBackward) * :<C-U>call matchit#Match_wrapper('',0,'n')<CR>
+	Last set from /opt/homebrew/Cellar/neovim/0.11.3/share/nvim/runtime/pack/dist/opt/matchit/plugin/matchit.vim line 51
+n  <Plug>(MatchitNormalForward) * :<C-U>call matchit#Match_wrapper('',1,'n')<CR>
+	Last set from /opt/homebrew/Cellar/neovim/0.11.3/share/nvim/runtime/pack/dist/opt/matchit/plugin/matchit.vim line 50
+n  <C-S-T>     * <Lua 304: ~/.local/share/nvim/lazy/buffer-reopen.nvim/lua/buffer-reopen/utils.lua:4>
+                 Reopen Last Closed Buffer
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Plug>BookmarkMoveToLine * :<C-U>BookmarkMoveToLine v:count<CR>
+	Last set from ~/.local/share/nvim/lazy/vim-bookmarks/plugin/bookmark.vim line 564
+n  <Plug>BookmarkMoveDown * :<C-U>BookmarkMoveDown v:count<CR>
+	Last set from ~/.local/share/nvim/lazy/vim-bookmarks/plugin/bookmark.vim line 564
+n  <Plug>BookmarkMoveUp * :<C-U>BookmarkMoveUp v:count<CR>
+	Last set from ~/.local/share/nvim/lazy/vim-bookmarks/plugin/bookmark.vim line 564
+n  <Plug>BookmarkClearAll * :BookmarkClearAll<CR>
+	Last set from ~/.local/share/nvim/lazy/vim-bookmarks/plugin/bookmark.vim line 566
+n  <Plug>BookmarkClear * :BookmarkClear<CR>
+	Last set from ~/.local/share/nvim/lazy/vim-bookmarks/plugin/bookmark.vim line 566
+n  <Plug>BookmarkPrev * :BookmarkPrev<CR>
+	Last set from ~/.local/share/nvim/lazy/vim-bookmarks/plugin/bookmark.vim line 566
+n  <Plug>BookmarkNext * :BookmarkNext<CR>
+	Last set from ~/.local/share/nvim/lazy/vim-bookmarks/plugin/bookmark.vim line 566
+n  <Plug>BookmarkAnnotate * :BookmarkAnnotate<CR>
+	Last set from ~/.local/share/nvim/lazy/vim-bookmarks/plugin/bookmark.vim line 566
+n  <Plug>BookmarkToggle * :BookmarkToggle<CR>
+	Last set from ~/.local/share/nvim/lazy/vim-bookmarks/plugin/bookmark.vim line 566
+n  <Plug>BookmarkShowAll * :BookmarkShowAll<CR>
+	Last set from ~/.local/share/nvim/lazy/vim-bookmarks/plugin/bookmark.vim line 566
+s  <C-B>       * <Lua 258: ~/.config/nvim/lua/plugins/ui/noice.lua:10>
+                 Noice LSP 文档滚动
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <C-B>       * <Lua 256: ~/.config/nvim/lua/plugins/ui/noice.lua:10>
+                 Noice LSP 文档滚动
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+s  <C-F>       * <Lua 255: ~/.config/nvim/lua/plugins/ui/noice.lua:10>
+                 Noice LSP 文档滚动
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <C-F>       * <Lua 250: ~/.config/nvim/lua/plugins/ui/noice.lua:10>
+                 Noice LSP 文档滚动
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <F12>       * <Lua 232: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Debug: Step Out
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <F11>       * <Lua 231: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Debug: Step Into
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <F10>       * <Lua 230: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Debug: Step Over
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <F9>        * <Lua 229: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Debug: Toggle Breakpoint (persistent)
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <F7>        * <Lua 228: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Debug: See last session result.
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <F5>        * <Lua 227: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Debug: Start/Continue
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <C-S-O>     * <Lua 223: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <C-S-N>     * <Lua 222: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <C-S-P>     * <Lua 208: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 查看btop
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <C-S-Q>     * <Lua 207: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 打开qwen
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <C-P>       * <Lua 193: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Telescope: 查找文件
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <C-S-E>     * <Lua 190: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Yazi : Open yazi at the current working space
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <C-E>       * <Lua 189: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Yazi : Open yazi at the current file
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+v  <C-E>       * <Lua 188: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Yazi : Open yazi at the current file
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+v  <C-S-E>     * <Lua 186: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 Yazi : Open yazi at the current working space
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+v  <C-_>       * <Lua 155: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 注释/取消注释
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <C-_>       * <Lua 154: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 注释/取消注释
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+v  <C-/>       * <Lua 153: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 注释/取消注释
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <C-/>       * <Lua 151: ~/.local/share/nvim/lazy/lazy.nvim/lua/lazy/core/handler/keys.lua:121>
+                 注释/取消注释
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <C-K>       * <C-W>k
+                 窗口:光标向上移动
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <C-]>       * :bnext<CR>
+                 切换到下一个buffer
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <C-[>       * :bprevious<CR>
+                 切换到上一个buffer
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <Home>      * <Lua 75: ~/.config/nvim/lua/config/keymaps.lua:14>
+                 光标:先按相当于^, 再按到行首
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <C-H>       * <C-W>h
+                 窗口:光标向左移动
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <C-Y>       * <Lua 72: ~/.config/nvim/lua/config/keymaps.lua:71>
+                 拷贝当前文件的相对路径
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <C-S-Y>     * <Lua 71: ~/.config/nvim/lua/config/keymaps.lua:81>
+                 拷贝当前文件的绝对路径
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <C-J>       * <C-W>j
+                 窗口:光标向下移动
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+n  <C-W><C-D>    <C-W>d
+                 Show diagnostics under the cursor
+	Last set from Lua (run Nvim with -V1 for more details)
+n  <C-W>d      * <Lua 33: vim/_defaults.lua:0>
+                 Show diagnostics under the cursor
+	Last set from Lua (run Nvim with -V1 for more details)
+s  <S-Tab>     * <Lua 28: vim/_defaults.lua:0>
+                 vim.snippet.jump if active, otherwise <S-Tab>
+	Last set from Lua (run Nvim with -V1 for more details)
+s  <C-S>       * <Lua 24: vim/_defaults.lua:0>
+                 vim.lsp.buf.signature_help()
+	Last set from Lua (run Nvim with -V1 for more details)
+n  <C-L>       * <C-W>l
+                 窗口:光标向右移动
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+
+i  <C-B>       * <Lua 257: ~/.config/nvim/lua/plugins/ui/noice.lua:10>
+                 Noice LSP 文档滚动
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+i  <C-F>       * <Lua 254: ~/.config/nvim/lua/plugins/ui/noice.lua:10>
+                 Noice LSP 文档滚动
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+i  <Home>      * <Lua 74: ~/.config/nvim/lua/config/keymaps.lua:14>
+                 光标:先按相当于^, 再按到行首
+	Last set from ~/.config/nvim/init.lua (run Nvim with -V1 for more details)
+i  <S-Tab>     * <Lua 27: vim/_defaults.lua:0>
+                 vim.snippet.jump if active, otherwise <S-Tab>
+	Last set from Lua (run Nvim with -V1 for more details)
+i  <C-S>       * <Lua 23: vim/_defaults.lua:0>
+                 vim.lsp.buf.signature_help()
+	Last set from Lua (run Nvim with -V1 for more details)
+i  <C-W>       * <C-G>u<C-W>
+                 :help i_CTRL-W-default
+	Last set from Lua (run Nvim with -V1 for more details)
+i  <C-U>       * <C-G>u<C-U>
+                 :help i_CTRL-U-default
+	Last set from Lua (run Nvim with -V1 for more details)
+i  <Tab>       * <Lua 25: vim/_defaults.lua:0>
+                 vim.snippet.jump if active, otherwise <Tab>
+	Last set from Lua (run Nvim with -V1 for more details)

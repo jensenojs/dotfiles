@@ -7,7 +7,7 @@ return {
     opts = {
         enable = true,
         throttle = true,
-        max_lines = 0, -- 0 表示不限制高度
+        max_lines = 3, -- 0 表示不限制高度
         patterns = {
             default = { "class", "function", "method" },
         },
