@@ -3,6 +3,8 @@
 local buf_util = require("utils.buf")
 local takeover = require("plugins.fuzzy_finder.lsp_takeover")
 local api = vim.api
+local log = vim.log.levels
+local notify_once = vim.notify_once or vim.notify
 
 local ROOT_MARKERS = {
     ".git",
@@ -96,6 +98,84 @@ local function live_grep_opts()
     }
 end
 
+local function buffer_supports_ts_highlight(bufnr)
+    bufnr = bufnr or api.nvim_get_current_buf()
+    local ts = vim.treesitter
+    if not ts or not ts.get_parser then
+        return false, "Tree-sitter 没有可用的 get_parser"
+    end
+
+    local ok_parser, parser_or_err = pcall(ts.get_parser, bufnr)
+    if not ok_parser then
+        return false, parser_or_err
+    end
+
+    local ft = vim.bo[bufnr].filetype or ""
+    local lang
+    if ts.language and ts.language.get_lang then
+        local ok_lang, resolved = pcall(ts.language.get_lang, ft)
+        if ok_lang then
+            lang = resolved
+        end
+    end
+    lang = lang or ft
+
+    if not lang or lang == "" then
+        return false, "无法识别当前 filetype 的 Tree-sitter 语言"
+    end
+
+    if not ts.query or not ts.query.get then
+        return false, "Tree-sitter query 模块不可用"
+    end
+
+    local ok_query, query = pcall(ts.query.get, lang, "highlights")
+    if not ok_query then
+        return false, query
+    end
+
+    if query == nil then
+        return false, string.format("语言 %s 缺少 highlights.scm", lang)
+    end
+
+    return true
+end
+
+local QUERY_NIL_ERROR = "attempt to index local 'query'"
+
+local function current_buffer_fuzzy_find_resilient()
+    local builtin = require("telescope.builtin")
+    local bufnr = api.nvim_get_current_buf()
+    local supports_highlight, reason = buffer_supports_ts_highlight(bufnr)
+    local opts
+
+    if not supports_highlight then
+        opts = { results_ts_highlight = false }
+        if reason then
+            notify_once(
+                string.format("[telescope] %s, 当前 buffer 将禁用 results_ts_highlight。", reason),
+                log.INFO
+            )
+        end
+    end
+
+    local ok, err = pcall(builtin.current_buffer_fuzzy_find, opts)
+    if ok then
+        return
+    end
+
+    local err_msg = tostring(err)
+    if err_msg:find(QUERY_NIL_ERROR, 1, true) then
+        notify_once(
+            "[telescope] 缺少 Tree-sitter highlights，已降级到非高亮模式。",
+            log.WARN
+        )
+        builtin.current_buffer_fuzzy_find({ results_ts_highlight = false })
+        return
+    end
+
+    error(err)
+end
+
 -- 对预览的设置
 -- Ignore files bigger than a threshold
 -- and don't preview binaries
@@ -163,7 +243,7 @@ return {
             mode = "n",
             function()
                 -- 注意: 您的 helper functions 必须在文件顶部定义
-                require("telescope.builtin").current_buffer_fuzzy_find()
+                current_buffer_fuzzy_find_resilient()
             end,
             desc = "Telescope: 模糊搜索当前文件",
         },

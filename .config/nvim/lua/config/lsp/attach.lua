@@ -333,6 +333,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
                         if not still_has then
                             pcall(vim.api.nvim_del_augroup_by_name, "lsp.highlight." .. bufnr)
                         end
+                        -- 修复：停止LSP客户端进程以防止孤儿进程
+                        if client and client.stop then
+                            client:stop(true)  -- true = force stop
+                        end
                     end
                 end,
             })

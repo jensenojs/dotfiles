@@ -1,50 +1,193 @@
 {
     "$schema": "https://opencode.ai/config.json",
-    "theme": "transparent",
-    // https://gist.github.com/intellectronica/e06c2547a11ffa9520a8fb7e269e8d08
+    "autoupdate": true,
+    // 自定义命令定义在 command/ 目录，通过 `/command_name` 调用
+    "command": {},
+    // 预留实验性 Hooks，后续可在 file_edited / session_completed 中注册命令
+    "experimental": {
+        "hook": {
+            // "file_edited": { "**/*.ts": [ { "command": ["npm", "test"] } ] }
+        }
+    },
+    "formatter": false,
+    // 引入指令文件: AGENTS.md 为主, 兼容其他工具的指令
+    "instructions": [
+        "AGENTS.md",
+        "CLAUDE.md",
+        ".cursor/rules/*.md",
+        "GEMINI.md",
+        "QWEN.md"
+    ],
+    // MCP 服务器配置: 为内核工程师和数据挖掘优化
     "mcp": {
-        "tavily": {
-            "type": "local",
-            "enabled": true,
-            "command": [
-                "npx",
-                "-y",
-                "tavily-mcp"
-            ],
-            "environment": {
-                "TAVILY_API_KEY": "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"
-            }
-        },
-        "sequential-thinking": {
-            "type": "local",
-            "command": [
-                "npx",
-                "-y",
-                "@modelcontextprotocol/server-sequential-thinking"
-            ],
-            "enabled": true
-        },
-        // https://github.com/oraios/serena
-        "serena": {
-            "type": "local",
+        // ast-grep: AST 结构化代码搜索和分析
+        "ast-grep": {
             "command": [
                 "uvx",
                 "--from",
-                "git+https://github.com/oraios/serena",
-                "serena-mcp-server"
+                "git+https://github.com/ast-grep/ast-grep-mcp",
+                "ast-grep-server"
             ],
-            "enabled": false
+            "enabled": true,
+            "timeout": 10000,
+            "type": "local"
         },
+        // Context7: 语义检索，查阅开源项目文档
         "context7": {
-            "type": "local",
             "command": [
                 "npx",
                 "-y",
                 "@upstash/context7-mcp",
                 "--api-key",
-                "YOUR_API_KEY"
+                "{env:CONTEXT7_API_KEY}"
             ],
-            "enabled": true
+            "enabled": true,
+            "timeout": 10000,
+            "type": "local"
+        },
+        // DeepWiki: 获取 GitHub 仓库文档并转换为 Markdown
+        "deepwiki": {
+            "command": [
+                "npx",
+                "-y",
+                "mcp-deepwiki@latest"
+            ],
+            "enabled": true,
+            "timeout": 10000,
+            "type": "local"
+        },
+        // GitHub 官方 MCP: 直接集成 GitHub 功能
+        "github": {
+            "type": "remote",
+            "url": "https://api.githubcopilot.com/mcp/",
+            "enabled": true,
+            "headers": {
+                "Authorization": "Bearer {env:GITHUB_PERSONAL_ACCESS_TOKEN}"
+            },
+            "timeout": 10000
+        },
+        // Jupyter: 数据挖掘和性能分析
+        "jupyter": {
+            "command": [
+                "uvx",
+                "jupyter-mcp-server@latest"
+            ],
+            "enabled": false,
+            "environment": {
+                "ALLOW_IMG_OUTPUT": "true",
+                "JUPYTER_TOKEN": "{env:JUPYTER_TOKEN}",
+                "JUPYTER_URL": "http://localhost:8888"
+            },
+            "timeout": 10000,
+            "type": "local"
+        },
+        // markitdown: 文档格式转 Markdown 的 MCP
+        "markitdown": {
+            "command": [
+                "uvx",
+                "--from",
+                "git+https://github.com/KorigamiK/markitdown_mcp_server",
+                "markitdown"
+            ],
+            "enabled": false,
+            "timeout": 10000,
+            "type": "local"
+        },
+        // Sequential-Thinking: 复杂问题推理
+        "sequential-thinking": {
+            "command": [
+                "npx",
+                "-y",
+                "@modelcontextprotocol/server-sequential-thinking"
+            ],
+            "enabled": true,
+            "timeout": 10000,
+            "type": "local"
+        },
+        // Serena: 对话式检索，深度研究
+        // https://github.com/oraios/serena/issues/613
+        "serena": {
+            "command": [
+                "uvx",
+                "--from",
+                "git+https://github.com/oraios/serena",
+                "serena-mcp-server",
+                "--enable-web-dashboard",
+                "False"
+            ],
+            "enabled": true,
+            "timeout": 10000,
+            "type": "local"
+        },
+        // Tavily: Web 搜索，查最新补丁、CVE、论文
+        "tavily": {
+            "command": [
+                "npx",
+                "-y",
+                "tavily-mcp"
+            ],
+            "enabled": true,
+            "environment": {
+                "TAVILY_API_KEY": "{env:TAVILY_API_KEY}"
+            },
+            "timeout": 10000,
+            "type": "local"
+        },
+        // Grep by Vercel: GitHub 代码搜索
+        "gh_grep": {
+            "type": "remote",
+            "url": "https://mcp.grep.app",
+            "enabled": true,
+            "timeout": 10000
         }
+    },
+    // 统一的权限策略：默认交互式询问，必要时再调高
+    "permission": {
+        "bash": "allow",
+        "doom_loop": "deny",
+        "edit": "allow",
+        "external_directory": "ask",
+        "webfetch": "allow"
+    },
+    "provider": {
+        "minimax": {
+            "models": {
+                "MiniMax-M2": {
+                    "name": "MiniMax-M2"
+                }
+            },
+            "npm": "@ai-sdk/anthropic",
+            "options": {
+                "baseURL": "https://api.minimaxi.com/anthropic/v1"
+            }
+        }
+    },
+    "theme": "transparent",
+    // 内置工具开关：留空表示沿用默认，可在这里按需禁用
+    "tools": {
+        // e.g. "web_search": false
+    },
+    "tui": {
+        "scroll_acceleration": {
+            "enabled": true
+        },
+        "scroll_speed": 3
+    },
+    // 限制文件监控噪音，防止 node_modules / 缓存触发多余事件
+    "watcher": {
+        "ignore": [
+            "node_modules",
+            "bun.lock",
+            "tmp",
+            "**/.git",
+            "**/.cache",
+            "**/dist",
+            "**/build",
+            "**/.next",
+            "**/__pycache__",
+            "**/.venv",
+            "**/target",
+            "**/.gradle"
+        ]
     }
 }

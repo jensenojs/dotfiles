@@ -15,6 +15,7 @@ return {
     "ruff",
     "pyright",
     -- "rust_analyzer",  -- 由rustaceanvim插件管理
+    "ts_ls", -- TypeScript/JavaScript 语言服务器
     -- "sqls",
     -- "vimls",
     -- "yamlls",
