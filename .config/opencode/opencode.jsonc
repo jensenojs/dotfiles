@@ -149,6 +149,10 @@
         "external_directory": "ask",
         "webfetch": "allow"
     },
+    // https://www.npmjs.com/package/@tarquinen/opencode-dcp?activeTab=readme
+    // "plugin": [
+    //     "@tarquinen/opencode-dcp@0.2.7"
+    // ],
     "provider": {
         "minimax": {
             "models": {
