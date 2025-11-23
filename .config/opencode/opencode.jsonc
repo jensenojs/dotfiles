@@ -119,6 +119,21 @@
             "timeout": 10000,
             "type": "local"
         },
+        // MiniMax Coding Plan: 图片理解
+        "minimax-coding-plan": {
+            "command": [
+                "uvx",
+                "minimax-coding-plan-mcp",
+                "-y"
+            ],
+            "enabled": true,
+            "environment": {
+                "MINIMAX_API_KEY": "{env:MINIMAX_API_KEY}",
+                "MINIMAX_API_HOST": "https://api.minimaxi.com"
+            },
+            "timeout": 10000,
+            "type": "local"
+        },
         // Tavily: Web 搜索，查最新补丁、CVE、论文
         "tavily": {
             "command": [
@@ -151,7 +166,7 @@
     },
     // https://www.npmjs.com/package/@tarquinen/opencode-dcp?activeTab=readme
     // "plugin": [
-    //     "@tarquinen/opencode-dcp@0.2.7"
+    //     "@tarquinen/opencode-dcp"
     // ],
     "provider": {
         "minimax": {

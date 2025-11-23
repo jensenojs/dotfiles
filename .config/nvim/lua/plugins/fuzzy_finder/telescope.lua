@@ -165,10 +165,7 @@ local function current_buffer_fuzzy_find_resilient()
 
     local err_msg = tostring(err)
     if err_msg:find(QUERY_NIL_ERROR, 1, true) then
-        notify_once(
-            "[telescope] 缺少 Tree-sitter highlights，已降级到非高亮模式。",
-            log.WARN
-        )
+        notify_once("[telescope] 缺少 Tree-sitter highlights，已降级到非高亮模式。", log.WARN)
         builtin.current_buffer_fuzzy_find({ results_ts_highlight = false })
         return
     end
@@ -270,6 +267,14 @@ return {
                 require("telescope.builtin").registers()
             end,
             desc = "Telescope: 打开寄存器列表",
+        },
+        {
+            "<leader>O",
+            mode = "n",
+            function()
+                require("telescope").extensions.aerial.aerial()
+            end,
+            desc = "Telescope(aerial): 打开LSP大纲",
         },
     },
 
@@ -420,6 +425,22 @@ return {
                     -- 	winblend = 10,
                     -- }),
                 },
+                aerial = {
+                    -- Set the width of the first two columns (the second
+                    -- is relevant only when show_columns is set to 'both')
+                    col1_width = 4,
+                    col2_width = 30,
+                    -- How to format the symbols
+                    format_symbol = function(symbol_path, filetype)
+                        if filetype == "json" or filetype == "yaml" then
+                            return table.concat(symbol_path, ".")
+                        else
+                            return symbol_path[#symbol_path]
+                        end
+                    end,
+                    -- Available modes: symbols, lines, both
+                    show_columns = "both",
+                },
             },
         }
     end,
@@ -429,8 +450,8 @@ return {
 
         pcall(telescope.load_extension, "fzf")
         pcall(telescope.load_extension, "ui-select")
+        pcall(telescope.load_extension, "aerial")
         -- require("telescope").load_extension("vim_bookmarks")
-        -- require("telescope").load_extension("lazygit")
         -- require("telescope").load_extension("dap")
 
         -- 注册自动命令: 在 LSP 附加时覆盖该 buffer 的按键
