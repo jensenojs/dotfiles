@@ -1,8 +1,7 @@
-# NPM XDG 配置
 prefix=${XDG_DATA_HOME}/npm
 cache=${XDG_CACHE_HOME}/npm
 logs-dir=${XDG_STATE_HOME}/npm/logs
-
-# 镜像配置
 registry=https://registry.npmmirror.com/
 coc.nvim:registry=https://registry.npmmirror.com
+proxy=http://127.0.0.1:7890
+https-proxy=http://127.0.0.1:7890

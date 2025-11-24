@@ -165,9 +165,9 @@
         "webfetch": "allow"
     },
     // https://www.npmjs.com/package/@tarquinen/opencode-dcp?activeTab=readme
-    // "plugin": [
-    //     "@tarquinen/opencode-dcp"
-    // ],
+    "plugin": [
+        "@tarquinen/opencode-dcp"
+    ],
     "provider": {
         "minimax": {
             "models": {
