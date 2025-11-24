@@ -4,12 +4,14 @@ return {
     "nvim-treesitter/nvim-treesitter-context",
     event = { "BufReadPost", "BufNewFile" },
     dependencies = { "nvim-treesitter/nvim-treesitter" },
-    opts = {
-        enable = true,
-        throttle = true,
-        max_lines = 3, -- 0 表示不限制高度
+    opts = function()
+        enable = true
+        throttle = true
+        max_lines = 3 -- 0 表示不限制高度
+        -- https://github.com/nvim-treesitter/nvim-treesitter-context/issues/355
+        vim.api.nvim_set_hl(0, "TreesitterContext", { bg = "none" })
         patterns = {
             default = { "class", "function", "method" },
-        },
-    },
+        }
+    end,
 }

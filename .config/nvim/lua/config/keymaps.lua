@@ -33,7 +33,11 @@ local function close_or_quit()
     -- 2. 检查这是不是最后一个真实 buffer
     if #real_buffers <= 1 then
         -- 是最后一个, 直接退出
-        vim.cmd("confirm qa")
+        local ok, err = pcall(vim.cmd, "confirm qa")
+        if not ok then
+            -- 处理键盘中断等错误，静默退出
+            vim.cmd("qa!")
+        end
         return
     end
 

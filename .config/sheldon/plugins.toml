@@ -65,7 +65,7 @@ apply = ["defer"]
 [plugins.omz-git]
 github = "ohmyzsh/ohmyzsh"
 dir = "plugins/git"
-apply = ["defer"]
+# apply = ["defer"]
 
 # Sudo 插件(按 ESC 两次添加 sudo)
 [plugins.omz-sudo]

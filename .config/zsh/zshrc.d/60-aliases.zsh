@@ -20,8 +20,14 @@ alias _=sudo
 # Development Tools
 # ==============================================================================
 
-# Git
-alias lg='lazygit'
+# --- Git FZF 增强 ---
+# gfp (Git File Preview): 浏览文件并查看其 Git 提交历史
+# 原理: 列出所有 Git 管理的文件 -> 传给 fzf -> 预览窗口显示该文件的 git log
+# alias gfp="git ls-files | fzf --preview 'git log --oneline --color=always -n 10 -- {}' --preview-window 'right:60%' --header 'Git File History'"
+
+# glp (Git Log Preview): 交互式搜索 Commit
+# 原理: 显示 git log -> fzf 搜索 -> 预览该 Commit 的具体改动 (diff)
+# alias glp="git log --oneline --color=always | fzf --ansi --no-sort --preview 'git show --color=always {1}' --preview-window 'right:60%' --bind 'enter:execute(git show {1} | less -R)'"
 
 # Python
 alias pip='pip3'
@@ -78,6 +84,8 @@ alias now='date +"%T"'
 alias nowtime=now
 alias nowdate='date +"%d-%m-%Y"'
 
+alias tf='tail -f'
+
 # ==============================================================================
 # System Information
 # ==============================================================================
@@ -88,6 +96,7 @@ if command_exists free; then
 elif command_exists vm_stat; then
   alias meminfo='vm_stat'
 fi
+
 
 # CPU 信息
 if command_exists lscpu; then
@@ -116,6 +125,7 @@ command_exists bat && alias cat='bat'
 command_exists colormake && alias make='colormake'
 command_exists gping && alias ping='gping'
 command_exists ip && alias ip='ip -color=auto'
+command_exists lnav && alias tf='lnav'
 
 # ==============================================================================
 # Tool Compatibility Aliases (Migration Support)

@@ -1,616 +1,200 @@
 # 🚀 FZF 增强配置
 
-一个针对开发者优化的 fzf 配置，提供强大的文件搜索、智能预览、实用工具函数和优雅的 Gruvbox Dark Soft 透明主题。
+> "A precise, ergonomic, and visual fzf setup for Zsh & WezTerm."
 
-![fzf config preview](https://img.shields.io/badge/fzf-v0.67.0+-blue) ![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Linux-lightgrey) ![Theme](https://img.shields.io/badge/Theme-Gruvbox%20Dark%20Soft-brightgreen)
+这份配置经过了重构，旨在解决进程隔离问题，增强预览体验（WezTerm 图片支持），并打磨了一套符合直觉的键位逻辑。
 
-## ✨ 特性概览
+## 📂 文件结构
 
-### 🔍 增强的文件搜索
-- **fd 集成**: 使用 `fd` 替代 `find` 进行更快速、精确的文件搜索
-- **智能路径**: 搜索 `$HOME/Projects`, `$HOME/.config`, `$HOME/Documents`
-- **排除模式**: 自动忽略 `.git`, `.idea`, `.vscode`, `node_modules` 等无关目录
-- **深度控制**: 最大搜索深度 5 层，避免性能问题
-- **隐藏文件**: 支持搜索隐藏文件和符号链接
-
-### 👁️ 智能预览系统
-- **多重回退**: bat → file+head → head，确保在任何环境下都能工作
-- **文件大小检查**: 自动检测大文件（>10MB）并显示警告
-- **类型识别**: 智能识别文件类型，文本/二进制文件区别处理
-- **目录预览**: 显示目录结构和文件统计信息
-- **语法高亮**: 使用 bat 提供代码语法高亮（可选）
-
-### 🎨 视觉主题
-- **Gruvbox Dark Soft**: 护眼的深色主题
-- **透明终端**: 支持终端透明度，融入桌面环境
-- **圆角边框**: 现代化的界面设计
-- **自定义符号**: 个性化的指针和标记符号
-
-### ⌨️ 增强键位绑定
-- **基础导航**: Ctrl+J/K (上下)，Ctrl+U/D (翻页)
-- **选择操作**: Ctrl+A (全选)，Ctrl+X (取消选择)
-- **排序控制**: Ctrl+R (切换排序)
-- **预览切换**: Ctrl+P (开启/关闭预览)
-- **快速导航**: Alt+Up/Down (首/尾)，Alt+J/K (上下)
-
-### 🛠️ 实用工具函数
-- **fkill()**: 交互式进程管理器
-- **fdel()**: 安全的文件删除工具
-- **check_fzf_deps()**: 依赖检查和安装建议
-
-## 📦 安装指南
-
-### 前置要求
-
-#### 必需依赖
-- **fzf 0.67.0+**: 核心工具
-  ```bash
-  # macOS
-  brew install fzf
-  
-  # Ubuntu/Debian
-  sudo apt install fzf
-  
-  # 或手动安装
-  git clone https://github.com/junegunn/fzf.git ~/.fzf
-  ~/.fzf/install
-  ```
-
-#### 推荐依赖 (可选，但强烈建议)
-```bash
-# macOS
-brew install fd bat tree
-
-# Ubuntu/Debian
-sudo apt install fd-find bat tree
-# Ubuntu 上的 fd 命令可能叫 fdfind，需要 symlink
-sudo ln -s $(which fdfind) /usr/local/bin/fd
-```
-
-### 配置安装
-
-1. **复制配置文件**
-   ```bash
-   # 将配置放置到标准位置
-   mkdir -p ~/.config/fzf
-   cp config ~/.config/fzf/config
-   ```
-
-2. **加载配置**
-   ```bash
-   # 添加到 shell 配置文件
-   echo "source ~/.config/fzf/config" >> ~/.zshrc  # Zsh
-   # 或
-   echo "source ~/.config/fzf/config" >> ~/.bashrc  # Bash
-   ```
-
-3. **重新加载配置**
-   ```bash
-   # Zsh
-   source ~/.zshrc
-   
-   # Bash
-   source ~/.bashrc
-   ```
-
-4. **验证安装**
-   ```bash
-   # 检查依赖状态
-   check_fzf_deps
-   
-   # 测试基本功能
-   fzf
-   ```
-
-## 📚 详细配置说明
-
-### 核心配置选项
-
-#### 基础搜索配置
-```bash
-# 使用 fd 替代 find，提供更好的性能
-export FZF_DEFAULT_COMMAND="fd \
-  --type f \           # 仅搜索文件
-  --hidden \           # 包含隐藏文件
-  --follow \           # 跟随符号链接
-  --max-depth 5 \      # 最大搜索深度
-  --exclude={.git,.idea,.vscode,.sass-cache,node_modules,build,target} \
-  --search-path=$HOME/Projects \
-  --search-path=$HOME/.config \
-  --search-path=$HOME/Documents"
-```
-
-#### 通用选项
-```bash
-export FZF_DEFAULT_OPTS='--height 90%
-  --layout=reverse     # 反向布局
-  --multi              # 支持多选
-  --border=rounded     # 圆角边框
-  --prompt="∼ "        # 自定义提示符
-  --pointer="▶"        # 自定义指针
-  --marker="✓"         # 选中标记'
-```
-
-#### 主题配置
-```bash
-# Gruvbox Dark Soft 透明版本
-local color01='#3c3836'  # 背景色
-local color02='#504945'  # 边框色
-local color03='#665c54'  # 分割线
-local color06='#ebdbb2'  # 主文字色
-local color0A='#fabd2f'  # 提示符颜色
-local color0C='#8ec07c'  # 指针颜色
-```
-
-### 智能预览系统
-
-`_fzf_preview()` 函数提供多级回退机制：
-
-1. **优先级 1: bat** - 语法高亮的文件预览
-2. **优先级 2: file + head** - 基础文件信息和内容预览
-3. **优先级 3: head** - 最基础的文件预览
-
-#### 预览功能特点
-- **大小检查**: 自动跳过 >10MB 的大文件
-- **类型识别**: 区分文本文件和二进制文件
-- **目录统计**: 显示文件数量和子目录数量
-- **树状显示**: 使用 tree 命令展示目录结构
-
-### 预设配置
-
-#### 文件搜索 (Ctrl+T)
-```bash
-export FZF_CTRL_T_OPTS="
-  --preview '_fzf_preview {}'
-  --preview-window right:60%:wrap
-  --header '📋 CTRL-P: 切换预览 | CTRL-A: 全选'"
-```
-
-#### 历史搜索 (Ctrl+R)
-```bash
-export FZF_CTRL_R_OPTS="
-  --preview 'echo {}'
-  --preview-window down:3:wrap
-  --header '🕐 历史命令搜索'"
-```
-
-#### 目录导航 (Alt+C)
-```bash
-export FZF_ALT_C_OPTS="
-  --preview '_fzf_preview {}'
-  --preview-window right:60%:wrap
-  --header '📁 ENTER: 进入目录'"
-```
-
-## 🎯 使用指南
-
-### 基础使用
-
-#### 基本文件搜索
-```bash
-# 启动文件搜索（使用配置的 fd 命令）
-fzf
-
-# 在指定目录中搜索
-find /path/to/dir | fzf
-
-# 结合其他命令使用
-find . -name "*.py" | fzf
-```
-
-#### Shell 集成
-```bash
-# Ctrl+T: 文件搜索
-# Ctrl+R: 历史命令搜索
-# Alt+C: 目录导航
-
-# 使用示例：
-# 1. 按 Ctrl+T 开始搜索文件
-# 2. 使用键位导航和搜索
-# 3. 按 Enter 选择文件
-```
-
-#### 预览功能
-```bash
-# 搜索时按 Ctrl+P 切换预览窗口
-# 预览窗口会显示文件内容或目录结构
-# 大文件会自动警告并拒绝显示
-```
-
-### 高级功能
-
-#### 多选操作
-```bash
-# 1. 使用 Ctrl+A 选择所有结果
-# 2. 使用 Ctrl+X 取消所有选择
-# 3. 使用空格键单独选择/取消项目
-# 4. Tab 键也可以用于选择
-```
-
-#### 排序控制
-```bash
-# 按 Ctrl+R 切换排序方式
-# 排序选项：文件名、修改时间、大小等
-```
-
-#### 快速导航
-```bash
-# Alt+Up/Down: 跳转到首项/末项
-# Alt+K/Up: 向上移动
-# Alt+J/Down: 向下移动
-# Ctrl+U/D: 向上/向下翻页
-```
-
-### 实用工具函数
-
-#### 进程管理 (fkill)
-```bash
-# 启动交互式进程管理器
-fkill
-
-# 功能：
-# 1. 显示所有运行进程
-# 2. 支持预览
-# 3. 选择进程后强制杀死 (SIGKILL)
-# 4. 包含确认机制防止误操作
-```
-
-#### 文件删除 (fdel)
-```bash
-# 启动交互式文件删除工具
-fdel
-
-# 功能：
-# 1. 搜索和选择要删除的文件
-# 2. 预览选中的文件
-# 3. 多选支持
-# 4. 强制确认机制
-# 5. 批量删除操作
-```
-
-#### 依赖检查 (check_fzf_deps)
-```bash
-# 检查所有增强功能的依赖状态
-check_fzf_deps
-
-# 输出示例：
-# ✅ bat (语法高亮): 已安装
-# ✅ tree (目录树): 已安装
-# ⚠️ fd (文件查找): 未安装 - 将使用 find 作为回退
-```
-
-## ⌨️ 完整键位绑定
-
-### 导航键位
-| 键位 | 功能 |
-|------|------|
-| `Ctrl+J` / `↓` | 向下移动 |
-| `Ctrl+K` / `↑` | 向上移动 |
-| `Alt+J` / `↓` | 向下移动（替代键） |
-| `Alt+K` / `↑` | 向上移动（替代键） |
-| `Ctrl+U` | 向上翻页 |
-| `Ctrl+D` | 向下翻页 |
-| `Alt+Up` | 跳转到首项 |
-| `Alt+Down` | 跳转到末项 |
-
-### 选择键位
-| 键位 | 功能 |
-|------|------|
-| `Space` / `Tab` | 选中/取消选中 |
-| `Ctrl+A` | 全选所有 |
-| `Ctrl+X` | 取消全选 |
-| `Alt+I` | 反向选择 |
-
-### 功能键位
-| 键位 | 功能 |
-|------|------|
-| `Ctrl+P` | 切换预览窗口 |
-| `Ctrl+R` | 切换排序方式 |
-| `Ctrl+T` | 触发文件搜索 |
-| `Alt+C` | 触发目录导航 |
-| `Esc` | 清除搜索查询 |
-| `Enter` | 确认选择 |
-
-### 预览窗口控制
-- **显示**: Ctrl+P 切换预览窗口
-- **位置**: 默认在右侧，60% 宽度
-- **换行**: 自动换行显示长行
-- **隐藏**: 再次按 Ctrl+P 隐藏
-
-## 🔧 故障排除
-
-### 常见问题
-
-#### 1. 预览功能不工作
-**问题**: 搜索时无法显示文件预览
-**解决方案**:
-```bash
-# 检查预览函数
-echo "test file" | fzf --preview '_fzf_preview {}'
-
-# 检查依赖
-check_fzf_deps
-
-# 手动测试预览
-echo "/path/to/file.txt" | fzf --preview 'head {}'
-```
-
-#### 2. fd 命令不可用
-**问题**: 提示 "fd 命令不可用"
-**解决方案**:
-```bash
-# 安装 fd
-brew install fd  # macOS
-sudo apt install fd-find  # Ubuntu
-
-# 或者创建别名
-alias fd='fdfind'
-
-# 配置会自动回退到 find
-```
-
-#### 3. 预览窗口显示异常
-**问题**: 预览窗口位置或显示不正常
-**解决方案**:
-```bash
-# 重置预览配置
-export FZF_CTRL_T_OPTS="--preview '_fzf_preview {}'"
-
-# 测试基本预览
-fzf --preview 'echo "test"'
-
-# 检查终端尺寸
-echo "终端行数: $(tput lines)"
-echo "终端列数: $(tput cols)"
-```
-
-#### 4. 主题显示问题
-**问题**: 颜色或透明度显示异常
-**解决方案**:
-```bash
-# 检查终端是否支持 256 色
-tput colors
-
-# 手动设置主题
-export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --color=bg:-1"
-
-# 重置为默认主题
-unset _gen_fzf_default_opts
-export FZF_DEFAULT_OPTS="--height 90% --layout=reverse --multi"
-```
-
-#### 5. 键位绑定失效
-**问题**: 某些键位组合不响应
-**解决方案**:
-```bash
-# 检查键位绑定
-fzf --version
-
-# 重新加载配置
-source ~/.config/fzf/config
-
-# 测试基本键位
-fzf --bind ctrl-j:down,ctrl-k:up
-```
-
-### 性能优化
-
-#### 搜索性能问题
-```bash
-# 减少搜索路径
-export FZF_DEFAULT_COMMAND="fd --type f --max-depth 3"
-
-# 增加排除模式
-export FZF_DEFAULT_COMMAND="fd --exclude='*.log' --exclude='tmp/*'"
-
-# 限制结果数量
-fzf --bind 'ctrl-t:reload(fd --type f | head -1000)'
-```
-
-#### 预览性能问题
-```bash
-# 禁用大文件预览
-# 配置文件已自动处理
-
-# 简化预览命令
-export FZF_CTRL_T_OPTS="--preview 'head -10 {}'"
-
-# 使用更快的预览工具
-export FZF_CTRL_T_OPTS="--preview 'cat {}' 2>/dev/null"
-```
-
-### 调试模式
-
-#### 启用详细输出
-```bash
-# 开启调试模式
-export FZF_DEBUG=1
-
-# 查看实际执行的命令
-export FZF_DEFAULT_COMMAND="fd --type f --hidden; echo 'FZF_DEFAULT_COMMAND executed'"
-
-# 测试预览函数
-_fzf_preview /path/to/test/file
-```
-
-#### 逐步排查
-```bash
-# 1. 检查基础配置
-echo $FZF_DEFAULT_COMMAND
-echo $FZF_DEFAULT_OPTS
-
-# 2. 测试基本功能
-fzf --version
-echo "test" | fzf
-
-# 3. 测试工具函数
-fkill  # 应该显示进程列表
-fdel   # 应该显示文件选择界面
-
-# 4. 检查依赖状态
-check_fzf_deps
-```
-
-### 兼容性说明
-
-#### fzf 版本兼容性
-- **最低要求**: fzf 0.67.0+
-- **推荐版本**: fzf 0.45.0+
-- **测试版本**: fzf 0.67.0, 0.69.0
-
-#### 终端兼容性
-- **支持终端**: iTerm2, Terminal.app, Hyper, Alacritty
-- **颜色支持**: 256 色，True Color
-- **特殊功能**: 透明度、emoji 支持
-
-#### Shell 兼容性
-- **支持 Shell**: Bash, Zsh, Fish
-- **测试版本**: Bash 5.0+, Zsh 5.8+, Fish 3.0+
-
-## 📝 自定义配置
-
-### 修改搜索路径
-```bash
-# 编辑配置文件，添加或修改搜索路径
-export FZF_DEFAULT_COMMAND="fd \
-  --type f \
-  --search-path=$HOME/Projects \
-  --search-path=$HOME/Work \
-  --search-path=$HOME/Documents"
-```
-
-### 自定义排除模式
-```bash
-# 添加更多排除模式
-export FZF_DEFAULT_COMMAND="fd \
-  --exclude='*.tmp' \
-  --exclude='*.log' \
-  --exclude='node_modules' \
-  --exclude='.git'"
-```
-
-### 修改预览行为
-```bash
-# 更改预览窗口大小
-export FZF_CTRL_T_OPTS="--preview-window right:50%"
-
-# 更改预览命令
-export FZF_CTRL_T_OPTS="--preview 'your-custom-preview-command {}'"
-```
-
-### 自定义主题
-```bash
-# 修改颜色方案
-_gen_fzf_default_opts() {
-  local bg='#282a36'      # Dracula 背景
-  local fg='#f8f8f2'      # Dracula 前景
-  local accent='#50fa7b'  # Dracula 强调色
-  
-  export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS
-    --color=bg:$bg,fg:$fg,accent:$accent"
-}
-```
-
-## 🚀 高级技巧
-
-### 与其他工具集成
-
-#### 与 vim/neovim 集成
-```bash
-# 在 vim 中使用 fzf
-vim $(fzf)
-
-# 或者使用 fzf.vim 插件
-# 在 .vimrc 中添加：Plug 'junegunn/fzf.vim'
-```
-
-#### 与 ranger 文件管理器集成
-```bash
-# 在 ranger 中使用 fzf 选择文件
-set preview_images false
-set use_preview_script true
-```
-
-#### 与其他 shell 工具组合
-```bash
-# 结合 ripgrep 使用
-rg --files | fzf --preview 'rg --color=always --no-heading {}'
-
-# 结合 git 使用
-git ls-files | fzf --preview 'git show {}'
-
-# 结合 ps 使用
-ps aux | fzf --preview 'ps -p $(echo {} | awk "{print \$2}")'
-```
-
-### 批量操作
-
-#### 批量重命名
-```bash
-# 选择多个文件并重命名
-ls | fzf --multi | while read file; do
-  mv "$file" "${file%.txt}_renamed.txt"
-done
-```
-
-#### 批量移动文件
-```bash
-# 移动选中的文件到指定目录
-fzf --multi | xargs -I {} mv {} ~/Desktop/Selected/
-```
-
-#### 批量复制路径
-```bash
-# 复制选中的文件路径到剪贴板
-fzf --multi | pbcopy  # macOS
-fzf --multi | xclip -selection clipboard  # Linux
-```
-
-### 效率优化技巧
-
-#### 预设搜索
-```bash
-# 创建常用搜索别名
-alias fzf-python='fzf --preview "head -10 {}" | grep "\.py$"'
-alias fzf-md='fzf --preview "head -10 {}" | grep "\.md$"'
-```
-
-#### 搜索历史
-```bash
-# 在历史搜索中快速定位
-# 1. 按 Ctrl+R
-# 2. 输入关键词
-# 3. 使用方向键选择历史记录
-# 4. 按 Enter 执行
-```
-
-#### 快速切换目录
-```bash
-# 1. 按 Alt+C
-# 2. 选择目标目录
-# 3. 自动切换到该目录并显示内容
-cd $(find . -type d | fzf)
-```
-
-## 📄 许可证
-
-本配置基于 MIT 许可证开源。
-
-## 🤝 贡献
-
-欢迎提交问题和改进建议！
-
-## 🙏 致谢
-
-- [junegunn/fzf](https://github.com/junegunn/fzf) - 核心工具
-- [sharkdp/fd](https://github.com/sharkdp/fd) - 改进的文件查找
-- [bat-preview](https://github.com/eth-p/bat-extras) - 语法高亮预览
-- [Gruvbox](https://github.com/morhetz/gruvbox) - 配色方案
+* **`config`**: 核心配置文件。定义环境变量、颜色（Gruvbox Transparent）、默认命令（fd）和键位绑定。
+* **`preview.sh`**: 增强版预览脚本。支持图片(Chafa)、目录统计、文件元数据、语法高亮等。
+* **`README.md`**: 你现在看到的说明文档。
+* **`~/.config/zsh/zshrc.d/50-fzf.zsh`**: (外部关联) Zsh 加载器，包含 `fkill`, `fdel` 函数和 `Ctrl-G` 映射。
 
 ---
 
-**最后更新**: 2024-11-23  
-**维护者**: Jensen  
-**版本**: 1.0.0  
+## 🎹 键位逻辑 (Key Bindings)
 
-如果这个配置对您有帮助，请考虑给个项目点个 ⭐️！
+这是最需要记忆的部分。采用了 **"Tab 移动 / Ctrl-J 选择"** 的分离策略。
+
+### 核心操作 (Inside FZF)
+
+| 键位 | 动作 | 逻辑说明 |
+| :--- | :--- | :--- |
+| **`Tab`** | **向下移动** | 快速浏览列表 (Move Down) |
+| **`Shift-Tab`** | **向上移动** | 快速浏览列表 (Move Up) |
+| **`Ctrl-J`** | **选中 + 下移** | **核心多选键**。类似 Checkbox 打钩 (Toggle + Down) |
+| **`Ctrl-K`** | **选中 + 上移** | 反向打钩 (Toggle + Up) |
+| **`Space`** | 选中 + 下移 | 备用的多选方式 |
+| **`Ctrl-/`** | **预览开关** | 显隐预览窗口 (Toggle Preview) |
+| **`Ctrl-Y`** | **复制到剪贴板** | 不执行命令，直接复制选中的路径或历史命令 |
+| **`Alt-Up/Down`** | 跳转首尾 | 快速跳转到列表最开始或最末尾 |
+
+### 触发入口 (Triggers)
+
+| 键位 | 模式 | 说明 |
+| :--- | :--- | :--- |
+| **`Ctrl-T`** | **找文件** | (Target) 插入文件路径到命令行 |
+| **`Ctrl-R`** | **找历史** | (Recall) 搜索并粘贴历史命令 |
+| **`Alt-C`** | **进目录** | (Change) 选中后直接 `cd` 进入 |
+| **`Ctrl-G`** | **进目录** | `Alt-C` 的替身 (在 `50-fzf.zsh` 中定义的 Zsh 别名) |
+
+---
+
+## 👁️ 预览功能 (Preview Features)
+
+预览脚本 (`preview.sh`) 会自动检测文件类型和终端能力：
+
+1.  **目录**: 显示包含的文件/文件夹数量，以及磁盘占用大小 (`du -sh`)。
+2.  **图片**: 在 WezTerm 中使用 `chafa` 协议直接渲染高清图片。
+3.  **代码**: 使用 `bat` 进行语法高亮。
+4.  **压缩包**: 自动列出 zip/tar/gz 的内容清单。
+5.  **元数据**: 顶部常驻显示文件大小、权限、行数、MIME 类型。
+
+---
+
+## 🛠️ 实用工具 (Utility Functions)
+
+定义在 `50-fzf.zsh` 中：
+
+* **`fkill`**: 交互式杀进程。支持 Tab 多选，带预览。
+* **`fdel`**: 交互式删文件。支持 Tab 多选，带确认保护，WezTerm 图片预览生效。
+
+---
+
+## 📦 依赖管理
+
+如果换了新机器，确保安装以下工具以获得完整体验：
+
+```bash
+# 核心组件
+brew install fzf fd bat
+
+# 增强预览组件
+brew install chafa      # 图片支持 (关键)
+brew install tree       # 目录树
+brew install jq         # JSON 预览
+brew install poppler    # PDF 预览
+
+---
+
+## 🧠 高阶用法手册 (Advanced Usage)
+
+这里记录了 FZF 官方文档中容易被忽视但极具威力的功能。
+
+### 1. 搜索语法 (Search Syntax)
+
+不要只是随机输入字母。使用修饰符可以极大提高搜索效率。**空格表示 AND**。
+
+| 符号 | 作用 | 示例 | 解释 |
+| :--- | :--- | :--- | :--- |
+| **(空格)** | **AND** | `foo bar` | 同时包含 foo 和 bar |
+| **`|`** | **OR** | `jpg | png` | 包含 jpg **或者** png |
+| **`!`** | **NOT** | `!test` | **不**包含 test |
+| **`'`** | **精确** | `'main` | 精确匹配 main (不匹配 maintain) |
+| **`^`** | **前缀** | `^src` | 以 src **开头** |
+| **`$`** | **后缀** | `.md$` | 以 .md **结尾** |
+
+> **💡 组合技示例**:
+> `^src .py$ !test`
+> *"查找以 src 开头，且是 .py 结尾，但文件名里不包含 test 的文件"*
+
+### 2. 模糊补全 (Fuzzy Completion)
+
+这是 FZF 最强大的隐藏功能。在命令后输入 `**` 再按 `Tab` 键触发。
+
+* **文件补全**:
+    ```bash
+    vim src/**<TAB>      # 搜索 src 下的文件并用 vim 打开
+    ls **<TAB>           # 搜索文件并 ls
+    ```
+
+* **目录补全**:
+    ```bash
+    cd **<TAB>           # 搜索并进入目录 (替代 Alt-C)
+    ```
+
+* **进程补全** (智能识别 kill):
+    ```bash
+    kill **<TAB>         # 自动列出进程列表，选中后自动填入 PID
+    ```
+
+* **SSH 主机补全**:
+    ```bash
+    ssh **<TAB>          # 从 ~/.ssh/config 搜索 Host
+    ```
+
+* **环境变量补全**:
+    ```bash
+    unset **<TAB>        # 搜索当前环境变量
+    export **<TAB>
+    ```
+
+### 3. 管道协同 (Pipeline)
+
+FZF 可以作为管道中间件，过滤任何命令的输出。
+
+* **Git 操作**:
+    ```bash
+    # 检出分支
+    git checkout $(git branch -a | fzf)
+    ```
+
+* **搜索历史并立即执行**:
+    ```bash
+    # 可以在 zshrc 中定义别名: fh
+    history | fzf | sh
+    ```
+
+* **结合 ripgrep (rg) 搜索内容**:
+    ```bash
+    # 在文件中搜索字符串，选中后用 vim 打开
+    rg --line-number "pattern" . | fzf | awk -F: '{print $1, $2}'
+    ```
+
+---
+
+## 💡 最佳实践流 (Workflow)
+
+基于您的 **Ctrl-J (多选)** 配置：
+
+1.  **批量操作**:
+    * 输入 `Ctrl-T`。
+    * 输入 `.jpg$` (搜图)。
+    * 按 `Tab` (下移) 浏览，看到要删的图按 `Ctrl-J` (选中)。
+    * 选了 5 张图后，按 `Enter`。
+    * 命令行变成: `rm img1.jpg img2.jpg ...` -> 回车执行。
+
+2.  **快速复制路径**:
+    * 输入 `Ctrl-T`。
+    * 找到那个藏得很深的文件。
+    * 直接按 `Ctrl-Y`。
+    * 路径已在剪贴板，去微信或 Slack 粘贴给同事。
+
+3.  **拯救长命令**:(但是针对这个, 有更好的方式)
+    * 刚敲了一个巨长的 curl 命令但失败了？
+    * 按 `Ctrl-R`。
+    * 输入 `curl` 找到它。
+    * 按 `Ctrl-E` (如果 Zsh 配置了 edit) 或者直接回车放到命令行修改。
+
+## 🧩 FZF 扩展功能矩阵 (Extended Functions)
+
+这些高级命令定义在 `50-fzf.zsh` (函数) 和 `30-aliases.zsh` (别名) 中，它们将 FZF 从单纯的“搜索工具”变成了“工作流引擎”。
+
+### 🛠️ 系统与运维 (System & DevOps)
+
+| 命令 | 来源 | 功能描述 | 核心价值 |
+| :--- | :--- | :--- | :--- |
+| **`fkill`** | 函数 | **杀进程**。列出进程 -> 预览详情 -> 多选查杀。 | 比 `kill -9` 直观，防止手滑杀错。 |
+| **`fdel`** | 函数 | **删文件**。多选文件 -> 预览内容/图片 -> 确认删除。 | 带“垃圾桶”般的确认机制，支持 WezTerm 图片预览。 |
+| **`fport`** | 函数 | **查端口**。查看端口占用情况，支持一键杀掉占用进程。 | 开发时端口被占用的救星 (兼容 macOS/Linux)。 |
+| **`logview`**| 函数 | **看日志**。搜索 `/var/log`，使用 `bat` 进行语法高亮预览。 | 运维排查利器，比直接 `cat` 清晰得多。 |
+| **`dexec`** | 函数 | **进容器**。列出 Docker 容器 -> 预览 Logs -> 进入 Shell。 | 省去 `docker ps` 找 ID 再 `exec` 的繁琐步骤。 |
+| **`sysz`** | 函数 | **管服务**。管理 Systemd 服务 (Start/Stop/Restart)。 | *(Linux Only)* 快速重启崩溃的服务。 |
+
+### 💻 开发工作流 (Development Workflow)
+
+| 命令 | 来源 | 功能描述 | 核心价值 |
+| :--- | :--- | :--- | :--- |
+| **`gst`** | 函数 | **Git 暂存**。交互式查看 Diff，按 `Enter` 切换 `add/reset`。 | **纯键盘流 Git**。比 `git add -p` 快，比 GUI 轻。 |
+| **`nr`** | 函数 | **跑脚本**。解析 `package.json`，选择 `npm run ...` 脚本。 | 记不住 `dev`, `build:prod`, `test:unit` 等脚本名时的助手。 |

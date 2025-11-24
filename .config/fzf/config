@@ -1,258 +1,109 @@
-# use fd instead of find, and ignore sth not important
-# https://github.com/cha0ran/fd-zh
+# https://github.com/junegunn/fzf/blob/master/README.md
+# =============================================================================
+# FZF 核心配置文件 (FZF Ultimate Configuration)
+# 策略: Tab移动 | Ctrl-J/K多选 | 增强预览 | Gruvbox透明主题
+# =============================================================================
 
-# 基础 fd 命令 - 兼容所有版本
-export FZF_DEFAULT_COMMAND="fd \
-  --type f \
-  --hidden \
-  --follow \
-  --max-depth 5 \
-  --exclude={.git,.idea,.vscode,.sass-cache,node_modules,build,target,__pycache__,.pytest_cache,.mypy_cache,.venv,venv} \
-  --search-path=$HOME/Projects \
-  --search-path=$HOME/.config \
-  --search-path=$HOME/Documents \
+# 1. 核心路径定义
+# -----------------------------------------------------------------------------
+# 确保脚本有执行权限: chmod +x ~/.config/fzf/preview.sh
+_FZF_PREVIEW_SCRIPT="$HOME/.config/fzf/preview.sh"
+
+# 2. 搜索引擎设置 (FD Integration)
+# -----------------------------------------------------------------------------
+# --type f: 仅文件 | --hidden: 搜隐藏 | --follow: 追软链
+export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow --max-depth 5 \
+  --exclude={.git,.idea,.vscode,.serena,.sass-cache,node_modules,build,dist,target,__pycache__,.pytest_cache,.mypy_cache,.venv,venv,.DS_Store} \
   2>/dev/null"
 
-# 基础选项 - 所有版本都支持
-export FZF_DEFAULT_OPTS='--height 90%
+# [Ctrl-T] 文件搜索
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+# [Alt-C] 目录跳转 (传送门)
+# 策略: 目录跳转通常是为了去“别的地方”，所以这里我们指定从 $HOME 开始搜，
+export FZF_ALT_C_COMMAND="fd --type d --hidden --follow --max-depth 5 \
+  --exclude={.git,.idea,.vscode,node_modules,build,dist,target,venv} \
+  . \"$HOME\""
+# 注意上面的 . "$HOME" 表示在 Home 目录下一层层找
+
+# 3. 视觉与行为核心 (Appearance & Behavior)
+# -----------------------------------------------------------------------------
+# 核心设置:
+# --multi: 开启多选
+# --layout=reverse: 搜索栏在顶部
+export FZF_DEFAULT_OPTS="
+  --height 90%
   --layout=reverse
-  --multi
   --border=rounded
-  --prompt="∼ "
-  --pointer="▶"
-  --marker="✓"'
+  --info=inline
+  --multi
+  --prompt='🔭 '
+  --pointer='▶'
+  --marker='✓'
+  --scrollbar='│'
+  --color=bg:-1,bg+:#3c3836,fg:#bdae93,fg+:#ebdbb2
+  --color=hl:#fabd2f,hl+:#fe8019,info:#fabd2f,header:#83a598
+  --color=prompt:#fabd2f,pointer:#8ec07c,marker:#8ec07c,spinner:#8ec07c
+  --color=border:#504945,separator:#665c54,preview-bg:-1,preview-fg:#bdae93
+"
 
-# 安全的键位绑定 - 使用标准动作
+# 4. 键位绑定 (Key Bindings)
+# -----------------------------------------------------------------------------
 export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS
-  --bind=ctrl-j:down
-  --bind=ctrl-k:up
-  --bind=ctrl-u:page-up
-  --bind=ctrl-d:page-down
-  --bind=ctrl-a:select-all
-  --bind=ctrl-x:deselect-all
-  --bind=ctrl-t:toggle-down
-  --bind=alt-up:first
-  --bind=alt-down:last
-  --bind=ctrl-r:toggle-sort
-  --bind=esc:clear-query
-  --bind=ctrl-p:toggle-preview
-  --bind=alt-j:down
-  --bind=alt-k:up
-  --bind=alt-i:toggle-down"
 
-# 智能预览函数 - 多重回退机制
-_fzf_preview() {
-  local file="$1"
-  # 处理文件名中的特殊字符
-  file="${file//'/\'}"
+  # --- 导航 (Navigation) ---
+  # [需求] Tab / Shift-Tab 回归移动功能
+  --bind 'tab:down,shift-tab:up'
+  # 保留 Ctrl-N/P 作为第二套移动方案
+  --bind 'ctrl-n:down,ctrl-p:up'
 
-  if [ -f "$file" ]; then
-    # 检查文件大小，防止大文件卡顿
-    local size
-    size=$(stat -f%z "$file" 2>/dev/null || stat -c%s "$file" 2>/dev/null || echo "0")
+  # --- 多选 (Selection) ---
+  # [需求] Ctrl-J/K 接管多选功能 (Toggle + Move)
+  --bind 'ctrl-j:toggle+down,ctrl-k:toggle+up'
+  # 保留 Space 作为备用多选
+  --bind 'space:toggle+down'
+  # 全选/反选
+  --bind 'ctrl-a:select-all,ctrl-x:deselect-all'
 
-    if [ "$size" -gt 10485760 ]; then # 10MB 限制
-      echo "⚠️  文件过大: $(echo $size | awk '{printf "%.1fMB", $1/1024/1024}')"
-      echo "📁 文件: $file"
-      file "$file" 2>/dev/null || echo "类型: 未知"
-      return
-    fi
+  # --- 预览控制 (Preview) ---
+  # Ctrl-/ 开关预览
+  --bind 'ctrl-/:toggle-preview,?:toggle-preview'
+  # 滚动预览窗口 (不移动光标)
+  --bind 'ctrl-d:preview-page-down,ctrl-u:preview-page-up'
+  --bind 'alt-w:toggle-preview-wrap'
 
-    # 优先级 1: bat (语法高亮)
-    if command -v bat >/dev/null 2>&1; then
-      # 尝试使用 bat，失败则回退
-      if ! bat --color=always --style=numbers --line-range :300 "$file" 2>/dev/null; then
-        # 优先级 2: head (基础显示)
-        echo "📄 文件: $file"
-        echo "大小: $(echo $size | awk '{printf "%.1fKB", $1/1024}')"
-        echo "--- 内容预览 ---"
-        head -n 50 "$file" 2>/dev/null || echo "无法读取文件"
-      fi
-    # 优先级 2: file 命令 + head
-    elif command -v file >/dev/null 2>&1; then
-      echo "📄 文件: $file"
-      echo "类型: $(file -b "$file" 2>/dev/null || echo "未知")"
-      echo "大小: $(echo $size | awk '{printf "%.1fKB", $1/1024}')"
-      if file "$file" | grep -q text 2>/dev/null; then
-        echo "--- 内容预览 ---"
-        head -n 30 "$file" 2>/dev/null || echo "无法读取文件"
-      else
-        echo "⚠️  二进制文件，无法显示内容"
-      fi
-    # 优先级 3: 基础 head
-    else
-      echo "📄 文件: $file"
-      echo "大小: $(echo $size | awk '{printf "%.1fKB", $1/1024}')"
-      echo "--- 内容预览 ---"
-      head -n 30 "$file" 2>/dev/null || echo "无法读取文件"
-    fi
+  # --- 辅助操作 ---
+  # 快速跳转
+  --bind 'alt-up:first,alt-down:last'
+  # 剪贴板复制
+  --bind 'ctrl-y:execute-silent(echo -n {+} | (pbcopy || xclip -selection clipboard) 2>/dev/null)+abort'
+  --bind 'esc:clear-query'
+"
 
-  elif [ -d "$file" ]; then
-    # 目录预览 - 多重回退
-    echo "📁 目录: $file"
+# 5. 模式特定配置 (Mode Specific)
+# -----------------------------------------------------------------------------
 
-    # 文件统计
-    local file_count dir_count
-    file_count=$(find "$file" -maxdepth 1 -type f 2>/dev/null | wc -l)
-    dir_count=$(find "$file" -maxdepth 1 -type d 2>/dev/null | wc -l | awk '{print $1-1}') # 减去自身
-    echo "文件: $file_count 个 | 子目录: $dir_count 个"
-    echo "--- 内容预览 ---"
-
-    # 优先级 1: tree 命令
-    if command -v tree >/dev/null 2>&1; then
-      tree -C "$file" 2>/dev/null | head -n 20 || echo "tree 命令执行失败"
-    # 优先级 2: ls 命令
-    elif command -v ls >/dev/null 2>&1; then
-      ls -la "$file" 2>/dev/null | head -n 20 || echo "ls 命令执行失败"
-    # 优先级 3: find 命令
-    else
-      find "$file" -maxdepth 2 2>/dev/null | head -n 20 || echo "find 命令执行失败"
-    fi
-
-  else
-    # 其他类型文件
-    echo "📋 路径: $file"
-    if command -v file >/dev/null 2>&1; then
-      file "$file" 2>/dev/null || echo "类型: 未知文件"
-    else
-      echo "类型: 未知文件类型"
-    fi
-  fi
-}
-
-# Scheme name: Gruvbox dark, soft (Transparent version)
-# Modified for transparent terminal support
-_gen_fzf_default_opts() {
-
-local color00='#32302f'  # Original bg (now transparent)
-local color01='#3c3836'  # Slightly lighter bg
-local color02='#504945'  # Borders
-local color03='#665c54'  # Comments/secondary
-local color04='#bdae93'  # Primary fg
-local color05='#d5c4a1'  # Secondary fg
-local color06='#ebdbb2'  # Light fg
-local color07='#fbf1c7'  # Brightest fg
-local color08='#fb4934'  # Red
-local color09='#fe8019'  # Orange
-local color0A='#fabd2f'  # Yellow
-local color0B='#b8bb26'  # Green
-local color0C='#8ec07c'  # Aqua
-local color0D='#83a598'  # Blue
-local color0E='#d3869b'  # Purple
-local color0F='#d65d0e'  # Dark orange
-
-# Transparent version - using -1 for terminal transparency
-export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS"\
-" --color=bg:-1,bg+:$color01,spinner:$color0C,hl:$color0D,gutter:-1"\
-" --color=fg:$color04,header:$color0D,info:$color0A,pointer:$color0C"\
-" --color=marker:$color0C,fg+:$color06,prompt:$color0A,hl+:$color0D"\
-" --color=border:$color02,separator:$color03,preview-bg:-1,preview-fg:$color04"
-}
-
-_gen_fzf_default_opts
-
-# File search with preview (Ctrl-T) - 修复版本
+# [Ctrl-T] 文件搜索
+# Header 提示已更新: Tab移动, Ctrl-J/K多选
 export FZF_CTRL_T_OPTS="
-  --preview '_fzf_preview {}'
-  --preview-window right:60%:wrap
-  --header '📋 CTRL-P: 切换预览 | CTRL-A: 全选 | ALT-上下: 首尾 | ESC: 清除'"
+  --preview '$_FZF_PREVIEW_SCRIPT {}'
+  --preview-window 'right:60%:wrap'
+  --header '📝 文件 | Tab:移动 | Ctrl-J/K:多选 | Ctrl-/:预览'
+"
 
-# History search enhancement (Ctrl-R) - 修复版本
+# [Alt-C] 目录跳转
+# 目录通常单选，但键位保持一致
+export FZF_ALT_C_OPTS="
+  --preview '$_FZF_PREVIEW_SCRIPT {}'
+  --preview-window 'right:60%:wrap'
+  --header '📂 目录 | Tab:移动 | Enter:进入 | Ctrl-/:预览'
+"
+
+# [Ctrl-R] 历史命令
 export FZF_CTRL_R_OPTS="
   --preview 'echo {}'
-  --preview-window down:3:wrap
-  --header '🕐 历史命令搜索 | CTRL-R: 切换排序 | ALT-上下: 首尾 | ESC: 清除'"
-
-# Directory navigation (Alt-C) - 修复版本
-export FZF_ALT_C_OPTS="
-  --preview '_fzf_preview {}'
-  --preview-window right:60%:wrap
-  --header '📁 ENTER: 进入目录 | ALT-上下: 首尾 | ESC: 清除'"
-
-# Utility functions with fallbacks
-# Interactive process killer
-fkill() {
-  local pid
-  if command -v ps >/dev/null 2>&1; then
-    pid=$(ps -ef 2>/dev/null | sed 1d | fzf --header '[🎯 选择进程杀死]' --preview-window hidden | awk '{print $2}')
-  else
-    echo "❌ ps 命令不可用，无法显示进程列表"
-    return 1
-  fi
-
-  if [ -n "$pid" ]; then
-    echo "🎯 杀死进程 $pid"
-    if command -v kill >/dev/null 2>&1; then
-      kill -9 "$pid" 2>/dev/null && echo "✅ 已杀死进程 $pid" || echo "❌ 杀死进程失败"
-    else
-      echo "❌ kill 命令不可用"
-    fi
-  fi
-}
-
-# Interactive file deletion with confirmation
-fdel() {
-  local files
-  if command -v fd >/dev/null 2>&1; then
-    files=$(fd --type f | fzf --multi --header '[🗑️ 选择文件删除]' --preview '_fzf_preview {}')
-  else
-    echo "❌ fd 命令不可用，使用 find 替代"
-    files=$(find . -type f 2>/dev/null | fzf --multi --header '[🗑️ 选择文件删除]' --preview '_fzf_preview {}')
-  fi
-
-  if [ -n "$files" ]; then
-    echo "🗑️  准备删除以下文件:"
-    echo "$files"
-    echo ""
-    echo "⚠️  确认删除? (y/N)"
-    read -r confirm
-    if [ "$confirm" = "y" ] || [ "$confirm" = "Y" ]; then
-      if command -v xargs >/dev/null 2>&1; then
-        echo "$files" | xargs rm -v
-        echo "✅ 文件删除完成"
-      else
-        echo "❌ xargs 命令不可用，无法批量删除文件"
-        echo "请手动删除:"
-        echo "$files"
-      fi
-    else
-      echo "❌ 取消删除操作"
-    fi
-  fi
-}
-
-# 检查依赖并给出建议
-check_fzf_deps() {
-  echo "🔍 检查 fzf 增强功能依赖..."
-
-  # 检查 bat
-  if command -v bat >/dev/null 2>&1; then
-    echo "✅ bat (语法高亮): 已安装"
-  else
-    echo "⚠️  bat (语法高亮): 未安装 - 建议安装以获得更好的文件预览"
-    echo "   安装: brew install bat"
-  fi
-
-  # 检查 tree
-  if command -v tree >/dev/null 2>&1; then
-    echo "✅ tree (目录树): 已安装"
-  else
-    echo "⚠️  tree (目录树): 未安装 - 建议安装以获得更好的目录预览"
-    echo "   安装: brew install tree"
-  fi
-
-  # 检查 fd
-  if command -v fd >/dev/null 2>&1; then
-    echo "✅ fd (文件查找): 已安装"
-  else
-    echo "⚠️  fd (文件查找): 未安装 - 将使用 find 作为回退"
-    echo "   安装: brew install fd"
-  fi
-
-  echo "🎨 透明 gruvbox 主题: 已配置"
-  echo "⌨️ 增强键位绑定: 已配置"
-  echo "🔍 智能预览系统: 已配置"
-}
-
-# 可选: 自动检查依赖（取消注释以启用）
-# check_fzf_deps
+  --preview-window 'down:3:wrap:hidden'
+  --bind 'ctrl-/:toggle-preview'
+  --bind 'ctrl-y:execute-silent(echo -n {2..} | (pbcopy || xclip -selection clipboard))+abort'
+  --header 'clock 历史 | Tab:移动 | Ctrl-Y:复制 | Ctrl-R:排序'
+"

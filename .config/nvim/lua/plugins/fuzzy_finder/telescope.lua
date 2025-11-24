@@ -158,7 +158,7 @@ local function current_buffer_fuzzy_find_resilient()
         end
     end
 
-    local ok, err = pcall(builtin.current_buffer_fuzzy_find, opts)
+    local ok, err = pcall(builtin.current_buffer_fuzzy_find, opts or {})
     if ok then
         return
     end

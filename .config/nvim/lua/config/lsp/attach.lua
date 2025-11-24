@@ -335,7 +335,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
                         end
                         -- 修复：停止LSP客户端进程以防止孤儿进程
                         if client and client.stop then
-                            client:stop(true)  -- true = force stop
+                            client:stop(true) -- true = force stop
                         end
                     end
                 end,

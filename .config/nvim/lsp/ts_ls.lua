@@ -8,13 +8,13 @@ return {
         "typescript",
         "typescriptreact",
         "vue",
-        "svelte"
+        "svelte",
     },
     root_markers = {
         "package.json",
         "tsconfig.json",
         "jsconfig.json",
-        ".git"
+        ".git",
     },
     settings = {
         typescript = {
@@ -24,6 +24,6 @@ return {
         javascript = {
             updateImportsOnFileMove = { enabled = true },
             completeFunctionCalls = true,
-        }
-    }
+        },
+    },
 }
