@@ -10,13 +10,13 @@ description: >-
     user: 'Write user docs for the new dashboard'
     assistant: 'I will use the Task tool to launch the doc-writer agent to create user-oriented documentation.'
     <commentary>Since the user specified 'user docs', use the doc-writer agent focused on users.</commentary>
-  
+
   - Example 2:
     Context: A code change is made and documentation is needed.
     user: 'Document this API endpoint for developers'
     assistant: 'I will use the Task tool to launch the doc-writer agent to create developer-oriented documentation.'
     <commentary>Audience is developers, so use the doc-writer agent for technical documentation.</commentary>
-  
+
   - Example 3:
     Context: Educational content is required.
     user: 'Explain this concept for beginners'
@@ -31,6 +31,9 @@ Tooling directives:
 - Use Tavily MCP whenever documentation needs fresh external references, standards, or changelog data. Summarize retrieved evidence before integrating it.
 - Use Context7 MCP to pull relevant code/API snippets from the repository or past sessions instead of relying on memory.
 - When the content structure is non-trivial (multi-part tutorials, comparison tables), call the sequential-thinking MCP to draft the outline, then fill sections accordingly.
+- Use ast-grep MCP for precise, AST-level code searches when you need to locate function definitions, call sites, or code patterns while梳理调用链路.
+- Use Serena MCP for跨文件/跨模块的代码导航和全局理解, 尤其是在需要从入口一路追踪到终点的执行流分析时.
+- When documenting public open-source repositories or their design, use DeepWiki MCP to pull structured docs and examples from GitHub instead of手动翻阅 README/源码.
 
 文档编写规范：
 
@@ -183,7 +186,7 @@ dberr_t RbioClient::get_page(...) {
                             -> Planner根据BoundStatement生成逻辑计划
                         -> Optimizer::Optimize  // 优化阶段
                             -> 应用各种优化规则
-                        
+
                         -> PhysicalPlanGenerator::CreatePlan  // 物理计划生成
                             -> 将逻辑算子转换为物理算子
                             -> 返回可执行的物理计划
@@ -194,7 +197,7 @@ dberr_t RbioClient::get_page(...) {
                         -> 设置进度条(如果启用)
                         -> 配置结果收集器
                         -> 初始化执行器
-                        
+
         -> ExecutePendingQueryInternal  // 执行阶段
             -> PendingQueryResult::ExecuteInternal
                 -> ExecuteTaskInternal
@@ -217,17 +220,17 @@ dberr_t RbioClient::get_page(...) {
 
     ```text
     Optimizer::RunOptimizer(FILTER_PUSHDOWN)
-    └── FilterPushdown::Rewrite(LogicalFilter)                    
+    └── FilterPushdown::Rewrite(LogicalFilter)
         └── PushdownFilter(LogicalFilter)
             ├── 检查投影映射(HasProjectionMap) -> false
             ├── FilterPushdown::AddFilter("amount > 100")
             │   ├── PushFilters()  // 清空之前收集的filters, 本例没有体现, e.g. 2
             │   └── 将新条件加入filters列表
             │       ├── LogicalFilter::SplitPredicates  // 拆分AND条件(本例中无需拆分)
-            │       └── FilterCombiner::AddFilter           
+            │       └── FilterCombiner::AddFilter
             │           └── AddBoundComparisonFilter 识别表达式类型(COMPARE_GREATERTHAN)
             │               └── 将常量条件(>100)存入constant_values[equivalence_set]
-            ├── FilterPushdown::GenerateFilters                   
+            ├── FilterPushdown::GenerateFilters
             │   └── FilterCombiner::GenerateFilters
             │       └── 从constant_values生成最终的过滤条件
             └── FilterPushdown::Rewrite(LogicalGet)
@@ -272,3 +275,23 @@ dberr_t RbioClient::get_page(...) {
     - 设计哲学的讨论能提升整体高度
 
 一个好的技术大纲应该像一张地图，既能提供全局视角，又能指引深入探索的路径。它应当既有理论高度，又有实践指导；既关注静态结构，又描述动态行为；既展示设计思想，又联系具体实现。
+
+7. 调用链路梳理模式
+
+- 适用场景:
+    - 用户提到“调用链路”“执行路径”“从 A 到 B 是怎么走的”“启动/关闭流程”等需求时
+    - 需要解释某个命令或 API 从入口到某个 Hook/Context 的完整执行流时
+- 输出结构要求:
+    - **入口/终点显式声明**: 在文档一开始给出 `入口 -> 终点` 的概要, 并标注函数名与文件路径(必要时加行号)
+    - **ASCII 调用树**: 参考文档中已有的调用链示例, 使用树形缩进展示关键调用关系, 每个节点写成 `Function (relative/path.ts:line)` 形式, 只保留改变状态/发起 I/O/跨进程或处理错误的关键节点
+    - **阶段化说明执行流**: 按“启动阶段 → 运行中关键交互 → 退出/错误阶段”拆分小节, 说明:
+        - 这一阶段的入口事件/函数是什么
+        - 核心状态存在哪些对象/模块里
+        - 错误与日志是如何传播和聚合的
+- 工具使用建议:
+    - 优先使用 ast-grep MCP 在代码中精确定位入口函数、关键调用点和终点位置
+    - 对跨包、大型仓库的执行流分析, 主动尝试使用 Serena MCP 做全局搜索与导航
+    - 当需要引用第三方开源项目的设计或实现作为对比时, 使用 DeepWiki MCP 读取对应 GitHub 仓库的文档/说明
+    - 如需补充外部规范或最新行为变化, 继续结合 Tavily/Context7 获取上下文, 但实际调用链仍应以源码为准
+
+

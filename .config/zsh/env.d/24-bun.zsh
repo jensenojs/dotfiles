@@ -3,6 +3,8 @@
 # Bun 安装目录(符合 XDG 规范)
 export BUN_INSTALL="${XDG_DATA_HOME:-$HOME/.local/share}/bun"
 
+# export BUN_INSTALL_REGISTRY="https://registry.npmmirror.com"
+
 # 加载 Bun 命令补全
 source_if_exists "$BUN_INSTALL/_bun"
 

@@ -1,0 +1,6 @@
+[install]
+registry = "https://registry.npmmirror.com"
+
+# 考虑到你的 npmrc 里有代理，如果为了彻底稳健，可以在这里也配上
+# [install.proxy]
+# url = "http://127.0.0.1:7890"
