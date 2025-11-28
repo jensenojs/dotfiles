@@ -3,40 +3,14 @@ return {
     -- 设计意图: 语法高亮/增量解析/按 buffer 条件折叠。依赖 andymass/vim-matchup 可与 Treesitter 集成。
     "nvim-treesitter/nvim-treesitter",
     branch = "main",
-    event = "VeryLazy",
+    lazy = false,
     build = ":TSUpdate",
     dependencies = { "andymass/vim-matchup" },
     opts = {
         -- 支持的语言, 它们的代码高亮就会更准确
-        ensure_installed = {
-            "dap_repl",
-            "bash",
-            "c",
-            "cpp",
-            "cmake",
-            "make",
-            "go",
-            "gomod",
-            "gosum",
-            "gowork",
-            "java",
-            "rust",
-            "ron",
-            "lua",
-            "scheme",
-            "python",
-            "json",
-            "vim",
-            "vimdoc",
-            "sql",
-            "scala",
-            "toml",
-            "html",
-            "markdown",
-            "markdown_inline",
-        },
+        ensure_installed = require("utils.treesitter-languages").ensure_installed,
         sync_install = false,
-        auto_install = false,
+        auto_install = true,
         highlight = {
             enable = true,
             -- 如果文件太大了就算了(>200KB)
@@ -84,5 +58,43 @@ return {
                 end
             end,
         })
+    end,
+
+    config = function(_, opts)
+        -- 使用 main 分支提供的新 API，显式安装 ensure_installed 里的语言，
+        -- 确保 parsers/queries 被写入 stdpath('data') .. '/site'，实现可迁移性。
+        local ts = require("nvim-treesitter")
+
+        -- 使用默认 install_dir（stdpath('data') .. '/site'），不覆写其它配置。
+        ts.setup(opts)
+
+        local ensure = opts.ensure_installed or {}
+        if type(ensure) == "string" then
+            ensure = { ensure }
+        end
+
+        local installed = ts.get_installed() or {}
+        local need = {}
+        for _, lang in ipairs(ensure) do
+            if not vim.list_contains(installed, lang) then
+                table.insert(need, lang)
+            end
+        end
+
+        if #need > 0 then
+            local has_cli = vim.fn.executable("tree-sitter") == 1
+            if not has_cli then
+                vim.schedule(function()
+                    vim.notify(
+                        "nvim-treesitter: 未检测到 tree-sitter CLI (tree-sitter). 请先安装, 例如: brew install tree-sitter-cli",
+                        vim.log.levels.WARN,
+                        { title = "nvim-treesitter" }
+                    )
+                end)
+                return
+            end
+            -- 默认异步安装缺失语言, 启动时不阻塞, 需要时可在 Neovim 内显式使用 TSInstall 同步安装。
+            ts.install(need, { summary = true })
+        end
     end,
 }

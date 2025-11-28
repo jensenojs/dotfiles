@@ -51,6 +51,7 @@ local function check_executables()
         "delve",
         "btop",
         "qwen",
+        "tree-sitter-cli",
     }
     for _, item in ipairs(checks) do
         local ok_exec, chosen = has_any_exec(item)
