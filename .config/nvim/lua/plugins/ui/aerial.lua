@@ -38,7 +38,7 @@ return {
                 ["n|<leader>lo"] = map_callback(function()
                         require("aerial").toggle({
                             focus = true,
-                            direction = "right",
+                            direction = "left",
                         })
                     end)
                     :with_buffer(bufnr)
@@ -57,6 +57,10 @@ return {
         local aerial_config = {
             -- 🚨 关键：强制禁用 lazy_load，确保 autocommands 被创建
             lazy_load = false,
+
+            layout = {
+                default_direction = "left",
+            },
 
             -- 自动打开: 仅当 LSP 支持 documentSymbol 时
             open_automatic = function(bufnr)

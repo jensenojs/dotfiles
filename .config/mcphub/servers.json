@@ -1,0 +1,127 @@
+{
+  "mcpServers": {
+    "ast-grep": {
+      "args": [
+        "--from",
+        "git+https://github.com/ast-grep/ast-grep-mcp",
+        "ast-grep-server"
+      ],
+      "command": "uvx",
+      "enabled": true,
+      "timeout": 10000,
+      "type": "local"
+    },
+    "context7": {
+      "args": [
+        "-y",
+        "@upstash/context7-mcp",
+        "--api-key",
+        "${env:CONTEXT7_API_KEY}"
+      ],
+      "command": "npx",
+      "enabled": true,
+      "timeout": 10000,
+      "type": "local"
+    },
+    "deepwiki": {
+      "args": [
+        "-y",
+        "mcp-deepwiki@latest"
+      ],
+      "command": "npx",
+      "enabled": true,
+      "timeout": 10000,
+      "type": "local"
+    },
+    "gh_grep": {
+      "enabled": true,
+      "timeout": 10000,
+      "type": "remote",
+      "url": "https://mcp.grep.app"
+    },
+    "github": {
+      "enabled": true,
+      "headers": {
+        "Authorization": "Bearer ${env:GITHUB_PERSONAL_ACCESS_TOKEN}"
+      },
+      "timeout": 10000,
+      "type": "remote",
+      "url": "https://api.githubcopilot.com/mcp/"
+    },
+    "jupyter": {
+      "args": [
+        "jupyter-mcp-server@latest"
+      ],
+      "command": "uvx",
+      "enabled": false,
+      "env": {
+        "ALLOW_IMG_OUTPUT": "true",
+        "JUPYTER_TOKEN": "${env:JUPYTER_TOKEN}",
+        "JUPYTER_URL": "http://localhost:8888"
+      },
+      "timeout": 10000,
+      "type": "local"
+    },
+    "markitdown": {
+      "args": [
+        "--from",
+        "git+https://github.com/KorigamiK/markitdown_mcp_server",
+        "markitdown"
+      ],
+      "command": "uvx",
+      "enabled": false,
+      "timeout": 10000,
+      "type": "local"
+    },
+    "minimax-coding-plan": {
+      "args": [
+        "minimax-coding-plan-mcp",
+        "-y"
+      ],
+      "command": "uvx",
+      "enabled": true,
+      "env": {
+        "MINIMAX_API_HOST": "https://api.minimaxi.com",
+        "MINIMAX_API_KEY": "${env:MINIMAX_API_KEY}"
+      },
+      "timeout": 10000,
+      "type": "local"
+    },
+    "sequential-thinking": {
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "command": "npx",
+      "enabled": true,
+      "timeout": 10000,
+      "type": "local"
+    },
+    "serena": {
+      "args": [
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena-mcp-server",
+        "--enable-web-dashboard",
+        "False"
+      ],
+      "command": "uvx",
+      "enabled": true,
+      "timeout": 10000,
+      "type": "local"
+    },
+    "tavily": {
+      "args": [
+        "-y",
+        "tavily-mcp"
+      ],
+      "command": "npx",
+      "enabled": true,
+      "env": {
+        "TAVILY_API_KEY": "${env:TAVILY_API_KEY}"
+      },
+      "timeout": 10000,
+      "type": "local"
+    }
+  }
+}

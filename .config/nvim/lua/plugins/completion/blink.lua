@@ -13,6 +13,7 @@ return {
         "onsails/lspkind.nvim",
         "folke/lazydev.nvim",
         "xzbdmw/colorful-menu.nvim",
+        "Kaiser-Yang/blink-cmp-avante",
     },
 
     init = function()
@@ -75,7 +76,7 @@ return {
 
     opts = function()
         local sources = {
-            -- 默认启用的补全来源
+            -- baseline: 纯本地 / 低依赖来源
             default = { "lsp", "path", "snippets", "buffer", "lazydev" },
             providers = {
                 path = {
@@ -89,9 +90,30 @@ return {
                 lazydev = {
                     module = "lazydev.integrations.blink",
                 },
+
+                cmdline = {
+                    min_keyword_length = function(ctx)
+                        -- when typing a command, only show when the keyword is 2 characters or longer
+                        if ctx.mode == "cmdline" and string.find(ctx.line, " ") == nil then
+                            return 2
+                        end
+                        return 0
+                    end,
+                },
             },
         }
         if not offline then
+            -- 在线时再挂 Avante / Minuet 源
+            sources.providers.avante = {
+                module = "blink-cmp-avante",
+                name = "Avante",
+                opts = {
+                    -- options for blink-cmp-avante
+                },
+            }
+            -- 将 avante 放在 path 之后, snippets 之前
+            table.insert(sources.default, 3, "avante")
+
             table.insert(sources.default, "minuet")
             sources.providers.minuet = {
                 name = "minuet",
@@ -108,6 +130,31 @@ return {
             -- Shows a signature help window while you type arguments for a function
             signature = {
                 enabled = true,
+            },
+
+            cmdline = {
+                keymap = {
+                    -- 1. 不要使用 preset = "inherit"，防止引入 Tabout 等针对代码编辑的逻辑
+                    preset = "none",
+
+                    -- 2. 为 cmdline 单独定义纯粹的补全逻辑
+                    ["<Tab>"] = {
+                        "show",
+                        "select_next",
+                        "fallback",
+                    },
+                    ["<S-Tab>"] = {
+                        "select_prev",
+                        "fallback",
+                    },
+
+                    -- cmdline 下回车通常需要立即执行，或者接受补全
+                    ["<CR>"] = {
+                        "select_and_accept",
+                        "fallback", -- fallback 会执行回车，即运行命令
+                    },
+                },
+                completion = { menu = { auto_show = true } },
             },
 
             keymap = {
@@ -156,6 +203,8 @@ return {
                         end
                     end,
                 },
+
+                ["<CR>"] = { "select_and_accept", "fallback" },
             },
 
             appearance = {

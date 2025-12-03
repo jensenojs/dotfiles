@@ -11,7 +11,7 @@ return {
     opts = function()
         require("minuet").setup({
             virtualtext = {
-                auto_trigger_ft = { "go", "c", "cpp", "python", "rust", "sql" },
+                auto_trigger_ft = { "go", "c", "cpp", "python", "rust", "sql", "sh", "zsh", "lua", "toml" },
                 keymap = {
                     accept = "<A-y>",
                     -- accept_line = '<A-a>',
@@ -23,7 +23,19 @@ return {
             },
 
             -- Default values
-            provider = "codestral",
+            -- provider = "codestral",
+            provider = "openai_compatible",
+            provider_options = {
+                openai_compatible = {
+                    end_point = "https://api.deepseek.com/beta/completions",
+                    api_key = "DEEPSEEK_API_KEY",
+                    name = "deepseek",
+                    optional = {
+                        max_tokens = 256,
+                        top_p = 0.9,
+                    },
+                },
+            },
 
             -- Default values
             -- Whether show virtual text suggestion when the completion menu

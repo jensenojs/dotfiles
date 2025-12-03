@@ -31,59 +31,22 @@ return {
             return string.format("#%02x%02x%02x", r, g, b)
         end
 
-        -- 透明背景适配：使用 NONE 让背景透明
-        local bg = "NONE" -- 透明背景
+        -- 基于主题的前景色做明暗区分，背景透明交给 transparent.nvim 处理
         local fg = get_hl_color("Normal", "fg") or "#cdd6f4"
-        local bg_inactive = "NONE" -- 未选中也透明
-        local bg_visible = "NONE" -- 可见也透明
-        local fg_inactive = darken(fg, 0.4) -- 未选中标签文字（暗40%）
-        local accent = get_hl_color("String", "fg") or "#a6e3a1" -- 高亮色
+        local fg_inactive = darken(fg, 0.4) -- 未选中标签文字（暗 40%）
+        local accent = get_hl_color("String", "fg") or "#a6e3a1" -- 选中高亮色
 
         return {
             highlights = {
-                background = { bg = "none" },
-                fill = { bg = "none" },
-                buffer_selected = { bg = "none", fg = "#fab387" },
-                buffer_visible = { bg = "none", fg = "#a6adc8" },
-                close_button = { bg = "none" },
-                close_button_selected = { bg = "none" },
-                close_button_visible = { bg = "none" },
-                duplicate = { bg = "none" },
-                duplicate_selected = { bg = "none" },
-                duplicate_visible = { bg = "none" },
-                error = { bg = "none" },
-                error_selected = { bg = "none" },
-                error_visible = { bg = "none" },
-                hint = { bg = "none" },
-                hint_selected = { bg = "none" },
-                hint_visible = { bg = "none" },
-                indicator_selected = { bg = "none" },
-                indicator_visible = { bg = "none" },
-                info = { bg = "none" },
-                info_selected = { bg = "none" },
-                info_visible = { bg = "none" },
-                modified = { bg = "none" },
-                modified_selected = { bg = "none" },
-                modified_visible = { bg = "none" },
-                numbers = { bg = "none" },
-                numbers_selected = { bg = "none" },
-                numbers_visible = { bg = "none" },
-                offset_separator = { bg = "none" },
-                pick = { bg = "none" },
-                pick_selected = { bg = "none" },
-                pick_visible = { bg = "none" },
-                separator = { bg = "none" },
-                separator_selected = { bg = "none" },
-                separator_visible = { bg = "none" },
-                tab = { bg = "none" },
-                tab_close = { bg = "none" },
-                tab_selected = { bg = "none" },
-                tab_separator = { bg = "none" },
-                tab_separator_selected = { bg = "none" },
-                trunc_marker = { bg = "none" },
-                warning = { bg = "none" },
-                warning_selected = { bg = "none" },
-                warning_visible = { bg = "none" },
+                -- 默认区域文字略暗
+                background = { fg = fg_inactive },
+                fill = {},
+                -- 当前 buffer: 使用主题的强调色
+                buffer_selected = { fg = accent },
+                tab_selected = { fg = accent },
+                -- 可见但未选中: 使用暗一些的前景
+                buffer_visible = { fg = fg_inactive },
+                tab = { fg = fg_inactive },
             },
             options = {
                 indicator = {
@@ -91,85 +54,22 @@ return {
                     style = "none",
                 },
                 separator_style = { "", "" },
+                offsets = {
+                    {
+                        filetype = "aerial",
+                        text = "Aerial",
+                        highlight = "Normal",
+                        separator = true,
+                    },
+                },
+                -- custom_filter = function(bufnr, _)
+                --     local ft = vim.bo[bufnr].filetype
+                --     if ft == "Avante" or ft == "AvanteInput" or ft == "AvanteTodos" or ft == "AvanteSelectedFiles" then
+                --         return false
+                --     end
+                --     return true
+                -- end,
             },
-            -- 	number = nil,
-            -- 	modified_icon = icons.Modified,
-            -- 	buffer_close_icon = icons.Close,
-            -- 	left_trunc_marker = icons.Left,
-            -- 	right_trunc_marker = icons.Right,
-            -- 	max_name_length = 20,
-            -- 	max_prefix_length = 13,
-            -- 	tab_size = 20,
-            -- 	color_icons = true,
-            -- 	show_buffer_icons = true,
-            -- 	show_buffer_close_icons = true,
-            -- 	show_close_icon = true,
-            -- 	show_tab_indicators = true,
-            -- 	enforce_regular_tabs = false,
-            -- 	persist_buffer_sort = true,
-            -- 	always_show_bufferline = true,
-            -- 	separator_style = "slope",
-            --
-            -- 	hover = {
-            -- 		enabled = true,
-            -- 		delay = 200,
-            -- 		reveal = { "close" },
-            -- 	},
-            -- },
-            -- highlights = {
-            -- 	fill = {
-            -- 		bg = bg, -- 填充区域透明
-            -- 	},
-            -- 	-- 未选中标签
-            -- 	background = {
-            -- 		fg = fg_inactive,
-            -- 		bg = bg_inactive,
-            -- 	},
-            -- 	-- 可见但未聚焦的标签
-            -- 	buffer_visible = {
-            -- 		fg = fg,
-            -- 		bg = bg_visible,
-            -- 	},
-            -- 	-- 选中的标签（当前激活）
-            -- 	buffer_selected = {
-            -- 		fg = accent, -- 用高亮色
-            -- 		bg = bg,     -- 透明背景
-            -- 		bold = true,
-            -- 		italic = false,
-            -- 		underline = true, -- 加下划线区分
-            -- 	},
-            -- 	-- 分隔符（透明）
-            -- 	separator = {
-            -- 		fg = bg,
-            -- 		bg = bg,
-            -- 	},
-            -- 	separator_visible = {
-            -- 		fg = bg,
-            -- 		bg = bg,
-            -- 	},
-            -- 	separator_selected = {
-            -- 		fg = bg,
-            -- 		bg = bg,
-            -- 	},
-            -- 	-- 关闭按钮
-            -- 	close_button = {
-            -- 		fg = fg_inactive,
-            -- 		bg = bg_inactive,
-            -- 	},
-            -- 	close_button_visible = {
-            -- 		fg = fg,
-            -- 		bg = bg_visible,
-            -- 	},
-            -- 	close_button_selected = {
-            -- 		fg = accent,
-            -- 		bg = bg,
-            -- 	},
-            -- 	-- 指示器（选中标签的左侧竖线）
-            -- 	indicator_selected = {
-            -- 		fg = accent,
-            -- 		bg = bg,
-            -- 	},
-            -- },
         }
     end,
 }

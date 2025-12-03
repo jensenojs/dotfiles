@@ -50,6 +50,7 @@ return {
             "DiffviewFiles",
             "DiffviewFileHistory",
             "aerial",
+            "Avante",
             "TelescopePrompt",
             "TelescopeResults",
             "TelescopePreview",

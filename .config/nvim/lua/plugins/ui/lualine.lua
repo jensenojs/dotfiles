@@ -3,14 +3,19 @@
 return {
     "nvim-lualine/lualine.nvim",
     event = "UIEnter",
-    dependencies = { "nvim-tree/nvim-web-devicons", "milanglacier/minuet-ai.nvim" },
+    dependencies = { "milanglacier/minuet-ai.nvim" },
     opts = function()
-        require("lualine").setup({
+        return {
+            options = {
+                disabled_filetypes = {
+                    statusline = { "aerial", "Avante", "AvanteInput", "AvanteTodos", "AvanteSelectedFiles" },
+                    winbar = { "aerial", "Avante", "AvanteInput", "AvanteTodos", "AvanteSelectedFiles" },
+                },
+            },
             sections = {
                 lualine_x = {
                     {
-                        require("minuet.lualine"),
-                        -- the follwing is the default configuration
+                        require("minuet.lualine"), -- the follwing is the default configuration
                         -- the name displayed in the lualine. Set to "provider", "model" or "both"
                         -- display_name = 'both',
                         -- separator between provider and model name for option "both"
@@ -23,6 +28,6 @@ return {
                     "filetype",
                 },
             },
-        })
+        }
     end,
 }

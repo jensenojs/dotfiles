@@ -85,7 +85,8 @@ return {
         autochdir = true, -- 跟随 Neovim 的当前工作目录
         on_open = function(term)
             vim.cmd("startinsert!")
-            vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", {
+            vim.keymap.set("n", "q", "<cmd>close<CR>", {
+                buffer = term.bufnr,
                 noremap = true,
                 silent = true,
             })

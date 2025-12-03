@@ -15,6 +15,15 @@ local function has(exe)
     return vim.fn.executable(exe) == 1
 end
 
+-- M.has: 跨模块可执行文件探测结果
+-- 约定: 仅在以下模块/场景中被直接访问, 方便未来统一搜索与扩展
+--   - git, rg, fd, nvr: 通用文件/模糊查找/外部集成 (如 plugins.file, plugins.git)
+--   - im_select: 输入法切换 (如 plugins.input)
+--   - btop: 系统监控终端 (plugins.terminal/terminal.lua, <C-S-P>)
+--   - qwen: Qwen 聊天/助手终端 (plugins.terminal/terminal.lua, <C-S-Q>)
+--   - opencode: OpenCode 命令行工具 (用于 AI/文档等集成)
+--   - uv: uv 包管理/环境工具 (依赖与虚拟环境管理)
+--   - python3, python_in_venv(): Python 与虚拟环境支持 (LSP、测试、脚本)
 M.has = {
     git = has("git"),
     rg = has("rg"),

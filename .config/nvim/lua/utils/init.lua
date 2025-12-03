@@ -16,6 +16,7 @@ local icons = require("utils.icons")
 local dap = require("utils.dap")
 local health = require("utils.health")
 local buf = require("utils.buf")
+local ai_instructions = require("utils.ai_instructions")
 
 local M = {}
 
@@ -45,5 +46,6 @@ M.icons = icons
 M.dap = dap
 M.health = health
 M.buf = buf
+M.ai_instructions = ai_instructions
 
 return M

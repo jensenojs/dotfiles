@@ -19,6 +19,7 @@ return {
         "json",
         "vim",
         "vimdoc",
+        "latex",
         "sql",
         "scala",
         "toml",
