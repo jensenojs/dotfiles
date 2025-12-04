@@ -48,20 +48,20 @@
       "type": "remote",
       "url": "https://api.githubcopilot.com/mcp/"
     },
-    "jupyter": {
-      "args": [
-        "jupyter-mcp-server@latest"
-      ],
-      "command": "uvx",
-      "enabled": false,
-      "env": {
-        "ALLOW_IMG_OUTPUT": "true",
-        "JUPYTER_TOKEN": "${env:JUPYTER_TOKEN}",
-        "JUPYTER_URL": "http://localhost:8888"
-      },
-      "timeout": 10000,
-      "type": "local"
-    },
+    // "jupyter": {
+    //   "args": [
+    //     "jupyter-mcp-server@latest"
+    //   ],
+    //   "command": "uvx",
+    //   "enabled": false,
+    //   "env": {
+    //     "ALLOW_IMG_OUTPUT": "true",
+    //     "JUPYTER_TOKEN": "${env:JUPYTER_TOKEN}",
+    //     "JUPYTER_URL": "http://localhost:8888"
+    //   },
+    //   "timeout": 10000,
+    //   "type": "local"
+    // },
     "markitdown": {
       "args": [
         "--from",
