@@ -22,6 +22,7 @@ return {
         "latex",
         "sql",
         "scala",
+        "yaml",
         "toml",
         "html",
         "markdown",
